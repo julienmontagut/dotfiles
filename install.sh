@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# Check zsh is intalled
+# Add zsh env file
+# Install other required files
+
 # Checks if a command is installed
 function check_installed() {
     COMMAND=$1
