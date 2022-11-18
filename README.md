@@ -1,19 +1,19 @@
-# My custom dotfiles
+# Dotfiles
 
-Dotfiles to personalize system
+This repository contains my dotfiles, which I use to configure my development
+environment. It is targeted at macOS, but I would love to update it to work on
+linux as well.
 
 ## Installation
 
-1. Clone this repository `git clone git@github.com:julienmontagut/dotfiles`
-2. Run `install.sh`
+```sh
+git clone git://github.com/julienmontagut/dotfiles.git
+    && cd dotfiles
+    && ./install.sh
+```
 
-## Structure
+## TODO
 
-This repository contains the following folders
- - `./settings`: application settings
- - `./store`: application data stores, may store user data
-
-### Compatibility with XDG dirs
-XDG_CACHE_HOME is set to ~/.cache
-XDG_CONFIG_HOME is set to `$DOTFILES/settings`, ~/.config may be simlinked to the same
-XDG_CONFIG_HOME is set to `$DOTFILES/stores`, ~/.local/share may be simlinked to the same
+- [X] Install script
+- [X] Configure macOS defaults on install
+- [X] Add completions for zsh
