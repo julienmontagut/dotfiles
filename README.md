@@ -16,4 +16,7 @@ git clone git://github.com/julienmontagut/dotfiles.git
 
 - [X] Install script
 - [X] Configure macOS defaults on install
-- [X] Add completions for zsh
+- [ ] Load installed ZSH config for next installation steps
+    > This might need the install script to be written in ZSH
+- [ ] Install configurations from `config` to `$XDG_CONFIG_HOME`
+- [ ] Install of binaries
