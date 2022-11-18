@@ -1,0 +1,7 @@
+[core]
+	excludesfile = /Users/julien/.config/git/ignore
+[init]
+	defaultBranch = main
+[user]
+	email = _@julienmontagut.com
+	name = Julien Montagut
