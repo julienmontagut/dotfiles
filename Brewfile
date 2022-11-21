@@ -30,7 +30,6 @@ mas "AdBlock Pro", id: 1018301773
 mas "Craft", id: 1487937127
 mas "Developer", id: 640199958
 mas "Keynote", id: 409183694
-mas "Magnet", id: 441258766
 mas "Numbers", id: 409203825
 mas "Pages", id: 409201541
 mas "Slack", id: 803453959
