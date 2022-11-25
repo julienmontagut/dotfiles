@@ -15,12 +15,12 @@ brew "zsh-syntax-highlighting"
 
 # Apps installed via Homebrew Cask
 cask "appcleaner"
+cask "docker"
 cask "firefox"
 cask "font-anonymous-pro"
 cask "font-fira-code"
 cask "onyx"
 cask "protonmail-bridge"
-cask "rancher"
 cask "spotify"
 cask "visual-studio-code"
 cask "vlc"
