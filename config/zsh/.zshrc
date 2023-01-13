@@ -51,10 +51,18 @@ bindkey '^[[B' down-line-or-beginning-search
 
 #
 # Plugins
-#
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source /opt/homebrew/opt/spaceship/spaceship.zsh
+# (Only when not running in Warp)
+if [ "$TERM_PROGRAM" != "WarpTerminal" ]; then
+  if [ -f /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
+    source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+  fi
+  if [ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+    source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  fi
+  if [ -f /opt/homebrew/opt/spaceship/spaceship.zsh ]; then
+    source /opt/homebrew/opt/spaceship/spaceship.zsh
+  fi
+fi
 
 #
 # Aliases
