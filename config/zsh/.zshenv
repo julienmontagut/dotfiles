@@ -1,9 +1,10 @@
 # Disable zsh sessions from macos
-export SHELL_SESSIONS_DISABLE=1
+# TODO: move to local file or check for os
+#export SHELL_SESSIONS_DISABLE=1
 
 # Configuring XDG directories
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:=$HOME/.config}"
-export XDG_CACHE_HOME="${XDG_CACHE_HOME:=$HOME/.local/cache}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:=$HOME/.cache}"
 export XDG_DATA_HOME="${XDG_DATA_HOME:=$HOME/.local/share}"
 export XDG_STATE_HOME="${XDG_STATE_HOME:=$HOME/.local/state}"
 
@@ -15,7 +16,8 @@ fi
 export PATH="$XDG_BIN_HOME:$PATH"
 
 # Homebrew
-eval "$(/opt/homebrew/bin/brew shellenv)"
+# TODO: Check for macos or linux
+# eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # Rust
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
@@ -31,8 +33,3 @@ export LESSHISTFILE="${LESSHISTFILE:-$XDG_CACHE_HOME/less/history}"
 
 # Vim
 export VIMINIT='source $XDG_CONFIG_HOME/vim/vimrc'
-
-# Add rancher to path if the directory exists
-if [ -d "$HOME/.rd/bin" ]; then
-  export PATH="$HOME/.rd/bin:$PATH"
-fi
