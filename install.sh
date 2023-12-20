@@ -67,6 +67,8 @@ if ! command -v brew &>/dev/null; then
 fi
 
 # Install Homebrew packages from Brewfile
+# TODO: Depending on the installation method for dotfiles, this might need upating
+# to use the global Brewfile installed at ~/.Brewfile
 brew bundle --file="$DOTFILES_DIR/Brewfile"
 
 # Install dotfiles
