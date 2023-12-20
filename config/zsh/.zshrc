@@ -51,26 +51,32 @@ bindkey '^[[B' down-line-or-beginning-search
 
 #
 # Plugins
-# (Only when not running in Warp)
-if [ "$TERM_PROGRAM" != "WarpTerminal" ]; then
-  if [ -f /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
-    source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-  fi
-  if [ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
-    source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-  fi
-  if [ -f /opt/homebrew/opt/spaceship/spaceship.zsh ]; then
-    source /opt/homebrew/opt/spaceship/spaceship.zsh
-  fi
+# TODO: Check platform before
+if [ -f /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
+  source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi
+if [ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+  source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
+eval "$(starship init zsh)"
 
 #
 # Aliases
 #
 alias ls='ls -G'
+alias vim='nvim'
+alias vimdiff='nvim -d'
+
+#
+# Editor
+#
+export EDITOR=nvim
 
 #
 # Color settings
 #
 export LSCOLORS=ExGxBxDxCxEgEdxbxgxcxd
 export GREP_COLORS=auto
+
+# bun completions
+[ -s "/Users/julien/.bun/_bun" ] && source "/Users/julien/.bun/_bun"

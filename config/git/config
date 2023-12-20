@@ -2,6 +2,10 @@
 	excludesfile = /Users/julien/.config/git/ignore
 [init]
 	defaultBranch = main
+[push]
+	autoSetupRemote = true
+[pull]
+	rebase = true
 [user]
 	email = _@julienmontagut.com
 	name = Julien Montagut
