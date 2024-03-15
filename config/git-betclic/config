@@ -1,0 +1,17 @@
+[core]
+	excludesfile = /Users/julien/.config/git/ignore
+	autocrlf = input
+[init]
+	defaultBranch = main
+[push]
+	autoSetupRemote = true
+[pull]
+	rebase = true
+[user]
+	email = j.montagut-ext@betclicgroup.com
+	name = Julien Montagut
+# [user]
+# 	email = _@julienmontagut.com
+# 	name = Julien Montagut
+[submodule]
+	recurse = true
