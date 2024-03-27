@@ -20,3 +20,9 @@ git clone git://github.com/julienmontagut/dotfiles.git
     > This might need the install script to be written in ZSH
 - [ ] Install configurations from `config` to `$XDG_CONFIG_HOME`
 - [ ] Install of binaries
+- [ ] If installation of bash is required on macOS, then:
+  - [ ] Install bash with brew
+  - [ ] Install bash-completion
+  - [ ] Link bash to `/usr/local/bin/bash`
+  - [ ] Add bash to `/etc/shells`
+- [ ] Change shell to bash
