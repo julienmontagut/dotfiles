@@ -1,6 +1,0 @@
-#!/bin/sh
-
-# Dofi is using git to manage dotfiles. The git repository dir is located at
-# $XDG_CONFIG_HOME/dotfiles/bare-repo.git. The dotfiles are located at $HOME.
-
-alias dofi='/usr/bin/git --git-dir=$XDG_CONFIG_HOME/dotfiles/bare-repo.git --work-tree=$HOME'

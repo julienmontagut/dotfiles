@@ -1,0 +1,11 @@
+#!/bin/sh
+
+$DOT_CONF_DIR=${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles
+$DOT_DATA_DIR=${XDG_DATA_HOME:-$HOME/.local/share}/dotfiles
+
+$DOT_REPO_DIR=$DOT_DATA_DIR/git
+
+$DOT_GIT_CMD='/usr/bin/git --git-dir=$DOT_REPO_DIR --work-tree=$HOME'
+
+alias dot='$DOT_GIT_CMD'
+
