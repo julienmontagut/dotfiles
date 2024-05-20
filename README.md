@@ -1,8 +1,6 @@
 # Dotfiles
 
-This repository contains my dotfiles, which I use to configure my development
-environment. It is targeted at macOS, but I would love to update it to work on
-linux as well.
+This repository contains my dotfiles, which I use to configure my development environments.
 
 ## Installation
 
@@ -12,10 +10,18 @@ git clone git://github.com/julienmontagut/dotfiles.git
     && ./install.sh
 ```
 
+## Structure of the repository
+
+- `bin`: Contains scripts that are added to the `$PATH`
+- `config`: Contains configuration files for various tools
+- `scripts`: Contains scripts that are useful to manage the dotfiles
+    - `{platform}`: Contains scripts that are specific to a platform
+    - `common/modules`: Contains the modules that are to be installed
+
 ## TODO
 
-- [X] Install script
-- [X] Configure macOS defaults on install
+- [ ] Install script
+- [ ] Configure macOS defaults on install
 - [ ] Load installed ZSH config for next installation steps
     > This might need the install script to be written in ZSH
 - [ ] Install configurations from `config` to `$XDG_CONFIG_HOME`
@@ -28,3 +34,4 @@ git clone git://github.com/julienmontagut/dotfiles.git
 - [ ] Change shell to bash
 - [ ] Split by platform and by package
 - [ ] Install pass on Fedora (with custom path PASSWORD_STORE_DIR see https://git.zx2c4.com/password-store/tree/src/password-store.sh)
+
