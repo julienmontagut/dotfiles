@@ -9,3 +9,6 @@
 [user]
 	email = _@julienmontagut.com
 	name = Julien Montagut
+[submodule]
+    recurse = true
+
