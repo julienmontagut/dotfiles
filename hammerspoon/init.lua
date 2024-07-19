@@ -1,52 +1,81 @@
 hs.ipc.cliInstall()
 
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "N", function()
-    local win = hs.window.focusedWindow()
-    local f = win:frame()
-    local screen = win:screen()
-    local max = screen:frame()
+-- Simplify the window animations and styling
+hs.window.animationDuration = 0
+hs.window.setShadows(false)
 
-    f.x = max.x
-    f.y = max.y
-    f.w = max.w / 2
-    f.h = max.h
-    win:setFrame(f)
+-- general settings
+--
+Margin = 10
+Mod1 = "command"
+Mod2 = "control"
+
+function getScreenFrame(mainScreen)
+	local screenFrame = mainScreen:frame()
+
+	return {
+		x = screenFrame.x + Margin,
+		y = screenFrame.y + Margin,
+		w = screenFrame.w - (Margin * 2),
+		h = screenFrame.h - (Margin * 2),
+	}
+end
+
+-- Creates a menubar item to handle workspaces
+local workspace_menu = hs.menubar.new()
+workspace_menu:autosaveName("workspaces")
+workspace_menu:setTitle("[ " .. os.date("%H:%M:%S") .. " ]")
+
+-- The application watcher handles the window tiling when enabled
+hs.application.watcher.new(function(name, event, app)
+	if event == hs.application.watcher.launched or event == hs.application.watcher.activated then
+		local apps = hs.application.runningApplications()
+		for _, otherApp in ipairs(apps) do
+			if otherApp:pid() ~= app:pid() then
+				otherApp:hide()
+			end
+		end
+		local window = app:mainWindow()
+		local screen = window:screen()
+		local fullscreen = getScreenFrame(screen)
+		if window then
+			window:setFrame(fullscreen)
+		end
+	elseif event == hs.application.watcher.deactivated or event == hs.application.watcher.hidden then
+		local windows = app:allWindows()
+		if #windows == 0 then
+			app:kill()
+		end
+	end
+end)
+	:start()
+
+hs.hotkey.bind({ Mod1 }, "return", function()
+	hs.execute("open -na Alacritty")
 end)
 
-hs.hotkey.bind({ "alt" }, "z", function()
-    local window = hs.window.focusedWindow()
-    window:minimize()
-    hs.notify.new({ title = "Hammerspoon", informativeText = "Hello World" }):send()
+hs.hotkey.bind({ Mod1, Mod2 }, "t", function()
+	hs.execute("open -na Alacritty")
 end)
 
-hs.hotkey.bind({ "alt" }, "h", function()
-    local windows = hs.window.allWindows()
-    for i, window in ipairs(windows) do
-        local title = window:title()
-        window:maximize()
-        hs.alert.show(title)
-    end
+hs.hotkey.bind({ Mod1, Mod2 }, "w", function()
+	hs.execute("open -na Firefox")
+	-- local screen = hs.screen.mainScreen()
+	-- local fullscreen = getScreenFrame(screen)
+	-- hs.webview.newBrowser(fullscreen)
 end)
 
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
-    local window = hs.window.focusedWindow()
-    local margin = 5
-    window:maximize()
-end)
+hs.hotkey.bind({ Mod1, Mod2 }, "c", hs.reload)
 
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "C", function()
-    local window = hs.window.focusedWindow()
-    local screen = window:screen()
-
-    local margin = 5
-
-    local frame = window:frame()
-    local max = screen:frame()
-
-    frame.x = max.x + margin
-    frame.y = max.y + margin
-    frame.w = max.w - (margin * 2)
-    frame.h = max.h - (margin * 2)
-
-    window:setFrame(frame)
-end)
+-- set up your windowfilter
+-- local switcher = hs.window.switcher.new(hs.window.filter.new(), {
+-- 	showThumbnails = false,
+-- 	showSelectedThumbnail = false,
+-- 	showSelectedTitle = true,
+-- })
+-- hs.hotkey.bind('alt', 'tab', function()
+-- 	switcher:next()
+-- end)
+-- hs.hotkey.bind('alt-shift', 'tab', function()
+-- 	switcher:previous()
+-- end)
