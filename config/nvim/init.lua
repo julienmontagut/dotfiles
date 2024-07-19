@@ -5,6 +5,7 @@ vim.g.maplocalleader = " "
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
+require("config.options")
 
 -- Make line numbers default
 vim.opt.number = true
@@ -55,7 +56,6 @@ vim.opt.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 5
--- vim.opt.colorcolumn = 100
 
 -- [[ Basic Keymaps ]]
 

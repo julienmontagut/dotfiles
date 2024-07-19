@@ -3,16 +3,20 @@ import = [
 ]
 
 [window]
-# decorations = "buttonless"
+# decorations = "Buttonless"
+dynamic_title = false
+title = "Terminal"
+#opacity = 0.9
+#startup_mode = "Maximized"
 resize_increments = true
 
 [window.padding]
-x = 8
-y = 8
+x = 2
+y = 2
 
 [scrolling]
-history = 10000
-multiplier = 3
+# history = 10000
+# multiplier = 3
 
 [font]
 size = 16.0
@@ -30,4 +34,3 @@ style = "Italic"
 [font.normal]
 family = "Lilex Nerd Font"
 style = "Regular"
-
