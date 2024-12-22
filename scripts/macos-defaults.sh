@@ -1,5 +1,8 @@
 #!/bin/sh
 
+echo "Error this is meant to be migrated to nix. Do not use"
+exit -1
+
 # User home folder
 #
 chflags nohidden ~/Library
