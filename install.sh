@@ -1,6 +1,15 @@
 #!/bin/sh
 set -e
 
+# Error as this is a work in progress
+echo "Do not use this script, until it is migrated to nix"
+exit 1
+
+# Install nix from determinate systems
+if ! command -v nix &>/dev/null; then
+  curl -fsSL https://nix.dev/install-nix | sh
+fi
+
 # Functions
 ###########
 
