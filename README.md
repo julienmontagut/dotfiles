@@ -1,8 +1,10 @@
 # Dotfiles
 
-This repository contains my dotfiles, which I use to configure my development environments.
+This repository contains my dotfiles
 
 ## Installation
+
+- [ ] TODO: Upgrade the installation process
 
 ```sh
 git clone git://github.com/julienmontagut/dotfiles.git
@@ -20,11 +22,9 @@ git clone git://github.com/julienmontagut/dotfiles.git
 
 ## TODO
 
-- [ ] Install script
-- [ ] Configure macOS defaults on install
-- [ ] Load installed ZSH config for next installation steps
-    > This might need the install script to be written in ZSH
-- [ ] Install configurations from `config` to `$XDG_CONFIG_HOME`
+- [ ] Update the install script
+- [ ] Move macOS defaults to Nix
+- [ ] Add missing configurations to Nix
 - [ ] Install of binaries
 - [ ] If installation of bash is required on macOS, then:
   - [ ] Install bash with brew
