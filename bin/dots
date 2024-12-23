@@ -1,10 +1,11 @@
 #!/bin/sh
 
-$DOTS_CONF_DIR=${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles
-$DOTS_DATA_DIR=${XDG_DATA_HOME:-$HOME/.local/share}/dotfiles
+# Use XDG_DATA_HOME if set, otherwise use ~/.local/share
+XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
 
-$DOTS_REPO_DIR=$DOT_DATA_DIR/git
+# Use DOTS_DIR if set, otherwise use XDG_DATA_HOME/dotfiles
+DOTS_DIR=${DOTS_DIR:-$XDG_DATA_HOME/dotfiles}
 
-$DOTS_GIT_CMD='/usr/bin/git --git-dir=$DOT_REPO_DIR --work-tree=$HOME'
-
-alias dots='$DOT_GIT_CMD'
+# The commands to use the dotfiles with nix
+alias dots-update='nix run nix-darwin -- switch --flake $DOTS_DIR'
+alias dots-edit='nvim $DOTS_DIR && dots-update'
