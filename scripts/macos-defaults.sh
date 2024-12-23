@@ -3,6 +3,8 @@
 echo "Error this is meant to be migrated to nix. Do not use"
 exit -1
 
+# TODO: Migrate the following configurations to nix-darwin
+
 # User home folder
 #
 chflags nohidden ~/Library
