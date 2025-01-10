@@ -1,6 +1,6 @@
 # This is your home-manager configuration file
 # Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
-{ inputs, lib, config, Pkgs, ... }:
+{ inputs, lib, config, pkgs, ... }:
 
 let
   inherit (pkgs.stdenv) isDarwin isLinux;
@@ -57,20 +57,14 @@ in
   # programs.wezterm.enable = true;
   # programs.wezterm.enableZshIntegration = true;
   home.packages = with pkgs; [
-    bat
     devenv
-    eza
-    fd
-    fzf
     gh
     gleam
     just
-    lazygit
     lua
     neovim
     ollama
-    ripgrep
-    yazi
+    timewarrior
   ];
 
   # fonts.fontConfig.enable = true;
@@ -79,30 +73,57 @@ in
   programs.home-manager.enable = true;
   programs.direnv = {
     enable = true;
-    enableZshIntegration = true;
-    nix-direnv.enable = true;
     silent = true;
+    nix-direnv.enable = true;
   };
   programs.zsh = {
     enable = true;
     enableCompletion = true;
     autocd = true;
-    antidote = {
-      enable = true;
-      plugins = [
-        "sindresorhus/pure"
-        "zsh-users/zsh-completions"
-        "zsh-users/zsh-autosuggestions"
-        "zsh-users/zsh-history-substring-search"
-        "zdharma-continuum/fast-syntax-highlighting"
-      ];
-    };
+    autosuggestion.enable = true;
+    syntaxHighlighting.enable = true;
+    historySubstringSearch.enable = true;
+  };
+  programs.starship = {
+    enable = true;
+  };
+  programs.eza = {
+    enable = true;
+    icons = "auto";
   };
   programs.bat = {
     enable = true;
     config.theme = "ansi";
   };
-  # TODO: Bind config from the repo to xdg
+  programs.fzf = {
+    enable = true;
+  };
+  programs.fd = {
+    enable = true;
+  };
+  programs.lazygit.enable = true;
+  programs.ripgrep.enable = true;
+  programs.yazi = {
+    enable = true;
+  };
+  programs.zoxide = {
+    enable = true;
+    options = [ "--cmd cd" ];
+  };
+  # On nix-darwin `programs.firefox` is not available system-wide
+  # TODO: On linux ensure firefox or librewolf is configured system-wide
+  programs.firefox = {
+    enable = true;
+    package = pkgs.firefox-unwrapped;
+    profiles = {
+      home = {
+        settings = {
+          "extensions.pocket.enabled" = false;
+          # "browser.startup.homepage" = "https://nixos.org";
+        };
+      };
+    };
+  };
   # programs.firefox = {
   #   enable = true;
   #   package = null;
@@ -130,7 +151,6 @@ in
 
   xdg.configFile = {
     "nvim".source = ./config/nvim;
-    "wezterm".source = ./config/wezterm;
   };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
