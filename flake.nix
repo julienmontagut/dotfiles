@@ -29,17 +29,21 @@
         nixpkgs.hostPlatform = "aarch64-darwin";
 
         # Allow non-free packages
-        # nixpkgs.config = {
-        #   allowUnfree = true;
-        #   allowUnfreePredicate = _: true;
-        # };
+        nixpkgs.config = {
+          allowUnfree = true;
+          allowUnfreePredicate = _: true;
+        };
 
         # Packages installed in system profile
-        # environment.systemPackages = with pkgs; [
+        environment.systemPackages = with pkgs; [
         #   lua
         #   luajit
         #   neovim
-        # ];
+        
+          # Packages to install only on macos
+          firefox-unwrapped
+          # raycast
+        ];
 
         # Variables set in system profile
         environment.variables = {
@@ -95,28 +99,30 @@
             "claude"
             "cursor"
             "element"
-            "firefox"
             "font-inter"
             "font-lilex"
             "font-lilex-nerd-font"
             "font-literata"
-            "inkscape"
+            "ghostty"
+            # "jordanbaird-ice"
+            "parallels"
             "proton-drive"
-            "proton-mail"
+            "proton-mail-bridge"
             "proton-pass"
+            "clion"
+            "raycast"
             "rider"
             "rustrover"
+            # "signal"
             "spotify"
             "steam"
-            "utm"
-            "wezterm"
+            # "utm"
+            "whatsapp"
             "whisky"
-            "zed"
           ];
 
           masApps = {
-            "Adguard for Safari" = 1440147259;
-            "Proton Pass for Safari" = 6502835663;
+            "AdGuard For Safari" = 1440147259;
             "TestFlight" = 899247664;
             "Xcode" = 497799835;
           };
