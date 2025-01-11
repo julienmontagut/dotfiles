@@ -53,7 +53,7 @@ vim.opt.inccommand = "split"
 
 -- Show which line your cursor is on
 vim.opt.cursorline = true
-
+  -- -specific settings
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 5
 
@@ -111,6 +111,11 @@ vim.api.nvim_create_autocmd("TextYankPost", {
         vim.highlight.on_yank()
     end,
 })
+
+-- Early exit if we're in vscode
+if vim.g.vscode ~= nil then
+    return
+end
 
 -- Install `lazy.nvim` plugin manager
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
