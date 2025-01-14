@@ -94,9 +94,10 @@
           };
 
           casks = [
-            "appcleaner"
             "anytype"
+            "appcleaner"
             "claude"
+            "clion"
             "cursor"
             "element"
             "font-inter"
@@ -116,6 +117,7 @@
             # "signal"
             "spotify"
             "steam"
+            "vmware-fusion"
             # "utm"
             "whatsapp"
             "whisky"
