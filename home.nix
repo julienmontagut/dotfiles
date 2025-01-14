@@ -46,7 +46,7 @@ in
       else
         "/home/julien";
     sessionVariables = {
-      EDITOR = "nvim";
+      # EDITOR = "nvim";
     };
   };
 
@@ -94,6 +94,22 @@ in
   programs.bat = {
     enable = true;
     config.theme = "ansi";
+  };
+
+  programs.helix = {
+    enable = true;
+    defaultEditor = true;
+    settings = {
+      theme = "base16_transparent";
+      keys = {
+        normal = {
+          C-c = ":wqa!";
+        };
+        insert = {
+         C-c = "normal_mode";
+        };
+      };
+    };  
   };
   programs.fzf = {
     enable = true;
