@@ -3,23 +3,27 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    nix-darwin.url = "github:LnL7/nix-darwin";
-    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager }:
+  outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager, nur }:
     let
       configuration = { pkgs, ... }: {
 
         nix.settings = {
           experimental-features = "nix-command flakes";
-          trusted-users = [
-            "root"
-            "@admin"
-            "@wheel"
-          ];
+          trusted-users = [ "root" "@admin" "@wheel" ];
         };
 
         nix.gc.automatic = true;
@@ -34,12 +38,16 @@
           allowUnfreePredicate = _: true;
         };
 
+        nixpkgs.overlays = [ nur.overlay ];
+
         # Packages installed in system profile
         environment.systemPackages = with pkgs; [
-        #   lua
-        #   luajit
-        #   neovim
-        
+          defaultbrowser
+
+          lua
+          luajit
+          neovim
+
           # Packages to install only on macos
           firefox-unwrapped
           # raycast
@@ -52,7 +60,7 @@
         };
 
         # Add ability to used TouchID for sudo authentication
-        security.pam.enableSudoTouchIdAuth = true;
+        # security.pam.enableSudoTouchIdAuth = true;
 
         # System configuration
         system = {
@@ -135,18 +143,20 @@
           home = "/Users/julien";
         };
       };
-    in
-    {
+    in {
       # Build darwin flake using:
       # $ darwin-rebuild build --flake .#MacBook-de-Julien
       darwinConfigurations."MacBook-de-Julien" = nix-darwin.lib.darwinSystem {
         modules = [
           configuration
 
-          # home manager
+          #home manager
           home-manager.darwinModules.home-manager
           {
+            home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = { inherit inputs nur; };
+            home-manager.backupFileExtension = "previous";
             home-manager.users.julien = import ./home.nix;
           }
         ];
