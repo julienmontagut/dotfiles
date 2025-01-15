@@ -53,7 +53,7 @@ vim.opt.inccommand = "split"
 
 -- Show which line your cursor is on
 vim.opt.cursorline = true
-  -- -specific settings
+-- -specific settings
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 5
 
@@ -131,6 +131,9 @@ require("lazy").setup({
     "echasnovski/mini.ai",
     "echasnovski/mini.surround",
     { "echasnovski/mini.statusline", opts = { use_icons = true } },
+
+    -- Add direnv support
+    -- "direnv/direnv.vim",
 
     -- "gc" to comment visual regions/lines
     { "numToStr/Comment.nvim", opts = {} },
