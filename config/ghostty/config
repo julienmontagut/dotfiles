@@ -1,0 +1,18 @@
+# Font configuration
+font-size=16
+
+# Theme
+theme=Hardcore
+
+# Mouse behaivour
+mouse-hide-while-typing=true
+focus-follows-mouse=true
+
+# Windows
+window-height=40
+window-width=120
+window-save-state=always
+
+# macOS titlebar styling
+macos-titlebar-style=tabs
+macos-titlebar-proxy-icon=hidden
