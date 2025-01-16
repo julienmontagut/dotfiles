@@ -89,7 +89,7 @@ in {
     config.theme = "ansi";
   };
   programs.helix = {
-    enable = false;
+    enable = true;
     settings = {
       theme = "base16_transparent";
       keys = { insert = { C-c = "normal_mode"; }; };

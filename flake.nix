@@ -38,7 +38,7 @@
           allowUnfreePredicate = _: true;
         };
 
-        nixpkgs.overlays = [ nur.overlay ];
+        nixpkgs.overlays = [ nur.overlays.default ];
 
         # Packages installed in system profile
         environment.systemPackages = with pkgs; [
