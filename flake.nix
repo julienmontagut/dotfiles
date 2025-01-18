@@ -60,7 +60,7 @@
         };
 
         # Add ability to used TouchID for sudo authentication
-        # security.pam.enableSudoTouchIdAuth = true;
+        security.pam.enableSudoTouchIdAuth = true;
 
         # System configuration
         system = {
@@ -130,6 +130,11 @@
             "whatsapp"
             "whisky"
           ];
+
+          # Install librewolf without quarantine
+          extraConfig = ''
+            cask "librewolf", args: { "no-quarantine": true }
+          '';
 
           masApps = {
             "AdGuard For Safari" = 1440147259;
