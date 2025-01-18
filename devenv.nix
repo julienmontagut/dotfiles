@@ -5,10 +5,7 @@
   # env.GREET = "devenv";
 
   # https://devenv.sh/packages/
-  packages = [ 
-    pkgs.git
-    pkgs.nixfmt
-  ];
+  packages = [ pkgs.git pkgs.nixfmt ];
 
   # https://devenv.sh/languages/
   # languages.rust.enable = true;
@@ -43,7 +40,7 @@
   # '';
 
   # https://devenv.sh/pre-commit-hooks/
-  # pre-commit.hooks.shellcheck.enable = true;
+  pre-commit.hooks.nixfmt.enable = true;
 
   # See full reference at https://devenv.sh/reference/options/
 }
