@@ -79,7 +79,7 @@
           keyboard = {
             enableKeyMapping = true;
             remapCapsLockToControl = true;
-            nonUS.remapTilde = true;
+            # nonUS.remapTilde = true;
           };
 
           # Set Git commit hash for darwin-version.

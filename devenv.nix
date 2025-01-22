@@ -5,11 +5,13 @@
   # env.GREET = "devenv";
 
   # https://devenv.sh/packages/
-  packages = [ pkgs.git pkgs.nixfmt ];
+  packages = [ pkgs.git pkgs.nixfmt pkgs.stylua ];
 
   # https://devenv.sh/languages/
-  # languages.rust.enable = true;
-  languages.nix.enable = true;
+  languages = {
+    nix.enable = true;
+    lua.enable = true;
+  };
 
   # https://devenv.sh/processes/
   # processes.cargo-watch.exec = "cargo-watch";
@@ -40,7 +42,9 @@
   # '';
 
   # https://devenv.sh/pre-commit-hooks/
-  pre-commit.hooks.nixfmt.enable = true;
-
+  pre-commit.hooks = {
+    nixfmt.enable = true;
+    stylua.enable = true;
+  };
   # See full reference at https://devenv.sh/reference/options/
 }

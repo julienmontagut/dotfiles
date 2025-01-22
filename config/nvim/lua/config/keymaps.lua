@@ -1,2 +1,0 @@
--- vim.keymap.set("n", "<leader>e", vim.cmd.Neotree)
--- vim.keymap.set("n", "<leader>t", vim.cmd.Telescope)
