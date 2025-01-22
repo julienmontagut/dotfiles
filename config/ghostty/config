@@ -16,3 +16,5 @@ window-save-state=always
 # macOS titlebar styling
 macos-titlebar-style=tabs
 macos-titlebar-proxy-icon=hidden
+
+keybind = global:cmd+grave_accent=toggle_quick_terminal

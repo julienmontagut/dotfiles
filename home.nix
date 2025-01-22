@@ -12,9 +12,9 @@ in {
     # inputs.nixvim.homeManagerModules.nixvim
 
     # Configuration modules for programs
-    ./modules/firefox.nix
-    ./modules/shell.nix
-    ./modules/helix.nix
+    ./programs/firefox.nix
+    ./programs/neovim.nix
+    ./programs/zsh.nix
   ];
 
   # nixpkgs = {
@@ -56,7 +56,6 @@ in {
     gleam
     just
     lua
-    neovim
     ollama
     rustup
     timewarrior
