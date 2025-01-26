@@ -42,15 +42,13 @@
 
         # Packages installed in system profile
         environment.systemPackages = with pkgs; [
-          defaultbrowser
-
           lua
           luajit
           neovim
 
           # Packages to install only on macos
+          defaultbrowser
           firefox-unwrapped
-          # raycast
         ];
 
         # Variables set in system profile
@@ -130,11 +128,6 @@
             "whatsapp"
             "whisky"
           ];
-
-          # Install librewolf without quarantine
-          extraConfig = ''
-            cask "librewolf", args: { "no-quarantine": true }
-          '';
 
           masApps = {
             "AdGuard For Safari" = 1440147259;
