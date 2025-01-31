@@ -45,8 +45,9 @@
           lua
           luajit
           neovim
+          netbird
 
-          # Packages to install only on macos
+          # Packages to install on macos
           defaultbrowser
           firefox-unwrapped
           librewolf-unwrapped
