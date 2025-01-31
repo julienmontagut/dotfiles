@@ -11,6 +11,30 @@
       autosuggestion.enable = true;
       syntaxHighlighting.enable = true;
       historySubstringSearch.enable = true;
+
+      initExtra = ''
+        # Use vim keys in tab complete menu
+        bindkey -M menuselect 'h' vi-backward-char
+        bindkey -M menuselect 'k' vi-up-line-or-history
+        bindkey -M menuselect 'l' vi-forward-char
+        bindkey -M menuselect 'j' vi-down-line-or-history
+
+        # Accept completion with more convenient keys
+        bindkey -M menuselect '^Y' accept-line
+        bindkey -M menuselect 'Tab' accept-line
+
+        # Better history search with Ctrl-p and Ctrl-n
+        bindkey '^P' history-substring-search-up
+        bindkey '^N' history-substring-search-down
+
+        # Use vim keys for history substring search
+        bindkey -M vicmd 'k' history-substring-search-up
+        bindkey -M vicmd 'j' history-substring-search-down
+
+        # Enable vim mode
+        bindkey -v
+        export KEYTIMEOUT=1
+      '';
     };
 
     # Directory environment management

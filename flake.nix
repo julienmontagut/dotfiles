@@ -49,6 +49,7 @@
           # Packages to install only on macos
           defaultbrowser
           firefox-unwrapped
+          librewolf-unwrapped
         ];
 
         # Variables set in system profile
