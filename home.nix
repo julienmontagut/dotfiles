@@ -57,6 +57,7 @@ in {
     just
     lua
     lmstudio
+    nixfmt
     rustup
     timewarrior
   ];
