@@ -9,7 +9,6 @@ in {
   imports = [
     # If you want to use home-manager modules from other flakes (such as nix-colors):
     # inputs.nix-colors.homeManagerModule
-    # inputs.nixvim.homeManagerModules.nixvim
 
     # Configuration modules for programs
     ./programs/firefox.nix
@@ -43,6 +42,7 @@ in {
     username = "julien";
     homeDirectory = if isDarwin then "/Users/julien" else "/home/julien";
     sessionVariables = { };
+    preferXdgDirectories = true;
   };
 
   # Enable XDG
@@ -72,6 +72,7 @@ in {
   xdg.configFile = {
     "ghostty".source = ./config/ghostty;
     "nvim".source = ./config/nvim;
+    "nvim-supa".source = ./config/nvim-supa;
   };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion

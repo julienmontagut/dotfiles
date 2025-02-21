@@ -44,13 +44,11 @@
         environment.systemPackages = with pkgs; [
           lua
           luajit
-          neovim
           netbird
 
           # Packages to install on macos
           defaultbrowser
           firefox-unwrapped
-          librewolf-unwrapped
         ];
 
         # Variables set in system profile
@@ -102,10 +100,8 @@
           };
 
           casks = [
-            "anytype"
             "appcleaner"
             "claude"
-            "clion"
             "cursor"
             "element"
             "font-inter"
@@ -113,20 +109,21 @@
             "font-lilex-nerd-font"
             "font-literata"
             "ghostty"
+            "jetbrains-toolbox"
             # "jordanbaird-ice"
+            "obsidian"
             "parallels"
             "proton-drive"
             "proton-mail-bridge"
             "proton-pass"
-            "clion"
             "raycast"
-            "rider"
-            "rustrover"
             # "signal"
             "spotify"
             "steam"
+            "utm"
+            # "visual-studio-code"
+            "visual-studio-code@insiders"
             "vmware-fusion"
-            # "utm"
             "whatsapp"
             "whisky"
           ];
