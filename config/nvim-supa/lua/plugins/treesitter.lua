@@ -1,0 +1,38 @@
+return {
+    {
+        "nvim-treesitter/nvim-treesitter",
+        event = "VeryLazy",
+        build = ":TSUpdate",
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter-textobjects",
+        },
+        opts = {
+            ensure_installed = {
+                "bash",
+                "c",
+                "c_sharp",
+                "css",
+                "dockerfile",
+                "editorconfig",
+                "gitcommit",
+                "gitignore",
+                "glea",
+                "html",
+                "javascript",
+                "json",
+                "jsonc",
+                "just",
+                "lua",
+                "markdown",
+                "markdown_inline",
+                "nix",
+                "proto",
+                "rust",
+                "sql",
+                "toml",
+                "typescript",
+                "yaml",
+            },
+        },
+    },
+}
