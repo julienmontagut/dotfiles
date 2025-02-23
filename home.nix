@@ -71,8 +71,13 @@ in {
   # Add custom configuration files
   xdg.configFile = {
     "ghostty".source = ./config/ghostty;
-    "nvim".source = ./config/nvim;
-    "nvim-supa".source = ./config/nvim-supa;
+    "nvim" = {
+      source = ./config/nvim;
+      onChange = ''
+        mkdir -p ${config.xdg.dataHome}/nvim
+        cp -f ${config.xdg.configHome}/nvim/lazy-lock.json ${config.xdg.dataHome}/nvim/lazy-lock.json 
+      '';
+    };
   };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
