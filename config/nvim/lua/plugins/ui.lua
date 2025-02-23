@@ -226,7 +226,9 @@ return {
                         "target",
                     },
                 },
-                follow_current_file = true,
+                follow_current_file = {
+                    enable = true,
+                },
                 use_libuv_file_watcher = true,
             },
         },

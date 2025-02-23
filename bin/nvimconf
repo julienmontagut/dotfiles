@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+DOTFILES_DIR="$HOME/.local/share/dotfiles"
+TEMP_CONFIG_DIR="/tmp/nvim-test-config"
+ORIG_CONFIG_DIR="$HOME/.config/nvim"
+
+# Create temporary config directory
+setup_temp_config() {
+    echo "Setting up temporary config directory..."
+    rm -rf "$TEMP_CONFIG_DIR"
+    mkdir -p "$TEMP_CONFIG_DIR"
+    cp -r "$ORIG_CONFIG_DIR"/* "$TEMP_CONFIG_DIR/"
+}
+
+# Launch nvim with temporary config
+test_config() {
+    echo "Launching Neovim with test config..."
+    NVIM_APPNAME="nvim-test" XDG_CONFIG_HOME="/tmp" nvim "$@"
+}
+
+# Save changes back to dotfiles if requested
+save_changes() {
+    echo "Do you want to save these changes to your dotfiles? (y/N)"
+    read -r response
+    if [[ "$response" =~ ^[Yy]$ ]]; then
+        echo "Saving changes to dotfiles..."
+        rm -rf "$DOTFILES_DIR/config/nvim"
+        mkdir -p "$DOTFILES_DIR/config/nvim"
+        cp -r "$TEMP_CONFIG_DIR"/* "$DOTFILES_DIR/config/nvim/"
+        echo "Changes saved successfully!"
+    else
+        echo "Changes discarded."
+    fi
+}
+
+# Main execution
+setup_temp_config
+test_config "$@"
+save_changes
