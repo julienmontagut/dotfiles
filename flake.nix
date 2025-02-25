@@ -102,7 +102,6 @@
           casks = [
             "appcleaner"
             "claude"
-            "cursor"
             "element"
             "font-inter"
             "font-lilex"
@@ -121,8 +120,7 @@
             "spotify"
             "steam"
             "utm"
-            # "visual-studio-code"
-            "visual-studio-code@insiders"
+            "visual-studio-code"
             "vmware-fusion"
             "whatsapp"
             "whisky"
