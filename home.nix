@@ -60,6 +60,7 @@ in {
     nixfmt
     rustup
     timewarrior
+    nodejs
   ];
 
   # fonts.fontConfig.enable = true;
