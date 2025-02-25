@@ -14,6 +14,7 @@ in {
     ./programs/firefox.nix
     ./programs/neovim.nix
     ./programs/zsh.nix
+    ./programs/claude.nix
   ];
 
   # nixpkgs = {
