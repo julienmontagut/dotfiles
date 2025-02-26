@@ -46,10 +46,30 @@ if [ "$OSNAME" = "Darwin" ]; then
   # darwin-rebuild switch --flake $DOTFILES_DIR
 fi
 
-# Install Home Manager on WSL
+# Install Home Manager on WSL if not already installed
 if [ "$IS_WSL" = true ]; then
-  nix-channel --add https://github.com/nix-community/home-manager/archive/release-23.05.tar.gz home-manager
-  nix-channel --update
-  nix-shell '<home-manager>' -A install
+  # Check if home-manager is already installed
+  if ! command -v home-manager &>/dev/null; then
+    echo "Home Manager not found, installing..."
+    nix-channel --add https://github.com/nix-community/home-manager/archive/release-23.05.tar.gz home-manager
+    nix-channel --update
+    nix-shell '<home-manager>' -A install
+  else
+    echo "Home Manager already installed, skipping installation..."
+  fi
+  
+  # Create dotfiles directory if it doesn't exist
+  mkdir -p $DOTFILES_DIR
+  
+  # Check if repo is already cloned
+  if [ ! -f "$DOTFILES_DIR/flake.nix" ]; then
+    echo "Cloning dotfiles repository..."
+    git clone https://github.com/julienmontagut/dotfiles.git $DOTFILES_DIR
+  else
+    echo "Dotfiles repository already exists, updating..."
+    (cd $DOTFILES_DIR && git pull)
+  fi
+  
+  echo "Applying configuration with home-manager..."
   home-manager switch --flake $DOTFILES_DIR
 fi
