@@ -31,7 +31,5 @@ git clone git://github.com/julienmontagut/dotfiles.git
   - [ ] Install bash-completion
   - [ ] Link bash to `/usr/local/bin/bash`
   - [ ] Add bash to `/etc/shells`
-- [ ] Change shell to bash
 - [ ] Split by platform and by package
-- [ ] Install pass on Fedora (with custom path PASSWORD_STORE_DIR see https://git.zx2c4.com/password-store/tree/src/password-store.sh)
 
