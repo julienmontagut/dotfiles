@@ -19,10 +19,13 @@ else
 fi
 
 if [ "$OSNAME" = "Darwin" ] || [ "$OSNAME" = "Linux" ]; then
-  # Install nix from determinate systems except on NixOS
-  if ! command -v nix &>/dev/null; then
+  # Install nix from determinate systems except if it is already installed
+  if ! command -v nix &>/dev/null && [ ! -d "$HOME/.nix-profile" ] && [ ! -f "/nix/var/nix/profiles/default/bin/nix" ]; then
+    echo "Nix not detected, installing..."
     curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | \
         sh -s -- install 
+  else
+    echo "Nix already installed, skipping installation..."
   fi
 fi
 
