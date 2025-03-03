@@ -6,7 +6,7 @@ let mapleader=' '
 
 " General options
 set scrolloff=3
-set relativenumber
+set number
 set clipboard+=unnamedplus
 
 " Search options

@@ -1,22 +1,33 @@
+-- Detect if running inside VSCode
+local is_vscode = vim.g.vscode ~= nil
+
 -- Set the leader key to space
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 -- Basic editor settings
 vim.opt.number = true
-
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
+vim.opt.undofile = true
+
+-- Exit insert mode with jk
+vim.keymap.set("i", "jk", "<Esc>", { noremap = true, silent = true })
+
+-- If running inside VSCode, load the VSCode configuration
+if is_vscode then
+    require("vscode")
+    return
+end
 
 vim.opt.cursorline = true
-vim.opt.undofile = true
 vim.opt.termguicolors = true
 vim.opt.signcolumn = "yes"
 
 -- Disable unused providers
 vim.g.loaded_node_provider = 0
 vim.g.loaded_perl_provider = 0
-vim.g.python3_host_prog = vim.fn.exepath("python3")
+-- vim.g.python3_host_prog = vim.fn.exepath("python3")
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
