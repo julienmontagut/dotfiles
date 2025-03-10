@@ -7,10 +7,7 @@ DOTFILES_DIR=${DOTFILES_DIR:-"${XDG_DATA_HOME}/dotfiles"}
 
 if [ "$OSNAME" = "Darwin" ] || [ "$OSNAME" = "Linux" ]; then
   # Install nix from determinate systems except if it is already installed
-  if
-    ! command -v nix &
-    >/dev/null && [ ! -d "$HOME/.nix-profile" ] && [ ! -f "/nix/var/nix/profiles/default/bin/nix" ]
-  then
+  if ! command -v nix >/dev/null && [ ! -d "$HOME/.nix-profile" ] && [ ! -f "/nix/var/nix/profiles/default/bin/nix" ]; then
     echo "Nix not detected, installing..."
     curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix |
       sh -s -- install
@@ -21,29 +18,29 @@ fi
 
 # On macOS, we install homebrew to handle app installations
 if [ "$OSNAME" = "Darwin" ]; then
-  if
-    ! xcode-select -p &
-    >/dev/null
-  then
+
+  if ! xcode-select -p >/dev/null; then
     xcode-select --install
+  else
+    echo "Xcode command line tools already installed, skipping installation..."
   fi
 
-  if
-    ! command -v brew &
-    >/dev/null
-  then
+  if ! PATH="/opt/homebrew/bin:$PATH" command -v brew >/dev/null; then
     NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  else
+    echo "Homebrew already installed, skipping installation..."
   fi
 
-  nix run nix-darwin -- switch --flake $DOTFILES_DIR
-  # darwin-rebuild switch --flake $DOTFILES_DIR
+  if command -v darwin-rebuild >/dev/null; then
+    darwin-rebuild switch --flake "$DOTFILES_DIR"
+  else
+    echo "Rebuilding Darwin configuration..."
+    nix run nix-darwin -- switch --flake "$DOTFILES_DIR"
+  fi
 fi
 
 # Install Home Manager on WSL if not already installed
-if
-  ! command -v home-manager &
-  >/dev/null
-then
+if ! command -v home-manager >/dev/null; then
   echo "Home Manager not found, installing..."
   nix-channel --add https://github.com/nix-community/home-manager/archive/release-23.05.tar.gz home-manager
   nix-channel --update
@@ -64,5 +61,26 @@ else
   (cd "$DOTFILES_DIR" && git pull)
 fi
 
-echo "Applying configuration with home-manager..."
-home-manager switch --flake "$DOTFILES_DIR"
+if [ "$OSNAME" = "Linux" ]; then
+  # Install NixOS configuration
+  if command -v nixos-rebuild >/dev/null; then
+    echo "Rebuilding NixOS configuration..."
+    sudo nixos-rebuild switch --flake "$DOTFILES_DIR"
+  else
+    echo "Using Home Manager to switch configurations..."
+    home-manager switch --flake "$DOTFILES_DIR"
+  fi
+elif [ "$OSNAME" = "Darwin" ]; then
+  # Install macOS configuration
+  if command -v darwin-rebuild >/dev/null; then
+    echo "Rebuilding Darwin configuration..."
+    darwin-rebuild switch --flake "$DOTFILES_DIR"
+  else
+    echo "Using Home Manager to switch configurations..."
+    home-manager switch --flake "$DOTFILES_DIR"
+  fi
+else
+  # Install WSL configuration
+  echo "Installing WSL configuration..."
+  home-manager switch --flake "$DOTFILES_DIR"
+fi
