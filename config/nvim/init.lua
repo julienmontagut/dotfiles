@@ -1,6 +1,3 @@
--- Detect if running inside VSCode
-local is_vscode = vim.g.vscode ~= nil
-
 -- Set the leader key to space
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
@@ -15,8 +12,8 @@ vim.opt.undofile = true
 vim.keymap.set("i", "jk", "<Esc>", { noremap = true, silent = true })
 
 -- If running inside VSCode, load the VSCode configuration
-if is_vscode then
-    require("vscode")
+if vim.g.vscode then
+    require("vscode-neovim")
     return
 end
 

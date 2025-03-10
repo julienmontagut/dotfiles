@@ -11,10 +11,11 @@ in {
     # inputs.nix-colors.homeManagerModule
 
     # Configuration modules for programs
-    ./programs/firefox.nix
+    ./programs/browser.nix
+    ./programs/claude.nix
+    # ./programs/firefox.nix
     ./programs/neovim.nix
     ./programs/zsh.nix
-    ./programs/claude.nix
   ];
 
   # nixpkgs = {
@@ -57,7 +58,7 @@ in {
     gleam
     just
     lua
-    lmstudio
+    #lmstudio
     nixfmt
     rustup
     timewarrior
@@ -77,7 +78,7 @@ in {
       source = ./config/nvim;
       onChange = ''
         mkdir -p ${config.xdg.dataHome}/nvim
-        cp -f ${config.xdg.configHome}/nvim/lazy-lock.json ${config.xdg.dataHome}/nvim/lazy-lock.json 
+        cp -f ${config.xdg.configHome}/nvim/lazy-lock.json ${config.xdg.dataHome}/nvim/lazy-lock.json
       '';
     };
   };
