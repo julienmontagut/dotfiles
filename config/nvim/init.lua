@@ -13,7 +13,6 @@ vim.keymap.set("i", "jk", "<Esc>", { noremap = true, silent = true })
 
 -- If running inside VSCode, load the VSCode configuration
 if vim.g.vscode then
-    require("vscode-neovim")
     return
 end
 
