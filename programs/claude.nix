@@ -2,7 +2,7 @@
 
 {
   home.packages = with pkgs; [
-    nodejs # Explicitly include nodejs in packages
+    nodejs
     (pkgs.writeShellScriptBin "claude" ''
       ${pkgs.nodejs}/bin/node ${config.home.homeDirectory}/.npm-global/bin/claude "$@"
     '')
@@ -11,49 +11,34 @@
   home.sessionPath = [ "$HOME/.npm-global/bin" ];
   home.sessionVariables = {
     NPM_CONFIG_PREFIX = "$HOME/.npm-global";
-    # Ensure npm scripts can find node
     NODE = "${pkgs.nodejs}/bin/node";
   };
 
   home.activation = {
     installClaudeCode = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      if ! [ -d "$HOME/.npm-global" ]; then
-        $DRY_RUN_CMD mkdir -p $VERBOSE_ARG "$HOME/.npm-global"
-      fi
-
-      # Create a symlink to node in a directory that's in the default PATH
+      # Ensure directories exist
       $DRY_RUN_CMD mkdir -p "$HOME/.npm-global/bin"
+      $DRY_RUN_CMD mkdir -p "$HOME/.npm-global/lib/node_modules"
+
+      # Create a symlink to node
       $DRY_RUN_CMD ln -sf "${pkgs.nodejs}/bin/node" "$HOME/.npm-global/bin/node"
 
-      # Ensure node is in PATH for npm scripts
-      export PATH="${pkgs.nodejs}/bin:$HOME/.npm-global/bin:$PATH"
+      # Setup minimal PATH for npm operations
+      NODE_BIN="${pkgs.nodejs}/bin"
+      NPM_BIN="$HOME/.npm-global/bin"
+      MINIMAL_PATH="$NODE_BIN:$NPM_BIN"
+      export NODE="$NODE_BIN/node"
 
-      # Set NODE explicitly for npm scripts
-      export NODE="${pkgs.nodejs}/bin/node"
+      # Configure npm
+      $DRY_RUN_CMD $NODE_BIN/npm config set prefix "$HOME/.npm-global"
 
-      echo "Setting npm config..."
-      $DRY_RUN_CMD ${pkgs.nodejs}/bin/npm config set prefix "$HOME/.npm-global"
-      $DRY_RUN_CMD ${pkgs.nodejs}/bin/npm config set scripts-prepend-node-path true
-
-      # Check if claude-code is installed, if not install it
+      # Install or skip update
       if ! [ -e "$HOME/.npm-global/bin/claude" ]; then
         echo "Installing @anthropic-ai/claude-code..."
-        $DRY_RUN_CMD PATH="${pkgs.nodejs}/bin:$HOME/.npm-global/bin:$PATH" ${pkgs.nodejs}/bin/npm install -g @anthropic-ai/claude-code || {
-          echo "Failed to install claude-code. Check if Node.js is available with: which node"
-          echo "Current NODE env: $NODE"
-          echo "Current PATH: $PATH"
-          return 1
-        }
-      else
-        # Check for updates if already installed
-        echo "Updating @anthropic-ai/claude-code..."
-        $DRY_RUN_CMD PATH="${pkgs.nodejs}/bin:$HOME/.npm-global/bin:$PATH" ${pkgs.nodejs}/bin/npm update -g @anthropic-ai/claude-code || {
-          echo "Failed to update claude-code."
-          return 1
-        }
+        if ! $DRY_RUN_CMD env PATH="$MINIMAL_PATH" $NODE_BIN/npm install -g @anthropic-ai/claude-code; then
+          echo "Failed to install claude-code, continuing..."
+        fi
       fi
-
-      echo "Claude CLI setup complete."
     '';
   };
 }
