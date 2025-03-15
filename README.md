@@ -4,12 +4,8 @@ This repository contains my dotfiles
 
 ## Installation
 
-- [ ] TODO: Upgrade the installation process
-
 ```sh
-git clone git://github.com/julienmontagut/dotfiles.git
-    && cd dotfiles
-    && ./install.sh
+curl -sSL https://raw.githubusercontent.com/julienmontagut/dotfiles/main/scripts/install.sh | bash
 ```
 
 ## Structure of the repository
@@ -22,14 +18,6 @@ git clone git://github.com/julienmontagut/dotfiles.git
 
 ## TODO
 
-- [ ] Update the install script
+- [ ] Update the install script to work on WSL
 - [ ] Move macOS defaults to Nix
-- [ ] Add missing configurations to Nix
-- [ ] Install of binaries
-- [ ] If installation of bash is required on macOS, then:
-  - [ ] Install bash with brew
-  - [ ] Install bash-completion
-  - [ ] Link bash to `/usr/local/bin/bash`
-  - [ ] Add bash to `/etc/shells`
 - [ ] Split by platform and by package
-
