@@ -48,7 +48,6 @@
 
           # Packages to install on macos
           defaultbrowser
-          firefox-unwrapped
         ];
 
         # Variables set in system profile
@@ -126,6 +125,9 @@
             "whatsapp"
             "whisky"
           ];
+          extraConfig = ''
+            cask "librewolf", args: { no_quarantine: true }
+          '';
 
           masApps = {
             "AdGuard For Safari" = 1440147259;

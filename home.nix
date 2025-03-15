@@ -11,9 +11,8 @@ in {
     # inputs.nix-colors.homeManagerModule
 
     # Configuration modules for programs
-    ./programs/browser.nix
+    # ./programs/browser.nix
     ./programs/claude.nix
-    # ./programs/firefox.nix
     ./programs/neovim.nix
     ./programs/zsh.nix
   ];
