@@ -54,11 +54,12 @@ in {
   home.packages = with pkgs; [
     devenv
     gh
-    gleam
     just
+    kubectl
+    kubectx
     lua
-    #lmstudio
     nixfmt
+    pulumi
     rustup
     timewarrior
     nodejs
@@ -69,6 +70,8 @@ in {
   # Enable home-manager
   programs.home-manager.enable = true;
   programs.lazygit.enable = true;
+  programs.k9s.enable = true;
+  # services.podman.enable = true;
 
   # Add custom configuration files
   xdg.configFile = {
