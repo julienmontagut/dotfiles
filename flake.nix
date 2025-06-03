@@ -44,7 +44,9 @@
         environment.systemPackages = with pkgs; [
           lua
           luajit
+          podman
           netbird
+          # netbird
 
           # Packages to install on macos
           defaultbrowser
@@ -99,7 +101,6 @@
           };
 
           casks = [
-            "appcleaner"
             "claude"
             "element"
             "font-inter"
@@ -107,33 +108,20 @@
             "font-lilex-nerd-font"
             "font-literata"
             "ghostty"
+            "google-chrome"
+            "google-drive"
             "jetbrains-toolbox"
-            # "jordanbaird-ice"
-            "lm-studio"
             "obsidian"
-            "parallels"
-            "proton-drive"
-            "proton-mail-bridge"
-            "proton-pass"
+            "orbstack"
             "raycast"
-            # "signal"
             "spotify"
             "steam"
-            "utm"
+            "todoist"
             "visual-studio-code"
-            "vmware-fusion"
             "whatsapp"
             "whisky"
+            "zed"
           ];
-          extraConfig = ''
-            cask "librewolf", args: { no_quarantine: true }
-          '';
-
-          masApps = {
-            "AdGuard For Safari" = 1440147259;
-            "TestFlight" = 899247664;
-            "Xcode" = 497799835;
-          };
         };
 
         users.users.julien = {
