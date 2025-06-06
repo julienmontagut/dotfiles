@@ -12,7 +12,7 @@
       syntaxHighlighting.enable = true;
       historySubstringSearch.enable = true;
 
-      initExtra = ''
+      initContent = ''
         # Initialize completion system
         zstyle ':completion:*' menu select
         zmodload zsh/complist

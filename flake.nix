@@ -45,12 +45,12 @@
           lua
           luajit
           podman
-          netbird
-          # netbird
 
           # Packages to install on macos
           defaultbrowser
         ];
+
+        services.netbird.enable = true;
 
         # Variables set in system profile
         environment.variables = {
@@ -63,6 +63,8 @@
 
         # System configuration
         system = {
+
+          primaryUser = "julien";
 
           defaults = {
             menuExtraClock.Show24Hour = true;
@@ -132,7 +134,7 @@
     in {
       # Build darwin flake using:
       # $ darwin-rebuild build --flake .#MacBook-de-Julien
-      darwinConfigurations."MacBook-de-Julien" = nix-darwin.lib.darwinSystem {
+      darwinConfigurations.Macbook = nix-darwin.lib.darwinSystem {
         modules = [
           configuration
 
