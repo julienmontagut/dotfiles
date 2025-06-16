@@ -17,13 +17,9 @@ return {
     opts = {
         workspaces = {
             {
-                name = "Personal",
-                path = "~/Documents/Personal",
+                name = "Main",
+                path = "~/Developer/julienmontagut/docs/",
             },
-            -- {
-            --   name = "work",
-            --   path = "~/vaults/work",
-            -- },
         },
     },
 }
