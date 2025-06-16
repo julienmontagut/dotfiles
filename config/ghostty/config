@@ -4,11 +4,14 @@ font-size=16
 # Theme
 theme=Hardcore
 
+# General behavior
+confirm-close-surface=false
+
 # Mouse behaivour
 mouse-hide-while-typing=true
 focus-follows-mouse=true
 
-# Windows
+# Window configuration
 window-height=36
 window-width=120
 window-save-state=always
