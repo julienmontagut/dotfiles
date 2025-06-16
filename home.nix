@@ -52,6 +52,7 @@ in {
   # Add stuff for your user as you see fit:
   # programs.neovim.enable = true;
   home.packages = with pkgs; [
+    bun
     devenv
     gh
     just
@@ -71,7 +72,16 @@ in {
   programs.home-manager.enable = true;
   programs.lazygit.enable = true;
   programs.k9s.enable = true;
+  programs.zellij.enable = true;
   # services.podman.enable = true;
+
+  programs.helix = {
+    enable = true;
+    package = pkgs.evil-helix;
+  };
+
+  # programs.gh.enable = true;
+  programs.gh-dash.enable = true;
 
   # Add custom configuration files
   xdg.configFile = {
