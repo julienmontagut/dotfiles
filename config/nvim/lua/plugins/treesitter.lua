@@ -16,7 +16,7 @@ return {
                 "editorconfig",
                 "gitcommit",
                 "gitignore",
-                "glea",
+                "gleam",
                 "html",
                 "javascript",
                 "json",
