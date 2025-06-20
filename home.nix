@@ -63,6 +63,7 @@ in {
     pulumi
     rustup
     timewarrior
+    tree-sitter
     nodejs
   ];
 
@@ -72,7 +73,23 @@ in {
   programs.home-manager.enable = true;
   programs.lazygit.enable = true;
   programs.k9s.enable = true;
-  programs.zellij.enable = true;
+  programs.zellij = {
+    enable = true;
+    settings = {
+      default_mode = "locked";
+      mouse_mode = false;
+      hide_session_name = true;
+      keybinds = {
+        normal = { bind = { "Ctrl c" = { SwitchToMode = "Locked"; }; }; };
+        pane = { bind = { "Ctrl c" = { SwitchToMode = "Locked"; }; }; };
+        tab = { bind = { "Ctrl c" = { SwitchToMode = "Locked"; }; }; };
+        resize = { bind = { "Ctrl c" = { SwitchToMode = "Locked"; }; }; };
+        move = { bind = { "Ctrl c" = { SwitchToMode = "Locked"; }; }; };
+        search = { bind = { "Ctrl c" = { SwitchToMode = "Locked"; }; }; };
+        session = { bind = { "Ctrl c" = { SwitchToMode = "Locked"; }; }; };
+      };
+    };
+  };
   # services.podman.enable = true;
 
   programs.helix = {
