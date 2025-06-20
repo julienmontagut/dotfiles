@@ -58,22 +58,78 @@ return {
                     },
                 },
                 server = {
-                    standalone = true, -- This ensures rust-analyzer starts independently
                     on_attach = function(client, bufnr)
-                        -- Ensure LSP is fully functional
+                        -- Use common LSP functionality
+                        _G.common_on_attach(client, bufnr)
+
                         local opts = { buffer = bufnr, noremap = true, silent = true }
-                        -- Add your keymaps here
+                        -- Rust-specific hover with actions
                         vim.keymap.set("n", "K", rt.hover_actions.hover_actions, opts)
+                        -- Code actions and language features (c = code) - rust-specific code actions override LSP
                         vim.keymap.set(
                             "n",
-                            "<Leader>a",
+                            "<Leader>ca",
                             rt.code_action_group.code_action_group,
-                            opts
+                            vim.tbl_extend("force", opts, { desc = "Rust code actions" })
                         )
+                        vim.keymap.set(
+                            "n",
+                            "<Leader>cr",
+                            rt.runnables.runnables,
+                            vim.tbl_extend("force", opts, { desc = "Code runnables" })
+                        )
+                        vim.keymap.set(
+                            "n",
+                            "<Leader>cd",
+                            rt.debuggables.debuggables,
+                            vim.tbl_extend("force", opts, { desc = "Code debuggables" })
+                        )
+                        vim.keymap.set(
+                            "n",
+                            "<Leader>ce",
+                            rt.expand_macro.expand_macro,
+                            vim.tbl_extend("force", opts, { desc = "Expand macro" })
+                        )
+                        vim.keymap.set(
+                            "n",
+                            "<Leader>ch",
+                            rt.inlay_hints.toggle_inlay_hints,
+                            vim.tbl_extend("force", opts, { desc = "Toggle hints" })
+                        )
+                        vim.keymap.set(
+                            "n",
+                            "<Leader>cg",
+                            rt.crate_graph.view_crate_graph,
+                            vim.tbl_extend("force", opts, { desc = "View crate graph" })
+                        )
+                        vim.keymap.set(
+                            "n",
+                            "<Leader>cm",
+                            rt.parent_module.parent_module,
+                            vim.tbl_extend("force", opts, { desc = "Parent module" })
+                        )
+                        -- Enhanced navigation and LSP actions
                         vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+                        vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
                         vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+                        vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, opts)
                         vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
                         vim.keymap.set("n", "<Leader>rn", vim.lsp.buf.rename, opts)
+                        vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
+                        vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, opts)
+
+                        -- Diagnostic navigation
+                        vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
+                        vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+                        vim.keymap.set("n", "<Leader>d", vim.diagnostic.open_float, opts)
+                        vim.keymap.set("n", "<Leader>dl", vim.diagnostic.setloclist, opts)
+
+                        -- Workspace management
+                        vim.keymap.set("n", "<Leader>wa", vim.lsp.buf.add_workspace_folder, opts)
+                        vim.keymap.set("n", "<Leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
+                        vim.keymap.set("n", "<Leader>wl", function()
+                            print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+                        end, opts)
 
                         -- Enable inlay hints by default
                         if client.server_capabilities.inlayHintProvider then
@@ -222,6 +278,72 @@ return {
                     end
                 end,
             })
+
+            -- Additional Rust-specific keybindings for efficient development
+            vim.api.nvim_create_autocmd("FileType", {
+                pattern = "rust",
+                callback = function(event)
+                    local opts = { buffer = event.buf, noremap = true, silent = true }
+
+                    -- Build commands (b = build) - specific build shortcuts
+                    vim.keymap.set(
+                        "n",
+                        "<leader>bb",
+                        ":!cargo build<CR>",
+                        vim.tbl_extend("force", opts, { desc = "Build" })
+                    )
+                    vim.keymap.set(
+                        "n",
+                        "<leader>br",
+                        ":!cargo build --release<CR>",
+                        vim.tbl_extend("force", opts, { desc = "Build release" })
+                    )
+
+                    -- Run commands (r = run) - all other execution, testing, linting
+                    vim.keymap.set(
+                        "n",
+                        "<leader>rc",
+                        ":!cargo check<CR>",
+                        vim.tbl_extend("force", opts, { desc = "Run check" })
+                    )
+                    vim.keymap.set(
+                        "n",
+                        "<leader>rl",
+                        ":!cargo clippy<CR>",
+                        vim.tbl_extend("force", opts, { desc = "Run lint" })
+                    )
+                    vim.keymap.set(
+                        "n",
+                        "<leader>rf",
+                        ":!cargo fmt<CR>",
+                        vim.tbl_extend("force", opts, { desc = "Run format" })
+                    )
+                    vim.keymap.set(
+                        "n",
+                        "<leader>rt",
+                        ":!cargo test<CR>",
+                        vim.tbl_extend("force", opts, { desc = "Run tests" })
+                    )
+                    vim.keymap.set(
+                        "n",
+                        "<leader>rw",
+                        ":!cargo watch -x check<CR>",
+                        vim.tbl_extend("force", opts, { desc = "Run watch" })
+                    )
+                    vim.keymap.set(
+                        "n",
+                        "<leader>rd",
+                        ":!cargo doc --open<CR>",
+                        vim.tbl_extend("force", opts, { desc = "Run docs" })
+                    )
+                    vim.keymap.set(
+                        "n",
+                        "<leader>rx",
+                        ":!cargo run --example ",
+                        vim.tbl_extend("force", opts, { desc = "Run example" })
+                    )
+                end,
+            })
         end,
     },
     {
@@ -240,8 +362,94 @@ return {
             local crates = require("crates")
             crates.setup(opts)
 
-            vim.keymap.set("n", "<leader>ct", crates.toggle, { silent = true })
-            vim.keymap.set("n", "<leader>cr", crates.reload, { silent = true })
+            -- Package management (p = package) - moved from crates config
+            vim.keymap.set(
+                "n",
+                "<leader>pt",
+                crates.toggle,
+                { silent = true, desc = "Toggle package info" }
+            )
+            vim.keymap.set(
+                "n",
+                "<leader>pr",
+                crates.reload,
+                { silent = true, desc = "Reload packages" }
+            )
+            vim.keymap.set(
+                "n",
+                "<leader>pv",
+                crates.show_versions_popup,
+                { silent = true, desc = "Show versions" }
+            )
+            vim.keymap.set(
+                "n",
+                "<leader>pf",
+                crates.show_features_popup,
+                { silent = true, desc = "Show features" }
+            )
+            vim.keymap.set(
+                "n",
+                "<leader>pd",
+                crates.show_dependencies_popup,
+                { silent = true, desc = "Show dependencies" }
+            )
+            vim.keymap.set(
+                "n",
+                "<leader>pu",
+                crates.update_crate,
+                { silent = true, desc = "Update package" }
+            )
+            vim.keymap.set(
+                "v",
+                "<leader>pu",
+                crates.update_crates,
+                { silent = true, desc = "Update selected packages" }
+            )
+            vim.keymap.set(
+                "n",
+                "<leader>pa",
+                crates.update_all_crates,
+                { silent = true, desc = "Update all packages" }
+            )
+            vim.keymap.set(
+                "n",
+                "<leader>pU",
+                crates.upgrade_crate,
+                { silent = true, desc = "Upgrade package" }
+            )
+            vim.keymap.set(
+                "v",
+                "<leader>pU",
+                crates.upgrade_crates,
+                { silent = true, desc = "Upgrade selected packages" }
+            )
+            vim.keymap.set(
+                "n",
+                "<leader>pA",
+                crates.upgrade_all_crates,
+                { silent = true, desc = "Upgrade all packages" }
+            )
+            vim.keymap.set(
+                "n",
+                "<leader>ph",
+                crates.open_homepage,
+                { silent = true, desc = "Open package homepage" }
+            )
+            vim.keymap.set(
+                "n",
+                "<leader>po",
+                crates.open_repository,
+                { silent = true, desc = "Open package repository" }
+            )
+            vim.keymap.set(
+                "n",
+                "<leader>pc",
+                crates.open_crates_io,
+                { silent = true, desc = "Open on crates.io" }
+            )
+            vim.keymap.set("n", "<leader>pn", ":!cargo new ", { desc = "New package" })
+            vim.keymap.set("n", "<leader>pi", ":!cargo install ", { desc = "Install package" })
+            vim.keymap.set("n", "<leader>pp", ":!cargo publish<CR>", { desc = "Publish package" })
         end,
     },
 }
