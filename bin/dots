@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 # Use XDG_DATA_HOME if set, otherwise use ~/.local/share
 XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
@@ -6,6 +7,39 @@ XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
 # Use DOTS_DIR if set, otherwise use XDG_DATA_HOME/dotfiles
 DOTS_DIR=${DOTS_DIR:-$XDG_DATA_HOME/dotfiles}
 
-# The commands to use the dotfiles with nix
-alias dots-update='nix run nix-darwin -- switch --flake $DOTS_DIR'
-alias dots-edit='nvim $DOTS_DIR && dots-update'
+# Detect platform
+if [ "$(uname)" = "Darwin" ]; then
+    IS_DARWIN=1
+else
+    IS_DARWIN=0
+fi
+
+case "${1:-}" in
+    update)
+        cd "$DOTS_DIR"
+        if [ "$IS_DARWIN" = "1" ]; then
+            sudo darwin-rebuild switch --flake .
+        else
+            sudo nixos-rebuild switch --flake .
+        fi
+        ;;
+    check)
+        cd "$DOTS_DIR"
+        if [ "$IS_DARWIN" = "1" ]; then
+            sudo darwin-rebuild check --flake .
+        else
+            sudo nixos-rebuild dry-build --flake .
+        fi
+        ;;
+    edit)
+        nvim "$DOTS_DIR" && "$0" update
+        ;;
+    *)
+        echo "Usage: dots <command>"
+        echo "Commands:"
+        echo "  update  - Apply dotfiles configuration"
+        echo "  check   - Check dotfiles configuration"
+        echo "  edit    - Edit dotfiles and apply changes"
+        exit 1
+        ;;
+esac
