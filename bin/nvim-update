@@ -1,0 +1,124 @@
+#!/bin/sh
+set -e
+
+# nvim-update - Update Neovim configuration easily
+# This script creates a vim alias for editing and automatically saves changes back to dotfiles
+
+DOTFILES_DIR="$HOME/.local/share/dotfiles"
+NVIM_CONFIG_DIR="$DOTFILES_DIR/config/nvim"
+TEMP_CONFIG_DIR="/tmp/nvim-config-edit"
+
+# Function to show usage
+usage() {
+    echo "Usage: nvim-update [OPTION]"
+    echo "Update Neovim configuration easily"
+    echo ""
+    echo "Options:"
+    echo "  --alt         Edit alternative nvim config (nvim-alt)"
+    echo "  -h, --help    Show this help message"
+    echo ""
+    echo "This script:"
+    echo "1. Creates a temporary copy of nvim config"
+    echo "2. Opens nvim with vim alias pointing to temp config"
+    echo "3. Saves changes back to dotfiles when you exit"
+}
+
+# Parse arguments
+ALT_CONFIG=false
+while [ $# -gt 0 ]; do
+    case $1 in
+        --alt)
+            ALT_CONFIG=true
+            shift
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1"
+            usage
+            exit 1
+            ;;
+    esac
+done
+
+# Set config directory based on flag
+if [ "$ALT_CONFIG" = true ]; then
+    NVIM_CONFIG_DIR="$DOTFILES_DIR/config/nvim-alt"
+    echo "Using alternative nvim config (nvim-alt)"
+else
+    echo "Using main nvim config"
+fi
+
+# Check if nvim config exists
+if [ ! -d "$NVIM_CONFIG_DIR" ]; then
+    echo "Error: Neovim config directory not found: $NVIM_CONFIG_DIR"
+    exit 1
+fi
+
+# Create temporary config directory
+echo "Creating temporary config copy..."
+rm -rf "$TEMP_CONFIG_DIR"
+cp -r "$NVIM_CONFIG_DIR" "$TEMP_CONFIG_DIR"
+
+# Create vim alias script
+VIM_ALIAS_SCRIPT="$TEMP_CONFIG_DIR/vim"
+cat > "$VIM_ALIAS_SCRIPT" << 'EOF'
+#!/bin/sh
+# Temporary vim alias that uses the temp nvim config
+exec nvim --cmd "set runtimepath^=$TEMP_CONFIG_DIR" "$@"
+EOF
+chmod +x "$VIM_ALIAS_SCRIPT"
+
+# Export temp config dir for the alias script
+export TEMP_CONFIG_DIR
+
+# Add temp config to PATH temporarily
+export PATH="$TEMP_CONFIG_DIR:$PATH"
+
+echo "Temporary nvim config created at: $TEMP_CONFIG_DIR"
+echo "Starting nvim with vim alias available..."
+echo "Edit your config files, then exit nvim to save changes back to dotfiles."
+echo ""
+
+# Start nvim in the temp config directory
+cd "$TEMP_CONFIG_DIR"
+nvim .
+
+# After nvim exits, ask user if they want to save changes
+echo ""
+echo "Do you want to save the changes back to your dotfiles? (y/N)"
+read -r response
+
+case "$response" in
+    [yY]|[yY][eE][sS])
+        echo "Saving changes back to dotfiles..."
+        
+        # Remove the vim alias script before copying back
+        rm -f "$VIM_ALIAS_SCRIPT"
+        
+        # Copy changes back to original config
+        cp -r "$TEMP_CONFIG_DIR"/* "$NVIM_CONFIG_DIR/"
+        
+        # Run stylua formatting if available
+        if command -v stylua >/dev/null 2>&1; then
+            echo "Formatting Lua files..."
+            cd "$DOTFILES_DIR"
+            stylua config/nvim/**/*.lua 2>/dev/null || true
+            if [ "$ALT_CONFIG" = true ]; then
+                stylua config/nvim-alt/**/*.lua 2>/dev/null || true
+            fi
+        fi
+        
+        echo "Changes saved successfully!"
+        echo "You can now rebuild your home-manager config with: home-manager switch --flake ."
+        ;;
+    *)
+        echo "Changes discarded."
+        ;;
+esac
+
+# Cleanup
+rm -rf "$TEMP_CONFIG_DIR"
+echo "Temporary files cleaned up."
