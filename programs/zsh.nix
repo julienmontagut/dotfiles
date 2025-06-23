@@ -1,7 +1,9 @@
 # Shell and shell-related tool configurations
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
-{
+let inherit (pkgs.stdenv) isDarwin;
+
+in {
   programs = {
     # Core shell configuration
     zsh = {
@@ -11,6 +13,13 @@
       autosuggestion.enable = true;
       syntaxHighlighting.enable = true;
       historySubstringSearch.enable = true;
+
+      shellAliases = {
+        # Git aliases
+        "gcm" = "git commit -m";
+        "gca" = "git commit --amend --no-edit";
+        "gpf" = "git push --force-with-lease";
+      };
 
       initContent = ''
         # Initialize completion system
