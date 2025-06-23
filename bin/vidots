@@ -8,3 +8,4 @@ EDITOR="${EDITOR:-vi}"
 
 # Edit the dotfiles directory
 $EDITOR $XDG_DATA_HOME/dotfiles
+
