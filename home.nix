@@ -1,6 +1,4 @@
-# This is your home-manager configuration file
-
-# Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
+# home-manager configuration
 { inputs, lib, config, pkgs, ... }:
 
 let inherit (pkgs.stdenv) isDarwin isLinux;
@@ -42,7 +40,7 @@ in {
   home = {
     username = "julien";
     homeDirectory = if isDarwin then "/Users/julien" else "/home/julien";
-    sessionVariables = { };
+    sessionPath = [ "$HOME/.local/bin" ];
     preferXdgDirectories = true;
   };
 
@@ -161,11 +159,6 @@ in {
   };
   # services.podman.enable = true;
 
-  programs.helix = {
-    enable = true;
-    package = pkgs.evil-helix;
-  };
-
   # programs.gh.enable = true;
   programs.gh-dash.enable = true;
 
@@ -187,6 +180,8 @@ in {
       '';
     };
   };
+
+  home.file = { ".local/bin".source = ./bin; };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   home.stateVersion = "25.05";
