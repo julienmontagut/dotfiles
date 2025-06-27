@@ -75,27 +75,31 @@ in {
     enable = true;
     settings = {
       default_mode = "locked";
-      mouse_mode = false;
-      hide_session_name = true;
+      session_name = "default";
+      attach_to_session = true;
       show_startup_tips = false;
+      ui = { pane_frames = { hide_session_name = true; }; };
       keybinds = {
+        _props.clear-defaults = true;
         locked = { "bind \"Ctrl g\"" = { SwitchToMode = "Normal"; }; };
         normal = {
           "bind \"Ctrl g\"" = { SwitchToMode = "Locked"; };
+          "bind \"Ctrl c\"" = { SwitchToMode = "Locked"; };
           "bind \"p\"" = { SwitchToMode = "Pane"; };
           "bind \"t\"" = { SwitchToMode = "Tab"; };
           "bind \"r\"" = { SwitchToMode = "Resize"; };
           "bind \"s\"" = { SwitchToMode = "Scroll"; };
           "bind \"o\"" = { SwitchToMode = "Session"; };
           "bind \"h\"" = { SwitchToMode = "Move"; };
+          "bind \"Ctrl q\"" = { Quit = { }; };
         };
         pane = {
           "bind \"Ctrl g\"" = { SwitchToMode = "Locked"; };
-          "bind \"Ctrl c\"" = { SwitchToMode = "Normal"; };
-          "bind \"h\" \"Left\"" = { MoveFocus = "Left"; };
-          "bind \"l\" \"Right\"" = { MoveFocus = "Right"; };
-          "bind \"j\" \"Down\"" = { MoveFocus = "Down"; };
-          "bind \"k\" \"Up\"" = { MoveFocus = "Up"; };
+          "bind \"Ctrl c\" \"Enter\"" = { SwitchToMode = "Normal"; };
+          "bind \"h\"" = { MoveFocus = "Left"; };
+          "bind \"l\"" = { MoveFocus = "Right"; };
+          "bind \"j\"" = { MoveFocus = "Down"; };
+          "bind \"k\"" = { MoveFocus = "Up"; };
           "bind \"p\"" = { SwitchFocus = { }; };
           "bind \"n\"" = {
             NewPane = { };
@@ -109,16 +113,12 @@ in {
             NewPane = "Right";
             SwitchToMode = "Normal";
           };
-          "bind \"x\"" = {
+          "bind \"q\"" = {
             CloseFocus = { };
             SwitchToMode = "Normal";
           };
           "bind \"f\"" = {
             ToggleFocusFullscreen = { };
-            SwitchToMode = "Normal";
-          };
-          "bind \"z\"" = {
-            TogglePaneFrames = { };
             SwitchToMode = "Normal";
           };
           "bind \"w\"" = {
@@ -129,17 +129,21 @@ in {
             TogglePaneEmbedOrFloating = { };
             SwitchToMode = "Normal";
           };
+          "bind \"c\"" = {
+            SwitchToMode = "RenamePane";
+            PaneNameInput = 0;
+          };
         };
         tab = {
           "bind \"Ctrl g\"" = { SwitchToMode = "Locked"; };
-          "bind \"Ctrl c\"" = { SwitchToMode = "Normal"; };
-          "bind \"h\" \"Left\" \"Up\" \"k\"" = { GoToPreviousTab = { }; };
-          "bind \"l\" \"Right\" \"Down\" \"j\"" = { GoToNextTab = { }; };
+          "bind \"Ctrl c\" \"Enter\"" = { SwitchToMode = "Normal"; };
+          "bind \"h\" \"k\"" = { GoToPreviousTab = { }; };
+          "bind \"l\" \"j\"" = { GoToNextTab = { }; };
           "bind \"n\"" = {
             NewTab = { };
             SwitchToMode = "Normal";
           };
-          "bind \"x\"" = {
+          "bind \"q\"" = {
             CloseTab = { };
             SwitchToMode = "Normal";
           };
@@ -171,31 +175,30 @@ in {
         };
         resize = {
           "bind \"Ctrl g\"" = { SwitchToMode = "Locked"; };
-          "bind \"Ctrl c\"" = { SwitchToMode = "Normal"; };
-          "bind \"h\" \"Left\"" = { Resize = "Increase Left"; };
-          "bind \"j\" \"Down\"" = { Resize = "Increase Down"; };
-          "bind \"k\" \"Up\"" = { Resize = "Increase Up"; };
-          "bind \"l\" \"Right\"" = { Resize = "Increase Right"; };
+          "bind \"Ctrl c\" \"Enter\"" = { SwitchToMode = "Normal"; };
+          "bind \"h\"" = { Resize = "Increase Left"; };
+          "bind \"j\"" = { Resize = "Increase Down"; };
+          "bind \"k\"" = { Resize = "Increase Up"; };
+          "bind \"l\"" = { Resize = "Increase Right"; };
           "bind \"H\"" = { Resize = "Decrease Left"; };
           "bind \"J\"" = { Resize = "Decrease Down"; };
           "bind \"K\"" = { Resize = "Decrease Up"; };
           "bind \"L\"" = { Resize = "Decrease Right"; };
-          "bind \"=\" \"+\"" = { Resize = "Increase"; };
+          "bind \"=\"" = { Resize = "Increase"; };
           "bind \"-\"" = { Resize = "Decrease"; };
         };
         scroll = {
-          "bind \"Ctrl g\"" = { SwitchToMode = "Locked"; };
-          "bind \"Ctrl c\"" = { SwitchToMode = "Normal"; };
-          "bind \"Ctrl b\"" = {
+          "bind \"Ctrl g\"" = {
             ScrollToBottom = { };
-            SwitchToMode = "Normal";
+            SwitchToMode = "Locked";
           };
+          "bind \"Ctrl c\" \"Enter\"" = { SwitchToMode = "Normal"; };
+          "bind \"g\"" = { ScrollToTop = { }; };
+          "bind \"G\"" = { ScrollToBottom = { }; };
           "bind \"j\" \"Down\"" = { ScrollDown = { }; };
           "bind \"k\" \"Up\"" = { ScrollUp = { }; };
-          "bind \"Ctrl f\" \"PageDown\" \"Right\" \"l\"" = {
-            PageScrollDown = { };
-          };
-          "bind \"Ctrl b\" \"PageUp\" \"Left\" \"h\"" = { PageScrollUp = { }; };
+          "bind \"Ctrl d\" \"l\"" = { PageScrollDown = { }; };
+          "bind \"Ctrl u\" \"h\"" = { PageScrollUp = { }; };
           "bind \"d\"" = { HalfPageScrollDown = { }; };
           "bind \"u\"" = { HalfPageScrollUp = { }; };
         };
