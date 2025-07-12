@@ -51,6 +51,7 @@ in {
   # programs.neovim.enable = true;
   home.packages = with pkgs; [
     bun
+    dua
     devenv
     gh
     just
@@ -58,11 +59,13 @@ in {
     kubectx
     lua
     nixfmt
+    mprocs
     pulumi
     rustup
     timewarrior
     tree-sitter
     nodejs
+    xh
   ];
 
   # fonts.fontConfig.enable = true;
@@ -71,6 +74,11 @@ in {
   programs.home-manager.enable = true;
   programs.lazygit.enable = true;
   programs.k9s.enable = true;
+  programs.bacon.enable = true;
+  programs.git = {
+    enable = true;
+    delta.enable = true;
+  };
   programs.zellij = {
     enable = true;
     settings = {
