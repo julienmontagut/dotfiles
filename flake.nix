@@ -103,6 +103,7 @@
           };
 
           casks = [
+            "brave-browser"
             "claude"
             "element"
             "font-inter"
