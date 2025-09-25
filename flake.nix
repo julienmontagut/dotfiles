@@ -103,26 +103,27 @@
           };
 
           casks = [
-            "brave-browser"
             "claude"
-            "element"
+            # "element"
+            "firefox"
             "font-inter"
             "font-lilex"
             "font-lilex-nerd-font"
             "font-literata"
             "ghostty"
+            "goland"
             "google-chrome"
             "google-drive"
-            "jetbrains-toolbox"
+            "motion"
             "obsidian"
             "orbstack"
             "raycast"
+            "readdle-spark"
+            "rustrover"
             "spotify"
             "steam"
-            "todoist"
-            "visual-studio-code"
+            "todoist-app"
             "whatsapp"
-            "whisky"
             "zed"
           ];
         };
