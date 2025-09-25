@@ -78,7 +78,17 @@ in {
   programs.git = {
     enable = true;
     delta.enable = true;
+    maintenance.enable = true;
+    userName = "Julien Montagut";
+    userEmail = "_@julienmontagut.com";
+    extraConfig = {
+      init.defaultBranch = "main";
+      pull.rebase = true;
+      push.autoSetupRemote = true;
+      submodule.recurse = true;
+    };
   };
+  programs.go.enable = true;
   programs.zellij = {
     enable = true;
     settings = {
