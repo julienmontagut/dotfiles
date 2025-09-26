@@ -103,6 +103,7 @@
           };
 
           casks = [
+            "anytype"
             "claude"
             # "element"
             "firefox"
@@ -122,7 +123,6 @@
             "rustrover"
             "spotify"
             "steam"
-            "todoist-app"
             "whatsapp"
             "zed"
           ];
