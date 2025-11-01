@@ -66,6 +66,8 @@ in {
     tree-sitter
     nodejs
     xh
+    jetbrains.rider
+    firefox
   ];
 
   # fonts.fontConfig.enable = true;
