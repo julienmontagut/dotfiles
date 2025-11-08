@@ -15,9 +15,11 @@
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    catppuccin.url = "github:catppuccin/nix";
   };
 
-  outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager, nur }:
+  outputs =
+    inputs@{ self, nixpkgs, nix-darwin, home-manager, nur, catppuccin, ... }:
     let
       configuration = { pkgs, ... }: {
 
@@ -147,7 +149,8 @@
             home-manager.useUserPackages = true;
             home-manager.extraSpecialArgs = { inherit inputs nur; };
             home-manager.backupFileExtension = "previous";
-            home-manager.users.julien = import ./home.nix;
+            home-manager.users.julien.imports =
+              [ ./home.nix catppuccin.homeModules.catppuccin ];
           }
         ];
       };
