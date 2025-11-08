@@ -5,10 +5,11 @@
   # env.GREET = "devenv";
 
   # https://devenv.sh/packages/
-  packages = [ pkgs.git pkgs.nixfmt pkgs.stylua ];
+  packages = [ pkgs.git pkgs.nixfmt-classic pkgs.stylua pkgs.jujutsu ];
 
   # https://devenv.sh/languages/
   languages = {
+    # ansible.enable = true;  # Using pkgs.ansible directly instead
     nix.enable = true;
     lua.enable = true;
   };
@@ -42,8 +43,8 @@
   # '';
 
   # https://devenv.sh/pre-commit-hooks/
-  pre-commit.hooks = {
-    nixfmt.enable = true;
+  git-hooks.hooks = {
+    nixfmt-classic.enable = true;
     stylua.enable = true;
   };
   # See full reference at https://devenv.sh/reference/options/

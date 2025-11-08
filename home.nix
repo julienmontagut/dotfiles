@@ -47,6 +47,15 @@ in {
   # Enable XDG
   xdg.enable = true;
 
+  # Catppuccin theme configuration
+  catppuccin = {
+    enable = true;
+    flavor = "mocha"; # Options: latte, frappe, macchiato, mocha
+    # Disable integrations for programs we're not using or have custom themes
+    delta.enable = false;
+    bat.enable = false; # Keep custom "ansi" theme from zsh.nix
+  };
+
   # Add stuff for your user as you see fit:
   # programs.neovim.enable = true;
   home.packages = with pkgs; [
@@ -77,13 +86,17 @@ in {
   programs.lazygit.enable = true;
   programs.k9s.enable = true;
   programs.bacon.enable = true;
+  # programs.delta.enable = true;
+
   programs.git = {
     enable = true;
-    delta.enable = true;
+    # delta.enable = true;
     maintenance.enable = true;
-    userName = "Julien Montagut";
-    userEmail = "_@julienmontagut.com";
-    extraConfig = {
+    settings = {
+      user = {
+        name = "Julien Montagut";
+        email = "_@julienmontagut.com";
+      };
       init.defaultBranch = "main";
       pull.rebase = true;
       push.autoSetupRemote = true;
