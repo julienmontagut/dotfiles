@@ -10,8 +10,8 @@ in {
 
     # Configuration modules for programs
     # ./programs/browser.nix
-    ./programs/claude.nix
-    ./programs/neovim.nix
+    # ./programs/claude.nix
+    # ./programs/neovim.nix
     ./programs/zsh.nix
   ];
 
@@ -44,16 +44,42 @@ in {
     preferXdgDirectories = true;
   };
 
+  # Configuration for the MacOS target
+  targets.darwin = {
+    # Add MacOS-specific configuration here
+    # programs.macos-settings.enable = true;
+    copyApps = {
+      enable = true;
+      directory = "Applications";
+    };
+    linkApps = {
+      enable = false;
+      # directory = "Applications";
+    };
+    defaults = {
+      NSGlobalDomain = {
+        KeyRepeat = 1;
+        AppleMetricUnits = true;
+      };
+      "com.apple.dock" = {
+        autohide = true;
+        orientation = "left";
+      };
+    };
+  };
+
   # Enable XDG
   xdg.enable = true;
 
   # Catppuccin theme configuration
   catppuccin = {
     enable = true;
-    flavor = "mocha"; # Options: latte, frappe, macchiato, mocha
+    # flavor = "mocha"; # Options: latte, frappe, macchiato, mocha
     # Disable integrations for programs we're not using or have custom themes
     delta.enable = false;
     bat.enable = false; # Keep custom "ansi" theme from zsh.nix
+    ghostty.enable = true;
+    firefox.enable = true;
   };
 
   # Add stuff for your user as you see fit:
@@ -64,6 +90,7 @@ in {
     devenv
     gh
     just
+    k9s
     kubectl
     kubectx
     lua
@@ -75,19 +102,51 @@ in {
     tree-sitter
     nodejs
     xh
+    jetbrains.goland
     jetbrains.rider
-    firefox
+    jetbrains.rust-rover
+    # firefox
   ];
 
+  # Only supported on linux
   # fonts.fontConfig.enable = true;
+  # services.podman.enable = true;
 
+  programs.aerospace = {
+    enable = isDarwin;
+    userSettings = {
+      gaps = {
+        outer.left = 8;
+        outer.bottom = 8;
+        outer.top = 8;
+        outer.right = 8;
+      };
+      mode.main.binding = {
+        alt-h = "focus left";
+        alt-j = "focus down";
+        alt-k = "focus up";
+        alt-l = "focus right";
+      };
+    };
+  };
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+    vimAlias = true;
+    vimdiffAlias = true;
+  };
+  programs.glab.enable = true;
+  programs.claude-code.enable = true;
   # Enable home-manager
   programs.home-manager.enable = true;
   programs.lazygit.enable = true;
   programs.k9s.enable = true;
   programs.bacon.enable = true;
   # programs.delta.enable = true;
-
+  programs.ghostty = {
+    enable = true;
+    package = pkgs.ghostty-bin;
+  };
   programs.git = {
     enable = true;
     # delta.enable = true;
@@ -103,146 +162,10 @@ in {
       submodule.recurse = true;
     };
   };
+  programs.firefox.enable = true;
+  programs.alacritty.enable = true;
   programs.go.enable = true;
-  programs.zellij = {
-    enable = true;
-    settings = {
-      default_mode = "locked";
-      session_name = "default";
-      attach_to_session = true;
-      show_startup_tips = false;
-      ui = { pane_frames = { hide_session_name = true; }; };
-      keybinds = {
-        _props.clear-defaults = true;
-        locked = { "bind \"Ctrl g\"" = { SwitchToMode = "Normal"; }; };
-        normal = {
-          "bind \"Ctrl g\"" = { SwitchToMode = "Locked"; };
-          "bind \"Ctrl c\"" = { SwitchToMode = "Locked"; };
-          "bind \"p\"" = { SwitchToMode = "Pane"; };
-          "bind \"t\"" = { SwitchToMode = "Tab"; };
-          "bind \"r\"" = { SwitchToMode = "Resize"; };
-          "bind \"s\"" = { SwitchToMode = "Scroll"; };
-          "bind \"o\"" = { SwitchToMode = "Session"; };
-          "bind \"h\"" = { SwitchToMode = "Move"; };
-          "bind \"Ctrl q\"" = { Quit = { }; };
-        };
-        pane = {
-          "bind \"Ctrl g\"" = { SwitchToMode = "Locked"; };
-          "bind \"Ctrl c\" \"Enter\"" = { SwitchToMode = "Normal"; };
-          "bind \"h\"" = { MoveFocus = "Left"; };
-          "bind \"l\"" = { MoveFocus = "Right"; };
-          "bind \"j\"" = { MoveFocus = "Down"; };
-          "bind \"k\"" = { MoveFocus = "Up"; };
-          "bind \"p\"" = { SwitchFocus = { }; };
-          "bind \"n\"" = {
-            NewPane = { };
-            SwitchToMode = "Normal";
-          };
-          "bind \"d\"" = {
-            NewPane = "Down";
-            SwitchToMode = "Normal";
-          };
-          "bind \"r\"" = {
-            NewPane = "Right";
-            SwitchToMode = "Normal";
-          };
-          "bind \"q\"" = {
-            CloseFocus = { };
-            SwitchToMode = "Normal";
-          };
-          "bind \"f\"" = {
-            ToggleFocusFullscreen = { };
-            SwitchToMode = "Normal";
-          };
-          "bind \"w\"" = {
-            ToggleFloatingPanes = { };
-            SwitchToMode = "Normal";
-          };
-          "bind \"e\"" = {
-            TogglePaneEmbedOrFloating = { };
-            SwitchToMode = "Normal";
-          };
-          "bind \"c\"" = {
-            SwitchToMode = "RenamePane";
-            PaneNameInput = 0;
-          };
-        };
-        tab = {
-          "bind \"Ctrl g\"" = { SwitchToMode = "Locked"; };
-          "bind \"Ctrl c\" \"Enter\"" = { SwitchToMode = "Normal"; };
-          "bind \"h\" \"k\"" = { GoToPreviousTab = { }; };
-          "bind \"l\" \"j\"" = { GoToNextTab = { }; };
-          "bind \"n\"" = {
-            NewTab = { };
-            SwitchToMode = "Normal";
-          };
-          "bind \"q\"" = {
-            CloseTab = { };
-            SwitchToMode = "Normal";
-          };
-          "bind \"s\"" = {
-            ToggleActiveSyncTab = { };
-            SwitchToMode = "Normal";
-          };
-          "bind \"1\"" = {
-            GoToTab = 1;
-            SwitchToMode = "Normal";
-          };
-          "bind \"2\"" = {
-            GoToTab = 2;
-            SwitchToMode = "Normal";
-          };
-          "bind \"3\"" = {
-            GoToTab = 3;
-            SwitchToMode = "Normal";
-          };
-          "bind \"4\"" = {
-            GoToTab = 4;
-            SwitchToMode = "Normal";
-          };
-          "bind \"5\"" = {
-            GoToTab = 5;
-            SwitchToMode = "Normal";
-          };
-          "bind \"Tab\"" = { ToggleTab = { }; };
-        };
-        resize = {
-          "bind \"Ctrl g\"" = { SwitchToMode = "Locked"; };
-          "bind \"Ctrl c\" \"Enter\"" = { SwitchToMode = "Normal"; };
-          "bind \"h\"" = { Resize = "Increase Left"; };
-          "bind \"j\"" = { Resize = "Increase Down"; };
-          "bind \"k\"" = { Resize = "Increase Up"; };
-          "bind \"l\"" = { Resize = "Increase Right"; };
-          "bind \"H\"" = { Resize = "Decrease Left"; };
-          "bind \"J\"" = { Resize = "Decrease Down"; };
-          "bind \"K\"" = { Resize = "Decrease Up"; };
-          "bind \"L\"" = { Resize = "Decrease Right"; };
-          "bind \"=\"" = { Resize = "Increase"; };
-          "bind \"-\"" = { Resize = "Decrease"; };
-        };
-        scroll = {
-          "bind \"Ctrl g\"" = {
-            ScrollToBottom = { };
-            SwitchToMode = "Locked";
-          };
-          "bind \"Ctrl c\" \"Enter\"" = { SwitchToMode = "Normal"; };
-          "bind \"g\"" = { ScrollToTop = { }; };
-          "bind \"G\"" = { ScrollToBottom = { }; };
-          "bind \"j\" \"Down\"" = { ScrollDown = { }; };
-          "bind \"k\" \"Up\"" = { ScrollUp = { }; };
-          "bind \"Ctrl d\" \"l\"" = { PageScrollDown = { }; };
-          "bind \"Ctrl u\" \"h\"" = { PageScrollUp = { }; };
-          "bind \"d\"" = { HalfPageScrollDown = { }; };
-          "bind \"u\"" = { HalfPageScrollUp = { }; };
-        };
-        session = {
-          "bind \"Ctrl g\"" = { SwitchToMode = "Locked"; };
-          "bind \"Ctrl c\"" = { SwitchToMode = "Normal"; };
-          "bind \"d\"" = { Detach = { }; };
-        };
-      };
-    };
-  };
+  programs.zellij.enable = true;
   # services.podman.enable = true;
 
   # programs.gh.enable = true;
@@ -250,21 +173,21 @@ in {
 
   # Add custom configuration files
   xdg.configFile = {
-    "ghostty".source = ./config/ghostty;
-    "nvim" = {
-      source = ./config/nvim;
-      onChange = ''
-        mkdir -p ${config.xdg.dataHome}/nvim
-        cp -f ${config.xdg.configHome}/nvim/lazy-lock.json ${config.xdg.dataHome}/nvim/lazy-lock.json
-      '';
-    };
-    "nvim-alt" = {
-      source = ./config/nvim;
-      onChange = ''
-        mkdir -p ${config.xdg.dataHome}/nvim-alt
-        cp -f ${config.xdg.configHome}/nvim-alt/lazy-lock.json ${config.xdg.dataHome}/nvim-alt/lazy-lock.json
-      '';
-    };
+    # "ghostty".source = ./config/ghostty;
+    # "nvim" = {
+    #   source = ./config/nvim;
+    #   onChange = ''
+    #     mkdir -p ${config.xdg.dataHome}/nvim
+    #     cp -f ${config.xdg.configHome}/nvim/lazy-lock.json ${config.xdg.dataHome}/nvim/lazy-lock.json
+    #   '';
+    # };
+    # "nvim-alt" = {
+    #   source = ./config/nvim;
+    #   onChange = ''
+    #     mkdir -p ${config.xdg.dataHome}/nvim-alt
+    #     cp -f ${config.xdg.configHome}/nvim-alt/lazy-lock.json ${config.xdg.dataHome}/nvim-alt/lazy-lock.json
+    #   '';
+    # };
   };
 
   home.file = { ".local/bin".source = ./bin; };
