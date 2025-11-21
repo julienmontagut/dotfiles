@@ -1,3 +1,5 @@
+tap "netbirdio/tap"
+brew "defaultbrowser"
 brew "glab"
 brew "go"
 brew "gopls"
@@ -16,6 +18,7 @@ cask "google-chrome"
 cask "google-drive"
 cask "jetbrains-toolbox"
 cask "motion"
+cask "netbirdio/tap/netbird-ui"
 cask "orbstack"
 cask "spotify"
 cask "steam", args: { appdir: "~/Applications" }

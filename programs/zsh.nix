@@ -71,7 +71,7 @@ in {
     };
     bat = {
       enable = true;
-      config.theme = "ansi";
+      # config.theme = "ansi";
     };
 
     # Search and navigation tools
