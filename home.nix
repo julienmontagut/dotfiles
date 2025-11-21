@@ -15,7 +15,7 @@ in {
     ./programs/zsh.nix
   ];
 
-  # nixpkgs = {
+  nixpkgs = {
   #   # You can add overlays here
   #   overlays = [
   #     # If you want to use overlays exported from other flakes:
@@ -28,14 +28,12 @@ in {
   #     #   });
   #     # })
   #   ];
-  #   # Configure your nixpkgs instance
-  #   config = {
-  #     # Disable if you don't want unfree packages
-  #     allowUnfree = true;
-  #     # Workaround for https://github.com/nix-community/home-manager/issues/2942
-  #     allowUnfreePredicate = _: true;
-  #   };
-  # };
+    config = {
+      allowUnfree = true;
+      # Workaround for https://github.com/nix-community/home-manager/issues/2942
+      allowUnfreePredicate = _: true;
+    };
+  };
 
   home = {
     username = "julien";
@@ -48,13 +46,14 @@ in {
   targets.darwin = {
     # Add MacOS-specific configuration here
     # programs.macos-settings.enable = true;
-    copyApps = {
-      enable = true;
-      directory = "Applications";
-    };
+    # TODO: Put back when available in release 25.11
+    # copyApps = {
+    #   enable = true;
+    #   directory = "Applications";
+    # };
     linkApps = {
-      enable = false;
-      # directory = "Applications";
+      # enable = false;
+      directory = "Applications";
     };
     defaults = {
       NSGlobalDomain = {
@@ -76,35 +75,35 @@ in {
     enable = true;
     # flavor = "mocha"; # Options: latte, frappe, macchiato, mocha
     # Disable integrations for programs we're not using or have custom themes
-    delta.enable = false;
-    bat.enable = false; # Keep custom "ansi" theme from zsh.nix
-    ghostty.enable = true;
-    firefox.enable = true;
+    # delta.enable = false;
+    # bat.enable = false; # Keep custom "ansi" theme from zsh.nix
   };
 
   # Add stuff for your user as you see fit:
   # programs.neovim.enable = true;
   home.packages = with pkgs; [
     bun
-    dua
+    claude-code
     devenv
+    dua
     gh
+    glab
+    jetbrains.goland
+    jetbrains.rider
+    jetbrains.rust-rover
     just
     k9s
     kubectl
     kubectx
     lua
-    nixfmt
     mprocs
+    nixfmt-rfc-style
+    nodejs
     pulumi
     rustup
     timewarrior
     tree-sitter
-    nodejs
     xh
-    jetbrains.goland
-    jetbrains.rider
-    jetbrains.rust-rover
     # firefox
   ];
 
@@ -135,27 +134,26 @@ in {
     vimAlias = true;
     vimdiffAlias = true;
   };
-  programs.glab.enable = true;
-  programs.claude-code.enable = true;
+  # TODO: Put back when available in stable release - 25.11?
+  # programs.glab.enable = true;
+  # programs.claude-code.enable = true;
   # Enable home-manager
   programs.home-manager.enable = true;
   programs.lazygit.enable = true;
   programs.k9s.enable = true;
   programs.bacon.enable = true;
   # programs.delta.enable = true;
-  programs.ghostty = {
-    enable = true;
-    package = pkgs.ghostty-bin;
-  };
+  # programs.ghostty = {
+  #   enable = true;
+  #   package = pkgs.ghostty-bin;
+  # };
   programs.git = {
     enable = true;
     # delta.enable = true;
     maintenance.enable = true;
-    settings = {
-      user = {
-        name = "Julien Montagut";
-        email = "_@julienmontagut.com";
-      };
+    userName = "Julien Montagut";
+    userEmail = "_@julienmontagut.com";
+    extraConfig = {
       init.defaultBranch = "main";
       pull.rebase = true;
       push.autoSetupRemote = true;
