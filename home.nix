@@ -146,9 +146,9 @@ in {
     enable = true;
     # delta.enable = true;
     maintenance.enable = true;
-    userName = "Julien Montagut";
-    userEmail = "_@julienmontagut.com";
-    extraConfig = {
+    settings = {
+      user.name = "Julien Montagut";
+      user.email = "_@julienmontagut.com";
       init.defaultBranch = "main";
       pull.rebase = true;
       push.autoSetupRemote = true;
