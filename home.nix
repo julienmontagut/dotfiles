@@ -31,7 +31,7 @@ in {
     config = {
       allowUnfree = true;
       # Workaround for https://github.com/nix-community/home-manager/issues/2942
-      allowUnfreePredicate = _: true;
+      # allowUnfreePredicate = _: true;
     };
   };
 
@@ -47,14 +47,15 @@ in {
     # Add MacOS-specific configuration here
     # programs.macos-settings.enable = true;
     # TODO: Put back when available in release 25.11
-    # copyApps = {
-    #   enable = true;
-    #   directory = "Applications";
-    # };
-    linkApps = {
-      # enable = false;
+    copyApps = {
+      enable = true;
       directory = "Applications";
     };
+    linkApps.enable = false;
+    # linkApps = {
+      # enable = false;
+      # directory = "Applications";
+    # };
     defaults = {
       NSGlobalDomain = {
         KeyRepeat = 1;
@@ -73,17 +74,13 @@ in {
   # Catppuccin theme configuration
   catppuccin = {
     enable = true;
-    # flavor = "mocha"; # Options: latte, frappe, macchiato, mocha
-    # Disable integrations for programs we're not using or have custom themes
-    # delta.enable = false;
-    # bat.enable = false; # Keep custom "ansi" theme from zsh.nix
+    flavor = "macchiato";
   };
 
   # Add stuff for your user as you see fit:
   # programs.neovim.enable = true;
   home.packages = with pkgs; [
     bun
-    claude-code
     devenv
     dua
     gh
@@ -104,7 +101,6 @@ in {
     timewarrior
     tree-sitter
     xh
-    # firefox
   ];
 
   # Only supported on linux
@@ -134,19 +130,18 @@ in {
     vimAlias = true;
     vimdiffAlias = true;
   };
-  # TODO: Put back when available in stable release - 25.11?
-  # programs.glab.enable = true;
-  # programs.claude-code.enable = true;
+  programs.claude-code.enable = true;
   # Enable home-manager
   programs.home-manager.enable = true;
   programs.lazygit.enable = true;
   programs.k9s.enable = true;
   programs.bacon.enable = true;
   # programs.delta.enable = true;
-  # programs.ghostty = {
-  #   enable = true;
-  #   package = pkgs.ghostty-bin;
-  # };
+  programs.ghostty = {
+    enable = true;
+    # package = isDarwin ? pkgs.ghostty-bin : ghostty;
+    package = pkgs.ghostty-bin;
+  };
   programs.git = {
     enable = true;
     # delta.enable = true;
@@ -191,5 +186,5 @@ in {
   home.file = { ".local/bin".source = ./bin; };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-  home.stateVersion = "25.05";
+  home.stateVersion = "25.11";
 }
