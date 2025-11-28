@@ -10,7 +10,6 @@ in {
 
     # Configuration modules for programs
     # ./programs/browser.nix
-    # ./programs/claude.nix
     # ./programs/neovim.nix
     ./programs/zsh.nix
   ];
@@ -28,11 +27,7 @@ in {
   #     #   });
   #     # })
   #   ];
-    config = {
-      allowUnfree = true;
-      # Workaround for https://github.com/nix-community/home-manager/issues/2942
-      # allowUnfreePredicate = _: true;
-    };
+    config.allowUnfree = true;
   };
 
   home = {
@@ -46,16 +41,11 @@ in {
   targets.darwin = {
     # Add MacOS-specific configuration here
     # programs.macos-settings.enable = true;
-    # TODO: Put back when available in release 25.11
-    copyApps = {
-      enable = true;
-      directory = "Applications";
-    };
-    linkApps.enable = false;
-    # linkApps = {
-      # enable = false;
-      # directory = "Applications";
-    # };
+    
+    # Store applications directly under ~/Applications
+    copyApps.directory = "Applications";
+
+    # Set some sensible macOS defaults
     defaults = {
       NSGlobalDomain = {
         KeyRepeat = 1;
@@ -70,12 +60,6 @@ in {
 
   # Enable XDG
   xdg.enable = true;
-
-  # Catppuccin theme configuration
-  catppuccin = {
-    enable = true;
-    flavor = "macchiato";
-  };
 
   # Add stuff for your user as you see fit:
   # programs.neovim.enable = true;
@@ -109,7 +93,6 @@ in {
 
   # Only supported on linux
   # fonts.fontConfig.enable = true;
-  # services.podman.enable = true;
 
   programs.aerospace = {
     enable = isDarwin;
@@ -141,11 +124,6 @@ in {
   programs.k9s.enable = true;
   programs.bacon.enable = true;
   # programs.delta.enable = true;
-  programs.ghostty = {
-    enable = true;
-    # package = isDarwin ? pkgs.ghostty-bin : ghostty;
-    package = pkgs.ghostty-bin;
-  };
   programs.git = {
     enable = true;
     # delta.enable = true;
@@ -160,31 +138,32 @@ in {
     };
   };
   programs.firefox.enable = true;
-  programs.alacritty.enable = true;
+  programs.alacritty = {
+    enable = true;
+    theme = "tokyo_night_storm";
+    settings = {
+      font.size = 15;
+      font.normal = {
+        family = "Lilex Nerd Font Mono";
+        style = "Regular";
+      };
+    };
+  };
   programs.go.enable = true;
   programs.zellij.enable = true;
-  # services.podman.enable = true;
 
   # programs.gh.enable = true;
   programs.gh-dash.enable = true;
 
   # Add custom configuration files
   xdg.configFile = {
-    # "ghostty".source = ./config/ghostty;
-    # "nvim" = {
-    #   source = ./config/nvim;
-    #   onChange = ''
-    #     mkdir -p ${config.xdg.dataHome}/nvim
-    #     cp -f ${config.xdg.configHome}/nvim/lazy-lock.json ${config.xdg.dataHome}/nvim/lazy-lock.json
-    #   '';
-    # };
-    # "nvim-alt" = {
-    #   source = ./config/nvim;
-    #   onChange = ''
-    #     mkdir -p ${config.xdg.dataHome}/nvim-alt
-    #     cp -f ${config.xdg.configHome}/nvim-alt/lazy-lock.json ${config.xdg.dataHome}/nvim-alt/lazy-lock.json
-    #   '';
-    # };
+    "nvim" = {
+      source = ./config/nvim;
+      onChange = ''
+        mkdir -p ${config.xdg.dataHome}/nvim
+        cp -f ${config.xdg.configHome}/nvim/lazy-lock.json ${config.xdg.dataHome}/nvim/lazy-lock.json
+      '';
+    };
   };
 
   home.file = { ".local/bin".source = ./bin; };
