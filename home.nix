@@ -80,6 +80,7 @@ in {
   # Add stuff for your user as you see fit:
   # programs.neovim.enable = true;
   home.packages = with pkgs; [
+    ansible
     bun
     devenv
     dua
@@ -89,7 +90,9 @@ in {
     jetbrains.rider
     jetbrains.rust-rover
     just
+    jq
     k9s
+    kind
     kubectl
     kubectx
     lua
@@ -98,6 +101,7 @@ in {
     nodejs
     pulumi
     rustup
+    talosctl
     timewarrior
     tree-sitter
     xh
