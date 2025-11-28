@@ -5,6 +5,12 @@ OSNAME=$(uname -s)
 XDG_DATA_HOME=${XDG_DATA_HOME:-"${HOME}/.local/share"}
 DOTFILES_DIR=${DOTFILES_DIR:-"${XDG_DATA_HOME}/dotfiles"}
 
+# If we are in NixOS we just enable flakes and experimental commands
+# if [ "$OSNAME" = "NixOS" ]; then
+#   echo "Enabling flakes and experimental commands..."
+#   nix-env -iA nixpkgs.flakes nixpkgs.nixUnstable
+# fi
+
 if [ "$OSNAME" = "Darwin" ] || [ "$OSNAME" = "Linux" ]; then
   # Install nix from determinate systems except if it is already installed
   if ! command -v nix >/dev/null && [ ! -d "$HOME/.nix-profile" ] && [ ! -f "/nix/var/nix/profiles/default/bin/nix" ]; then
