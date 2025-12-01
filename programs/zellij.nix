@@ -8,6 +8,7 @@
       session_name = "default";
       attach_to_session = true;
       show_startup_tips = false;
+      theme = "default";
       ui = { pane_frames = { hide_session_name = true; }; };
       keybinds = {
         _props.clear-defaults = true;
