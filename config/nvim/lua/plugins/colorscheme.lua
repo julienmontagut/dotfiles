@@ -5,16 +5,16 @@ return {
         priority = 1000,
         config = function()
             require("tokyonight").setup({
-                style = "night",
-                transparent = false,
+                style = "storm",
+                transparent = true,
                 terminal_colors = true,
                 styles = {
                     comments = { italic = true },
                     keywords = { italic = true },
                     functions = {},
                     variables = {},
-                    sidebars = "dark",
-                    floats = "dark",
+                    sidebars = "transparent",
+                    floats = "transparent",
                 },
             })
             vim.cmd([[colorscheme tokyonight]])
