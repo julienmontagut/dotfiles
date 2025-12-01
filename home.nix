@@ -41,7 +41,7 @@ in {
   targets.darwin = {
     # Add MacOS-specific configuration here
     # programs.macos-settings.enable = true;
-    
+
     # Store applications directly under ~/Applications
     copyApps.directory = "Applications";
 
@@ -54,6 +54,9 @@ in {
       "com.apple.dock" = {
         autohide = true;
         orientation = "left";
+      };
+      "com.apple.universalaccess" = {
+        keyboardAccessEnabled = false;
       };
     };
   };
@@ -96,21 +99,74 @@ in {
 
   programs.aerospace = {
     enable = isDarwin;
+    launchd.enable = isDarwin;
     userSettings = {
+      enable-normalization-flatten-containers = true;
       gaps = {
-        outer.left = 8;
-        outer.bottom = 8;
         outer.top = 8;
+        outer.bottom = 8;
+        outer.left = 8;
         outer.right = 8;
+        inner.vertical = 8;
+        inner.horizontal = 8;
       };
       mode.main.binding = {
+
+        # alt-enter = "exec-and-forget alacritty";
+
         alt-h = "focus left";
         alt-j = "focus down";
         alt-k = "focus up";
         alt-l = "focus right";
+
+        # Workspace navigation
+        alt-1 = "workspace 1";
+        alt-2 = "workspace 2";
+        alt-3 = "workspace 3";
+        alt-4 = "workspace 4";
+
+        # Move windows to warkpsace
+        alt-shift-1 = "move-node-to-workspace 1";
+        alt-shift-2 = "move-node-to-workspace 2";
+        alt-shift-3 = "move-node-to-workspace 3";
+        alt-shift-4 = "move-node-to-workspace 4";
+
+        # Enter resize mode (explicitly define it so we control it)
+        alt-r = "mode resize";
+      };
+
+      # Define resize mode with clear exit strategy
+      mode.resize.binding = {
+        # Use hjkl to resize windows
+        h = "resize width -50";
+        j = "resize height +50";
+        k = "resize height -50";
+        l = "resize width +50";
+
+        # Exit resize mode with ESC or Enter
+        esc = "mode main";
+        enter = "mode main";
       };
     };
   };
+  programs.sketchybar = {
+    enable = isDarwin;
+    config = ''
+      sketchybar --bar height=32 \
+                       color=0xff1a1b26 \
+                       border_color=0xff292e42 \
+                 --add item battery right \
+                 --set battery update_freq=60 \
+                             script="$HOME/.config/sketchybar/plugins/battery.sh" \
+                             icon.font="$FONT:Bold:15.0" \
+                             label.font="$FONT:Regular:15.0" \
+                             icon.color=0xffaaffaa \
+                             label.color=0xffaaffaa
+                             '';
+  };
+  services.jankyborders.enable = isDarwin;
+
+  # TODO: check the latest mynixos options and configure sketchybar properly
   programs.neovim = {
     enable = true;
     defaultEditor = true;
