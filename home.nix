@@ -1,4 +1,4 @@
-# home-manager configuration
+# hom-manager configuration
 { inputs, lib, config, pkgs, ... }:
 
 let inherit (pkgs.stdenv) isDarwin isLinux;
@@ -80,6 +80,7 @@ in {
     just
     jq
     k9s
+    # TODO: Install this only on macOS when available
     karabiner-elements
     kind
     kubectl
@@ -105,7 +106,7 @@ in {
     userSettings = {
       enable-normalization-flatten-containers = true;
       gaps = {
-        outer.top = 8;
+        outer.top = 12;
         outer.bottom = 8;
         outer.left = 8;
         outer.right = 8;
@@ -253,9 +254,6 @@ in {
       theme = "ansi";
     };
   };
-
-  # programs.gh.enable = true;
-  programs.gh-dash.enable = true;
 
   # Add custom configuration files
   xdg.configFile = {
