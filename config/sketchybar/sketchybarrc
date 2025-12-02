@@ -11,7 +11,7 @@
   MAGENTA=0xffbb9af7
   GRAY=0xff565f89
 
-  FONT="SF Pro"
+  FONT="LilexNerdFontMono"
 
   # Detect display characteristics
   # Check if we're on a high-DPI external display (Studio Display is 5120x2880 or similar)
@@ -22,9 +22,9 @@
 
   # Set bar height based on display (bigger for high-DPI external displays)
   if [ "$MAIN_DISPLAY_WIDTH" -gt 4000 ]; then
-    BAR_HEIGHT=40
+    BAR_HEIGHT=44
   else
-    BAR_HEIGHT=32
+    BAR_HEIGHT=36
   fi
 
   # Set bar color (black for notch displays, Tokyo Night for others)
@@ -44,11 +44,11 @@
 
   # Default settings
   sketchybar --default updates=when_shown \
-                       icon.font="$FONT:Bold:14.0" \
+                       icon.font="$FONT:Bold:16.0" \
                        icon.color=$FG \
                        icon.padding_left=8 \
                        icon.padding_right=8 \
-                       label.font="$FONT:Semibold:13.0" \
+                       label.font="$FONT:Semibold:15.0" \
                        label.color=$FG \
                        label.padding_left=8 \
                        label.padding_right=8 \
@@ -67,7 +67,7 @@
                      label="$sid" \
                      label.color=$FG \
                      icon.drawing=off \
-                     click_script="aerospace workspace $sid" \
+                     click_script="aerospace workspace $sid && sleep 0.1 && sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$sid" \
                      script="$HOME/.config/sketchybar/plugins/aerospace.sh $sid"
   done
 
@@ -77,7 +77,7 @@
                           label.color=$FG \
                           background.color=$BLUE \
                           background.height=3 \
-                          background.y_offset=-14 \
+                          background.y_offset=-16 \
                           background.drawing=on \
                           script="$HOME/.config/sketchybar/plugins/front_app.sh" \
              --subscribe front_app front_app_switched
@@ -88,20 +88,23 @@
   sketchybar --add item date right \
              --set date update_freq=30 \
                         icon= \
+                        icon.font="$FONT:Bold:18.0" \
                         icon.color=$MAGENTA \
+                        label.align=center \
                         background.color=$MAGENTA \
                         background.height=3 \
-                        background.y_offset=-14 \
+                        background.y_offset=-16 \
                         background.drawing=on \
                         script="$HOME/.config/sketchybar/plugins/date.sh"
 
   # Battery (right before date)
   sketchybar --add item battery right \
              --set battery update_freq=60 \
+                           icon.font="$FONT:Bold:18.0" \
                            icon.color=$YELLOW \
                            background.color=$YELLOW \
                            background.height=3 \
-                           background.y_offset=-14 \
+                           background.y_offset=-16 \
                            background.drawing=on \
                            script="$HOME/.config/sketchybar/plugins/battery.sh"
 
@@ -109,10 +112,11 @@
   sketchybar --add item ram right \
              --set ram update_freq=5 \
                        icon=󰍛 \
+                       icon.font="$FONT:Bold:18.0" \
                        icon.color=$GREEN \
                        background.color=$GREEN \
                        background.height=3 \
-                       background.y_offset=-14 \
+                       background.y_offset=-16 \
                        background.drawing=on \
                        script="$HOME/.config/sketchybar/plugins/ram.sh"
 
@@ -120,10 +124,11 @@
   sketchybar --add item cpu right \
              --set cpu update_freq=5 \
                        icon=󰻠 \
+                       icon.font="$FONT:Bold:18.0" \
                        icon.color=$CYAN \
                        background.color=$CYAN \
                        background.height=3 \
-                       background.y_offset=-14 \
+                       background.y_offset=-16 \
                        background.drawing=on \
                        script="$HOME/.config/sketchybar/plugins/cpu.sh"
 
@@ -131,10 +136,11 @@
   sketchybar --add item wifi right \
              --set wifi update_freq=10 \
                         icon=󰖩 \
+                        icon.font="$FONT:Bold:18.0" \
                         icon.color=$BLUE \
                         background.color=$BLUE \
                         background.height=3 \
-                        background.y_offset=-14 \
+                        background.y_offset=-16 \
                         background.drawing=on \
                         click_script="open /System/Library/PreferencePanes/Network.prefPane" \
                         script="$HOME/.config/sketchybar/plugins/wifi.sh"
