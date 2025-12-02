@@ -15,7 +15,6 @@ in {
       historySubstringSearch.enable = true;
 
       shellAliases = {
-        # Git aliases
         "gcm" = "git commit -m";
         "gca" = "git commit --amend --no-edit";
         "gpf" = "git push --force-with-lease";
@@ -78,15 +77,6 @@ in {
     fzf.enable = true;
     fd.enable = true;
     ripgrep.enable = true;
-    yazi = {
-      enable = true;
-      settings = {
-        manager = {
-          showHidden = true;
-          ratio = [ 1 2 2 ];
-        };
-      };
-    };
     zoxide = {
       enable = true;
       options = [ "--cmd cd" ];

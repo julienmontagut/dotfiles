@@ -1,5 +1,6 @@
 #!/bin/bash
 
-DATE=$(date '+%a %d %b %H:%M')
+# Use French locale for date
+DATE=$(LC_TIME=fr_FR.UTF-8 date '+%a %d %b %H:%M')
 
-sketchybar --set date label="$DATE"
+sketchybar --set date label="$DATE" label.align=center

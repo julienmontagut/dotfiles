@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+NVIM_APPNAME="nvim-test"
+
 DOTFILES_DIR="$HOME/.local/share/dotfiles"
 TEMP_CONFIG_DIR="/tmp/nvim-test-config"
 ORIG_CONFIG_DIR="$HOME/.config/nvim"
