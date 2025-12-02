@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/bin/bash
+
 set -e
 
 # macOS Setup Script
@@ -14,7 +15,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 # Check if running on macOS
-if [ "$(uname)" != "Darwin" ]; then
+if ; then
   echo "${RED}Error: This script is only for macOS${NC}"
   exit 1
 fi
