@@ -27,4 +27,6 @@ else
   COLOR="$GREEN"
 fi
 
-sketchybar --set "$NAME" icon.color="$COLOR" label="${MEMORY_PRESSURE}%"
+sketchybar --set "$NAME" icon.color="$COLOR" \
+                         background.color="$COLOR" \
+                         label="${MEMORY_PRESSURE}%"

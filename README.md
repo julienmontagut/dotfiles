@@ -19,5 +19,4 @@ curl -sSL https://raw.githubusercontent.com/julienmontagut/dotfiles/main/scripts
 ## TODO
 
 - [ ] Update the install script to work on WSL
-- [ ] Move macOS defaults to Nix
 - [ ] Split by platform and by package
