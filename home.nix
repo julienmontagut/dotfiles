@@ -105,8 +105,12 @@ in {
     launchd.enable = isDarwin;
     userSettings = {
       enable-normalization-flatten-containers = true;
+
       gaps = {
-        outer.top = 12;
+        outer.top = [
+          { monitor."Built-in" = 8; }
+          40 
+        ];
         outer.bottom = 8;
         outer.left = 8;
         outer.right = 8;
@@ -116,9 +120,9 @@ in {
 
       # Integrate with sketchybar
       exec-on-workspace-change = [
-        "/bin/bash"
+        "${pkgs.bash}/bin/bash"
         "-c"
-        "sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE"
+        "${pkgs.sketchybar}/bin/sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE"
       ];
 
       mode.main.binding = {
