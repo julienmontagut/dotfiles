@@ -53,9 +53,9 @@ fi
 # Update label
 sketchybar --set "$NAME" label="$LABEL"
 
-# Highlight if focused (simple approach from official docs)
+# Highlight if focused - set both background and label colors
 if [ "$WORKSPACE_ID" = "$FOCUSED_WORKSPACE" ]; then
-  sketchybar --set "$NAME" background.color="$BLUE"
+  sketchybar --set "$NAME" background.color="$BLUE" label.color="$BLUE"
 else
-  sketchybar --set "$NAME" background.color="$GRAY"
+  sketchybar --set "$NAME" background.color="$GRAY" label.color="$GRAY"
 fi

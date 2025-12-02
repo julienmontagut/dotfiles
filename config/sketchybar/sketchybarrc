@@ -13,34 +13,32 @@ GRAY=0xff565f89
 
 FONT="Lilex Nerd Font Mono"
 
-# Detect display characteristics
-# Check if we're on a high-DPI external display (Studio Display is 5120x2880 or similar)
-MAIN_DISPLAY_WIDTH=$(system_profiler SPDisplaysDataType | grep "Resolution" | head -1 | awk '{print $2}')
+CURRENT_DIR=$(dirname "$0")
 
-# Detect if internal display has notch (MacBook Pro 14"/16" have notch, resolution width is 3024 or 3456)
-INTERNAL_WIDTH=$(system_profiler SPDisplaysDataType | grep -A 20 "Built-In" | grep "Resolution" | awk '{print $2}')
-
-# Set bar height based on display (bigger for high-DPI external displays)
-if [ "$MAIN_DISPLAY_WIDTH" -gt 4000 ]; then
-BAR_HEIGHT=44
+# Detect if the built-in display is the main display
+# Extract the display info and check if Built-in section contains "Main Display: Yes"
+DISPLAY_INFO=$(system_profiler SPDisplaysDataType)
+if echo "$DISPLAY_INFO" | grep -A 20 "Display Type:.*Built-in" | grep -q "Main Display: Yes"; then
+    MAIN_IS_BUILTIN="yes"
 else
-BAR_HEIGHT=36
+    MAIN_IS_BUILTIN="no"
 fi
 
-# Set bar color (black for notch displays, Tokyo Night for others)
-if [ "$INTERNAL_WIDTH" = "3024" ] || [ "$INTERNAL_WIDTH" = "3456" ] || [ "$INTERNAL_WIDTH" = "3456" ]; then
-BAR_COLOR=$BLACK
+# Set bar color based on which display is main
+if [ "$MAIN_IS_BUILTIN" = "yes" ]; then
+    BAR_COLOR=$BLACK  # Built-in is main - use black (blends with notch)
 else
-BAR_COLOR=$BG
+    BAR_COLOR=$BG     # External is main - use Tokyo Night background
 fi
 
 # Bar settings
-sketchybar --bar height=$BAR_HEIGHT \
+sketchybar --bar height=32 \
                blur_radius=30 \
                position=top \
                padding_left=20 \
                padding_right=20 \
-               color=$BAR_COLOR
+               color=$BAR_COLOR \
+               notch_offset=on
 
 # Default settings
 sketchybar --default updates=when_shown \
@@ -53,14 +51,13 @@ sketchybar --default updates=when_shown \
                    label.padding_left=8 \
                    label.padding_right=8 \
                    background.height=4 \
-                   background.y_offset=-18 \
+                   background.y_offset=-16 \
                    background.corner_radius=0 \
                    background.padding_left=4 \
                    background.padding_right=4 \
 
 # Events
 sketchybar --add event aerospace_workspace_change
-sketchybar --add event front_app_switched
 
 # Workspace indicators (always show 1-4)
 for sid in 1 2 3 4; do
@@ -74,14 +71,6 @@ sketchybar --add item space.$sid left \
                  script="$HOME/.config/sketchybar/plugins/aerospace.sh $sid"
 done
 
-
-sketchybar --add item front_app left \
-         --set front_app icon.drawing=off \
-                      label.color=$FG \
-                      background.color=$BLUE \
-                      script="$HOME/.config/sketchybar/plugins/front_app.sh" \
-         --subscribe front_app front_app_switched
-
 # Right side items (added right to left)
 sketchybar --add item date right \
          --set date update_freq=30 \
@@ -92,25 +81,33 @@ sketchybar --add item date right \
 
 # Battery 
 sketchybar --add item battery right \
-         --set battery update_freq=60 \
-                       script="$HOME/.config/sketchybar/plugins/battery.sh"
+           --set battery update_freq=60 \
+                         script="$HOME/.config/sketchybar/plugins/battery.sh"
 
 # RAM
 sketchybar --add item ram right \
-         --set ram update_freq=5 \
+         --set ram update_freq=10 \
                    icon= \
                    script="$HOME/.config/sketchybar/plugins/ram.sh"
 
 # CPU
 sketchybar --add item cpu right \
-         --set cpu update_freq=5 \
+         --set cpu update_freq=10 \
                    icon= \
                    script="$HOME/.config/sketchybar/plugins/cpu.sh"
 
 # WiFi
 sketchybar --add item wifi right \
-         --set wifi update_freq=10 \
+         --set wifi update_freq=30 \
                     click_script="open /System/Library/PreferencePanes/Network.prefPane" \
                     script="$HOME/.config/sketchybar/plugins/wifi.sh"
 
+sketchybar --add item network right \
+         --set wifi update_freq=30 \
+                    click_script="open /System/Library/PreferencePanes/Network.prefPane" \
+                    script="$HOME/.config/sketchybar/plugins/network.sh"
+
 sketchybar --update
+
+INITIAL_WORKSPACE=$(aerospace list-workspaces --focused)
+sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE="$INITIAL_WORKSPACE"
