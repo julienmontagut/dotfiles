@@ -5,21 +5,29 @@ BLUE=0xff7aa2f7
 GRAY=0xff565f89
 FG=0xffc0caf5
 
+# Workspace ID passed as argument
+WORKSPACE_ID="$1"
+
+# If FOCUSED_WORKSPACE is not set, get it from aerospace
+if [ -z "$FOCUSED_WORKSPACE" ]; then
+  FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)
+fi
+
 # Get list of apps in this workspace
-APPS=$(aerospace list-windows --workspace "$1" --format "%{app-name}" | sort -u)
+APPS=$(aerospace list-windows --workspace "$WORKSPACE_ID" --format "%{app-name}" | sort -u)
 
 # Count apps
 APP_COUNT=$(echo "$APPS" | grep -v '^$' | wc -l | tr -d ' ')
 
 # Build label with workspace number and app count
 if [ "$APP_COUNT" -gt 0 ]; then
-  LABEL="$1 [$APP_COUNT]"
+  LABEL="$WORKSPACE_ID [$APP_COUNT]"
 else
-  LABEL="$1"
+  LABEL="$WORKSPACE_ID"
 fi
 
 # Highlight if focused, always show
-if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
+if [ "$WORKSPACE_ID" = "$FOCUSED_WORKSPACE" ]; then
   sketchybar --set "$NAME" \
     background.color=$BLUE \
     background.height=3 \
