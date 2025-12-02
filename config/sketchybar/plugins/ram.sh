@@ -1,4 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# Tokyo Night Storm colors
+GREEN=0xff9ece6a
+YELLOW=0xffe0af68
+RED=0xfff7768e
 
 MEMORY_PRESSURE=$(memory_pressure | grep "System-wide memory free percentage:" | awk '{print 100-$5}' | sed 's/%//')
 
@@ -13,4 +18,13 @@ if [ -z "$MEMORY_PRESSURE" ]; then
   MEMORY_PRESSURE=$((($USED_MEM * 100) / $TOTAL_MEM))
 fi
 
-sketchybar --set ram label="${MEMORY_PRESSURE}%"
+# Determine color based on usage
+if [ "$MEMORY_PRESSURE" -gt 80 ]; then
+  COLOR="$RED"
+elif [ "$MEMORY_PRESSURE" -gt 50 ]; then
+  COLOR="$YELLOW"
+else
+  COLOR="$GREEN"
+fi
+
+sketchybar --set "$NAME" icon.color="$COLOR" label="${MEMORY_PRESSURE}%"
