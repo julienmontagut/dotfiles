@@ -12,6 +12,7 @@ in {
     # ./programs/browser.nix
     # ./programs/neovim.nix
     ./programs/zsh.nix
+    # ./programs/sway.nix
   ];
 
   nixpkgs = {
@@ -79,6 +80,7 @@ in {
     just
     jq
     k9s
+    karabiner-elements
     kind
     kubectl
     kubectx
@@ -119,29 +121,39 @@ in {
       ];
 
       mode.main.binding = {
-
-        cmd-ctrl-t = "exec-and-forget alacritty";
-        cmd-ctrl-w = "exec-and-forget firefox";
-
-        alt-h = "focus left";
-        alt-j = "focus down";
-        alt-k = "focus up";
-        alt-l = "focus right";
-
-        # Workspace navigation
+        # Workspace switching (alt alone - simple!)
         alt-1 = "workspace 1";
         alt-2 = "workspace 2";
         alt-3 = "workspace 3";
         alt-4 = "workspace 4";
 
-        # Move windows to warkpsace
-        alt-shift-1 = "move-node-to-workspace 1";
-        alt-shift-2 = "move-node-to-workspace 2";
-        alt-shift-3 = "move-node-to-workspace 3";
-        alt-shift-4 = "move-node-to-workspace 4";
+        # Move windows to workspace (alt-shift = stronger action)
+        alt-shift-1 = [ "move-node-to-workspace 1" "workspace 1" ];
+        alt-shift-2 = [ "move-node-to-workspace 2" "workspace 2" ];
+        alt-shift-3 = [ "move-node-to-workspace 3" "workspace 3" ];
+        alt-shift-4 = [ "move-node-to-workspace 4" "workspace 4" ];
 
-        # Enter resize mode (explicitly define it so we control it)
-        alt-r = "mode resize";
+        # Focus navigation (alt-shift for consistency)
+        alt-shift-h = "focus left";
+        alt-shift-j = "focus down";
+        alt-shift-k = "focus up";
+        alt-shift-l = "focus right";
+
+        # Layout manipulation (alt-shift for window manager control)
+        alt-shift-s = "layout h_accordion"; # split/stack horizontal
+        alt-shift-v = "layout v_accordion"; # vertical split
+        alt-shift-e = "layout tiles"; # toggle layout
+        alt-shift-z = "fullscreen"; # zoom/fullscreen
+        alt-shift-space = "layout floating tiling"; # floating toggle
+
+        # Window management
+        alt-shift-c = "close"; # force close window
+
+        # Application launching
+        alt-enter = "exec-and-forget open -na Alacritty"; # terminal (open -n creates new instance)
+
+        # Resize mode
+        alt-shift-r = "mode resize";
       };
 
       # Define resize mode with clear exit strategy
@@ -160,149 +172,10 @@ in {
   };
   programs.sketchybar = {
     enable = isDarwin;
-    config = ''
-      # Tokyo Night Storm Color Palette
-      BG=0xff24283b
-      BLACK=0xff000000
-      FG=0xffc0caf5
-      BLUE=0xff7aa2f7
-      CYAN=0xff7dcfff
-      GREEN=0xff9ece6a
-      YELLOW=0xffe0af68
-      RED=0xfff7768e
-      MAGENTA=0xffbb9af7
-      GRAY=0xff565f89
-
-      FONT="SF Pro"
-
-      # Detect display characteristics
-      # Check if we're on a high-DPI external display (Studio Display is 5120x2880 or similar)
-      MAIN_DISPLAY_WIDTH=$(system_profiler SPDisplaysDataType | grep "Resolution" | head -1 | awk '{print $2}')
-
-      # Detect if internal display has notch (MacBook Pro 14"/16" have notch, resolution width is 3024 or 3456)
-      INTERNAL_WIDTH=$(system_profiler SPDisplaysDataType | grep -A 20 "Built-In" | grep "Resolution" | awk '{print $2}')
-
-      # Set bar height based on display (bigger for high-DPI external displays)
-      if [ "$MAIN_DISPLAY_WIDTH" -gt 4000 ]; then
-        BAR_HEIGHT=40
-      else
-        BAR_HEIGHT=32
-      fi
-
-      # Set bar color (black for notch displays, Tokyo Night for others)
-      if [ "$INTERNAL_WIDTH" = "3024" ] || [ "$INTERNAL_WIDTH" = "3456" ] || [ "$INTERNAL_WIDTH" = "3456" ]; then
-        BAR_COLOR=$BLACK
-      else
-        BAR_COLOR=$BG
-      fi
-
-      # Bar settings
-      sketchybar --bar height=$BAR_HEIGHT \
-                       blur_radius=30 \
-                       position=top \
-                       padding_left=20 \
-                       padding_right=20 \
-                       color=$BAR_COLOR
-
-      # Default settings
-      sketchybar --default updates=when_shown \
-                           icon.font="$FONT:Bold:14.0" \
-                           icon.color=$FG \
-                           icon.padding_left=8 \
-                           icon.padding_right=8 \
-                           label.font="$FONT:Semibold:13.0" \
-                           label.color=$FG \
-                           label.padding_left=8 \
-                           label.padding_right=8 \
-                           background.padding_left=4 \
-                           background.padding_right=4 \
-                           background.padding_top=10 \
-                           background.drawing=off
-
-      # Workspace indicators (always show 1-4)
-      sketchybar --add event aerospace_workspace_change
-
-      for sid in 1 2 3 4; do
-        sketchybar --add item space.$sid left \
-                   --subscribe space.$sid aerospace_workspace_change \
-                   --set space.$sid \
-                         label="$sid" \
-                         label.color=$FG \
-                         icon.drawing=off \
-                         click_script="aerospace workspace $sid" \
-                         script="$HOME/.config/sketchybar/plugins/aerospace.sh $sid"
-      done
-
-      # Front app
-      sketchybar --add item front_app left \
-                 --set front_app icon.drawing=off \
-                              label.color=$FG \
-                              background.color=$BLUE \
-                              background.height=3 \
-                              background.y_offset=-14 \
-                              background.drawing=on \
-                              script="$HOME/.config/sketchybar/plugins/front_app.sh" \
-                 --subscribe front_app front_app_switched
-
-      # Right side items (added right to left)
-
-      # Date
-      sketchybar --add item date right \
-                 --set date update_freq=30 \
-                            icon= \
-                            icon.color=$MAGENTA \
-                            background.color=$MAGENTA \
-                            background.height=3 \
-                            background.y_offset=-14 \
-                            background.drawing=on \
-                            script="$HOME/.config/sketchybar/plugins/date.sh"
-
-      # Battery (right before date)
-      sketchybar --add item battery right \
-                 --set battery update_freq=60 \
-                               icon.color=$YELLOW \
-                               background.color=$YELLOW \
-                               background.height=3 \
-                               background.y_offset=-14 \
-                               background.drawing=on \
-                               script="$HOME/.config/sketchybar/plugins/battery.sh"
-
-      # RAM
-      sketchybar --add item ram right \
-                 --set ram update_freq=5 \
-                           icon=󰍛 \
-                           icon.color=$GREEN \
-                           background.color=$GREEN \
-                           background.height=3 \
-                           background.y_offset=-14 \
-                           background.drawing=on \
-                           script="$HOME/.config/sketchybar/plugins/ram.sh"
-
-      # CPU
-      sketchybar --add item cpu right \
-                 --set cpu update_freq=5 \
-                           icon=󰻠 \
-                           icon.color=$CYAN \
-                           background.color=$CYAN \
-                           background.height=3 \
-                           background.y_offset=-14 \
-                           background.drawing=on \
-                           script="$HOME/.config/sketchybar/plugins/cpu.sh"
-
-      # WiFi
-      sketchybar --add item wifi right \
-                 --set wifi update_freq=10 \
-                            icon=󰖩 \
-                            icon.color=$BLUE \
-                            background.color=$BLUE \
-                            background.height=3 \
-                            background.y_offset=-14 \
-                            background.drawing=on \
-                            click_script="open /System/Library/PreferencePanes/Network.prefPane" \
-                            script="$HOME/.config/sketchybar/plugins/wifi.sh"
-
-      sketchybar --update
-    '';
+    config = { 
+      source = ./config/sketchybar;
+      recursive = true;
+    };
   };
   services.jankyborders = {
     enable = isDarwin;
@@ -311,11 +184,9 @@ in {
       inactive_color = "0xff565f89"; # Tokyo Night Storm Gray
       width = 5.0;
       style = "round";
-      # ax_focus = "on"; # Use accessibility API for better window detection
     };
   };
 
-  # TODO: check the latest mynixos options and configure sketchybar properly
   programs.neovim = {
     enable = true;
     defaultEditor = true;
@@ -353,20 +224,33 @@ in {
         style = "Regular";
       };
       window = {
-        decorations = "buttonless"; # Remove title bar but keep rounded corners
-        opacity = 0.95; # Slight transparency for modern look
-        blur = true; # Enable background blur on macOS
+        decorations = "buttonless"; 
+        opacity = 0.95;
+        blur = true;
         padding = {
           x = 10;
           y = 10;
         };
         dynamic_padding = true;
-        option_as_alt = "Both"; # macOS specific - use Option as Alt
+        option_as_alt = "Both";
       };
+      keyboard.bindings = [
+        # Linux-style copy/paste (ctrl+shift+c/v)
+        { key = "C"; mods = "Control|Shift"; action = "Copy"; }
+        { key = "V"; mods = "Control|Shift"; action = "Paste"; }
+      ];
     };
   };
   programs.go.enable = true;
-  programs.zellij.enable = true;
+  programs.zellij = {
+    enable = true;
+    settings = {
+      default_mode = "locked";
+      simplified_ui = true;
+      show_startup_tips = false;
+      theme = "ansi";
+    };
+  };
 
   # programs.gh.enable = true;
   programs.gh-dash.enable = true;
@@ -380,9 +264,8 @@ in {
         cp -f ${config.xdg.configHome}/nvim/lazy-lock.json ${config.xdg.dataHome}/nvim/lazy-lock.json
       '';
     };
-    "sketchybar/plugins" = {
-      source = ./config/sketchybar/plugins;
-      recursive = true;
+    "karabiner/karabiner.json" = lib.mkIf isDarwin {
+      source = ./config/karabiner/karabiner.json;
     };
   };
 
