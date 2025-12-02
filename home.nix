@@ -11,7 +11,7 @@ in {
     # Configuration modules for programs
     # ./programs/browser.nix
     # ./programs/neovim.nix
-    ./programs/zsh.nix
+    ./modules/zsh.nix
     # ./programs/sway.nix
   ];
 
@@ -150,7 +150,8 @@ in {
         alt-shift-c = "close"; # force close window
 
         # Application launching
-        alt-enter = "exec-and-forget open -na Alacritty"; # terminal (open -n creates new instance)
+        alt-enter = "exec-and-forget open -na Alacritty";
+        alt-w = "exec-and-forget open -na Firefox";
 
         # Resize mode
         alt-shift-r = "mode resize";
@@ -245,6 +246,7 @@ in {
   programs.zellij = {
     enable = true;
     settings = {
+      attach_to_session = true;
       default_mode = "locked";
       simplified_ui = true;
       show_startup_tips = false;

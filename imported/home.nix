@@ -35,8 +35,6 @@
     #   echo "Hello, ${config.home.username}!"
     # '')
 
-    ansible
-
     devenv
 
     jq
