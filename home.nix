@@ -1,4 +1,4 @@
-# hom-manager configuration
+# home-manager configuration
 { inputs, lib, config, pkgs, ... }:
 
 let inherit (pkgs.stdenv) isDarwin isLinux;
@@ -105,6 +105,7 @@ in {
     launchd.enable = isDarwin;
     userSettings = {
       enable-normalization-flatten-containers = true;
+      key-mapping.preset = "dvorak";
 
       gaps = {
         outer.top = [
@@ -125,41 +126,41 @@ in {
         "${pkgs.sketchybar}/bin/sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE"
       ];
 
+      # Hyper key bindings (Ctrl+Alt+Cmd+Shift)
+      # Karabiner transforms left_command+key into cmd-ctrl-alt-shift+key
       mode.main.binding = {
-        # Workspace switching (alt alone - simple!)
-        alt-1 = "workspace 1";
-        alt-2 = "workspace 2";
-        alt-3 = "workspace 3";
-        alt-4 = "workspace 4";
+        # Workspace switching
+        "cmd-ctrl-alt-1" = "workspace 1";
+        "cmd-ctrl-alt-2" = "workspace 2";
+        "cmd-ctrl-alt-3" = "workspace 3";
+        "cmd-ctrl-alt-4" = "workspace 4";
 
-        # Move windows to workspace (alt-shift = stronger action)
-        alt-shift-1 = [ "move-node-to-workspace 1" "workspace 1" ];
-        alt-shift-2 = [ "move-node-to-workspace 2" "workspace 2" ];
-        alt-shift-3 = [ "move-node-to-workspace 3" "workspace 3" ];
-        alt-shift-4 = [ "move-node-to-workspace 4" "workspace 4" ];
+        # Move window to workspace and follow
+        "cmd-ctrl-alt-shift-1" = ["move-node-to-workspace 1" "workspace 1"];
+        "cmd-ctrl-alt-shift-2" = ["move-node-to-workspace 2" "workspace 2"];
+        "cmd-ctrl-alt-shift-3" = ["move-node-to-workspace 3" "workspace 3"];
+        "cmd-ctrl-alt-shift-4" = ["move-node-to-workspace 4" "workspace 4"];
 
-        # Focus navigation (alt-shift for consistency)
-        alt-shift-h = "focus left";
-        alt-shift-j = "focus down";
-        alt-shift-k = "focus up";
-        alt-shift-l = "focus right";
+        # Focus navigation
+        "cmd-ctrl-alt-shift-h" = "focus left";
+        "cmd-ctrl-alt-shift-j" = "focus down";
+        "cmd-ctrl-alt-shift-k" = "focus up";
+        "cmd-ctrl-alt-shift-l" = "focus right";
 
-        # Layout manipulation (alt-shift for window manager control)
-        alt-shift-s = "layout h_accordion"; # split/stack horizontal
-        alt-shift-v = "layout v_accordion"; # vertical split
-        alt-shift-e = "layout tiles"; # toggle layout
-        alt-shift-z = "fullscreen"; # zoom/fullscreen
-        alt-shift-space = "layout floating tiling"; # floating toggle
+        # Layout control
+        "cmd-ctrl-alt-shift-s" = "layout h_accordion";
+        "cmd-ctrl-alt-shift-v" = "layout v_accordion";
+        "cmd-ctrl-alt-shift-e" = "layout tiles";
+        "cmd-ctrl-alt-shift-z" = "fullscreen";
+        "cmd-ctrl-alt-shift-space" = "layout floating tiling";
 
         # Window management
-        alt-shift-c = "close"; # force close window
+        "cmd-ctrl-alt-shift-q" = "close";
+        "cmd-ctrl-alt-shift-r" = "mode resize";
 
-        # Application launching
-        alt-enter = "exec-and-forget open -na Alacritty";
-        alt-w = "exec-and-forget open -na Firefox";
-
-        # Resize mode
-        alt-shift-r = "mode resize";
+        # Applications
+        "cmd-ctrl-alt-enter" = "exec-and-forget open -na Alacritty";
+        "cmd-ctrl-alt-w" = "exec-and-forget open -na Firefox";
       };
 
       # Define resize mode with clear exit strategy
@@ -270,6 +271,7 @@ in {
     };
     "karabiner/karabiner.json" = lib.mkIf isDarwin {
       source = ./config/karabiner/karabiner.json;
+      force = true;
     };
   };
 
