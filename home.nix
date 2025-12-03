@@ -211,13 +211,23 @@ in {
     enable = true;
     # delta.enable = true;
     maintenance.enable = true;
+    ignores = [
+      ".DS_Store"
+      ".AppleDouble"
+      ".LSOverride"
+      ".CFUserTextEncoding"
+      "Icon"
+      "._*"
+    ];
     settings = {
-      user.name = "Julien Montagut";
-      user.email = "_@julienmontagut.com";
+      # core.excludesfile = "${config.xdg.configHome}/git/ignore";
       init.defaultBranch = "main";
       pull.rebase = true;
       push.autoSetupRemote = true;
       submodule.recurse = true;
+      user.email = "_@julienmontagut.com";
+      user.name = "Julien Montagut";
+      
     };
   };
   programs.firefox.enable = true;
