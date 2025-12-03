@@ -5,6 +5,9 @@ let
   mod = "Mod1"; # Alt (physically same position as Cmd on macOS)
 in
 {
+  # TODO: Check that we are not running in nixos
+  targets.genericLinux.enable = true;
+
   # Enable font configuration for Linux
   fonts.fontConfig.enable = true;
 
@@ -12,6 +15,11 @@ in
   home.packages = with pkgs; [
     # Add Linux-specific packages here
   ];
+
+  programs = {
+    fuzzel.enable = true;
+    waybar.enable = true;
+  }
 
   # Sway window manager for Wayland
   wayland.windowManager.sway = {
