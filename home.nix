@@ -1,72 +1,47 @@
 # home-manager configuration
-{ inputs, lib, config, pkgs, ... }:
+{ inputs, lib, config, pkgs, username, homeDirectory, platform, ... }:
 
-let inherit (pkgs.stdenv) isDarwin isLinux;
-in {
-  # You can import other home-manager modules here
+let
+  inherit (pkgs.stdenv) isDarwin isLinux;
+in
+{
+  # Import common and platform-specific modules
   imports = [
-    # If you want to use home-manager modules from other flakes (such as nix-colors):
-    # inputs.nix-colors.homeManagerModule
-
-    # Configuration modules for programs
-    # ./programs/browser.nix
-    # ./programs/neovim.nix
+    # Common modules
     ./modules/zsh.nix
-    # ./programs/sway.nix
-  ];
+
+    # Optional modules (uncomment as needed)
+    # ./modules/browser.nix
+    # ./modules/neovim.nix
+  ] ++ lib.optional (platform == "darwin") ./modules/darwin.nix
+    ++ lib.optional (platform == "linux") ./modules/linux.nix;
 
   nixpkgs = {
-  #   # You can add overlays here
-  #   overlays = [
-  #     # If you want to use overlays exported from other flakes:
-  #     # neovim-nightly-overlay.overlays.default
-  #
-  #     # Or define it inline, for example:
-  #     # (final: prev: {
-  #     #   hi = final.hello.overrideAttrs (oldAttrs: {
-  #     #     patches = [ ./change-hello-to-hi.patch ];
-  #     #   });
-  #     # })
-  #   ];
+    # You can add overlays here
+    # overlays = [
+    #   # If you want to use overlays exported from other flakes:
+    #   # neovim-nightly-overlay.overlays.default
+    #
+    #   # Or define it inline, for example:
+    #   # (final: prev: {
+    #   #   hi = final.hello.overrideAttrs (oldAttrs: {
+    #   #     patches = [ ./change-hello-to-hi.patch ];
+    #   #   });
+    #   # })
+    # ];
     config.allowUnfree = true;
   };
 
   home = {
-    username = "julien";
-    homeDirectory = if isDarwin then "/Users/julien" else "/home/julien";
+    inherit username homeDirectory;
     sessionPath = [ "$HOME/.local/bin" ];
     preferXdgDirectories = true;
-  };
-
-  # Configuration for the MacOS target
-  targets.darwin = {
-    # Add MacOS-specific configuration here
-    # programs.macos-settings.enable = true;
-
-    # Store applications directly under ~/Applications
-    copyApps.directory = "Applications";
-
-    # Set some sensible macOS defaults
-    defaults = {
-      NSGlobalDomain = {
-        KeyRepeat = 1;
-        AppleMetricUnits = true;
-      };
-      "com.apple.dock" = {
-        autohide = true;
-        orientation = "left";
-      };
-      "com.apple.universalaccess" = {
-        keyboardAccessEnabled = false;
-      };
-    };
   };
 
   # Enable XDG
   xdg.enable = true;
 
-  # Add stuff for your user as you see fit:
-  # programs.neovim.enable = true;
+  # Common packages for all platforms
   home.packages = with pkgs; [
     ansible
     bun
@@ -80,8 +55,6 @@ in {
     just
     jq
     k9s
-    # TODO: Install this only on macOS when available
-    karabiner-elements
     kind
     kubectl
     kubectx
@@ -97,103 +70,7 @@ in {
     xh
   ];
 
-  # Only supported on linux
-  # fonts.fontConfig.enable = true;
-
-  programs.aerospace = {
-    enable = isDarwin;
-    launchd.enable = isDarwin;
-    userSettings = {
-      enable-normalization-flatten-containers = true;
-      key-mapping.preset = "dvorak";
-
-      gaps = {
-        outer.top = [
-          { monitor."Built-in" = 8; }
-          40 
-        ];
-        outer.bottom = 8;
-        outer.left = 8;
-        outer.right = 8;
-        inner.vertical = 8;
-        inner.horizontal = 8;
-      };
-
-      # Integrate with sketchybar
-      exec-on-workspace-change = [
-        "${pkgs.bash}/bin/bash"
-        "-c"
-        "${pkgs.sketchybar}/bin/sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE"
-      ];
-
-      # Hyper key bindings (Ctrl+Alt+Cmd+Shift)
-      # Karabiner transforms left_command+key into cmd-ctrl-alt-shift+key
-      mode.main.binding = {
-        # Workspace switching
-        "cmd-ctrl-alt-1" = "workspace 1";
-        "cmd-ctrl-alt-2" = "workspace 2";
-        "cmd-ctrl-alt-3" = "workspace 3";
-        "cmd-ctrl-alt-4" = "workspace 4";
-
-        # Move window to workspace and follow
-        "cmd-ctrl-alt-shift-1" = ["move-node-to-workspace 1" "workspace 1"];
-        "cmd-ctrl-alt-shift-2" = ["move-node-to-workspace 2" "workspace 2"];
-        "cmd-ctrl-alt-shift-3" = ["move-node-to-workspace 3" "workspace 3"];
-        "cmd-ctrl-alt-shift-4" = ["move-node-to-workspace 4" "workspace 4"];
-
-        # Focus navigation
-        "cmd-ctrl-alt-shift-h" = "focus left";
-        "cmd-ctrl-alt-shift-j" = "focus down";
-        "cmd-ctrl-alt-shift-k" = "focus up";
-        "cmd-ctrl-alt-shift-l" = "focus right";
-
-        # Layout control
-        "cmd-ctrl-alt-shift-s" = "layout h_accordion";
-        "cmd-ctrl-alt-shift-v" = "layout v_accordion";
-        "cmd-ctrl-alt-shift-e" = "layout tiles";
-        "cmd-ctrl-alt-shift-z" = "fullscreen";
-        "cmd-ctrl-alt-shift-space" = "layout floating tiling";
-
-        # Window management
-        "cmd-ctrl-alt-shift-q" = "close";
-        "cmd-ctrl-alt-shift-r" = "mode resize";
-
-        # Applications
-        "cmd-ctrl-alt-enter" = "exec-and-forget open -na Alacritty";
-        "cmd-ctrl-alt-w" = "exec-and-forget open -na Firefox";
-      };
-
-      # Define resize mode with clear exit strategy
-      mode.resize.binding = {
-        # Use hjkl to resize windows
-        h = "resize width -50";
-        j = "resize height +50";
-        k = "resize height -50";
-        l = "resize width +50";
-
-        # Exit resize mode with ESC or Enter
-        esc = "mode main";
-        enter = "mode main";
-      };
-    };
-  };
-  programs.sketchybar = {
-    enable = isDarwin;
-    config = { 
-      source = ./config/sketchybar;
-      recursive = true;
-    };
-  };
-  services.jankyborders = {
-    enable = isDarwin;
-    settings = {
-      active_color = "0xff7aa2f7"; # Tokyo Night Storm Blue
-      inactive_color = "0xff565f89"; # Tokyo Night Storm Gray
-      width = 5.0;
-      style = "round";
-    };
-  };
-
+  # Common program configurations
   programs.neovim = {
     enable = true;
     defaultEditor = true;
@@ -227,7 +104,7 @@ in {
       submodule.recurse = true;
       user.email = "_@julienmontagut.com";
       user.name = "Julien Montagut";
-      
+
     };
   };
   programs.firefox.enable = true;
@@ -241,7 +118,6 @@ in {
         style = "Regular";
       };
       window = {
-        decorations = "buttonless"; 
         opacity = 0.95;
         blur = true;
         padding = {
@@ -249,7 +125,7 @@ in {
           y = 10;
         };
         dynamic_padding = true;
-        option_as_alt = "Both";
+        # Platform-specific settings (decorations, option_as_alt) are in platform modules
       };
       keyboard.bindings = [
         # Linux-style copy/paste (ctrl+shift+c/v)
@@ -279,10 +155,7 @@ in {
         cp -f ${config.xdg.configHome}/nvim/lazy-lock.json ${config.xdg.dataHome}/nvim/lazy-lock.json
       '';
     };
-    "karabiner/karabiner.json" = lib.mkIf isDarwin {
-      source = ./config/karabiner/karabiner.json;
-      force = true;
-    };
+    # Platform-specific config files (karabiner) are in platform modules
   };
 
   home.file = { ".local/bin".source = ./bin; };
