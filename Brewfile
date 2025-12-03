@@ -26,3 +26,4 @@ cask "utm"
 cask "visual-studio-code"
 cask "whatsapp"
 cask "zed"
+
