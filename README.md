@@ -1,15 +1,16 @@
 # Dotfiles
 
-This repository contains my dotfiles
+This repository contains my dotfiles managed by home-manager.
 
 ## Installation
 
-```sh
-curl -sSL https://raw.githubusercontent.com/julienmontagut/dotfiles/main/scripts/install.sh | bash
-```
+TDB
 
 ## Structure of the repository
 
+The repository is built around home-manager. The configuration can be found at the root of the repository and is organized by modules.
+
+There are also some additional files installed using home-manager:
 - `bin`: Contains scripts that are added to the `$PATH`
 - `config`: Contains configuration files for various tools
 - `scripts`: Contains scripts that are useful to manage the dotfiles
@@ -18,5 +19,5 @@ curl -sSL https://raw.githubusercontent.com/julienmontagut/dotfiles/main/scripts
 
 ## TODO
 
-- [ ] Update the install script to work on WSL
-- [ ] Split by platform and by package
+- [ ] Run `home-manager init` to get a default configuration structure
+- [ ] Reorganize home-manager config by modules
