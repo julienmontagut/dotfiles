@@ -1,22 +1,19 @@
-# home-manager configuration
-{ inputs, lib, config, pkgs, username, homeDirectory, platform, ... }:
+{ config, pkgs, ... }:
 
-let
-  inherit (pkgs.stdenv) isDarwin isLinux;
-in
 {
   # Import common and platform-specific modules
   imports = [
     # Common modules
-    ./modules/zsh.nix
+    modules/neovim.nix
+    modules/zsh.nix
 
     # Optional modules (uncomment as needed)
     # ./modules/browser.nix
     # ./modules/neovim.nix
-  ] ++ lib.optional (platform == "darwin") ./modules/darwin.nix
-    ++ lib.optional (platform == "linux") ./modules/linux.nix;
+  ];
 
   nixpkgs = {
+    config.allowUnfree = true;
     # You can add overlays here
     # overlays = [
     #   # If you want to use overlays exported from other flakes:
@@ -29,11 +26,10 @@ in
     #   #   });
     #   # })
     # ];
-    config.allowUnfree = true;
   };
 
   home = {
-    inherit username homeDirectory;
+    # inherit username homeDirectory;
     sessionPath = [ "$HOME/.local/bin" ];
     preferXdgDirectories = true;
   };
@@ -71,12 +67,6 @@ in
   ];
 
   # Common program configurations
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-    vimAlias = true;
-    vimdiffAlias = true;
-  };
   programs.claude-code.enable = true;
   # Enable home-manager
   programs.home-manager.enable = true;
@@ -113,7 +103,7 @@ in
     enable = true;
     theme = "tokyo_night_storm";
     settings = {
-      font.size = 15;
+      font.size = 18;
       font.normal = {
         family = "Lilex Nerd Font Mono";
         style = "Regular";
@@ -126,12 +116,18 @@ in
           y = 10;
         };
         dynamic_padding = true;
-        # Platform-specific settings (decorations, option_as_alt) are in platform modules
       };
       keyboard.bindings = [
-        # Linux-style copy/paste (ctrl+shift+c/v)
-        { key = "C"; mods = "Control|Shift"; action = "Copy"; }
-        { key = "V"; mods = "Control|Shift"; action = "Paste"; }
+        {
+          key = "C";
+          mods = "Control|Shift";
+          action = "Copy";
+        }
+        {
+          key = "V";
+          mods = "Control|Shift";
+          action = "Paste";
+        }
       ];
     };
   };
@@ -142,25 +138,16 @@ in
     settings = {
       attach_to_session = true;
       default_mode = "locked";
-      simplified_ui = true;
+      session_name = "default";
       show_startup_tips = false;
+      simplified_ui = true;
       theme = "ansi";
     };
   };
 
-  # Add custom configuration files
-  xdg.configFile = {
-    "nvim" = {
-      source = ./config/nvim;
-      onChange = ''
-        mkdir -p ${config.xdg.dataHome}/nvim
-        cp -f ${config.xdg.configHome}/nvim/lazy-lock.json ${config.xdg.dataHome}/nvim/lazy-lock.json
-      '';
-    };
-    # Platform-specific config files (karabiner) are in platform modules
+  home.file = {
+    ".local/bin".source = ./bin;
   };
-
-  home.file = { ".local/bin".source = ./bin; };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   home.stateVersion = "25.11";
