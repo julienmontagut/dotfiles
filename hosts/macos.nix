@@ -2,6 +2,11 @@
 { lib, config, pkgs, ... }:
 
 {
+  home = {
+    username = "julien";
+    homeDirectory = "/Users/julien";
+  };
+
   # macOS-specific packages
   home.packages = with pkgs; [
     karabiner-elements
@@ -65,10 +70,22 @@
         "cmd-ctrl-alt-4" = "workspace 4";
 
         # Move window to workspace and follow
-        "cmd-ctrl-alt-shift-1" = ["move-node-to-workspace 1" "workspace 1"];
-        "cmd-ctrl-alt-shift-2" = ["move-node-to-workspace 2" "workspace 2"];
-        "cmd-ctrl-alt-shift-3" = ["move-node-to-workspace 3" "workspace 3"];
-        "cmd-ctrl-alt-shift-4" = ["move-node-to-workspace 4" "workspace 4"];
+        "cmd-ctrl-alt-shift-1" = [
+          "move-node-to-workspace 1"
+          "workspace 1"
+        ];
+        "cmd-ctrl-alt-shift-2" = [
+          "move-node-to-workspace 2"
+          "workspace 2"
+        ];
+        "cmd-ctrl-alt-shift-3" = [
+          "move-node-to-workspace 3"
+          "workspace 3"
+        ];
+        "cmd-ctrl-alt-shift-4" = [
+          "move-node-to-workspace 4"
+          "workspace 4"
+        ];
 
         # Focus navigation
         "cmd-ctrl-alt-shift-h" = "focus left";
