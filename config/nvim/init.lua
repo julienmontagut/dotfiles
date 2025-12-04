@@ -11,11 +11,7 @@ vim.opt.undofile = true
 -- Exit insert mode with jk
 vim.keymap.set("i", "jk", "<Esc>", { noremap = true, silent = true })
 
--- If running inside VSCode, load the VSCode configuration
-if vim.g.vscode then
-    return
-end
-
+vim.opt.colorcolumn = 80
 vim.opt.cursorline = true
 vim.opt.termguicolors = true
 vim.opt.signcolumn = "yes"

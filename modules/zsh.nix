@@ -1,9 +1,11 @@
 # Shell and shell-related tool configurations
 { pkgs, lib, ... }:
 
-let inherit (pkgs.stdenv) isDarwin;
+let
+  inherit (pkgs.stdenv) isDarwin;
 
-in {
+in
+{
   programs = {
     # Core shell configuration
     zsh = {

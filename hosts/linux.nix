@@ -1,25 +1,25 @@
-# Linux-specific configuration
 { lib, config, pkgs, ... }:
 
 let
-  mod = "Mod1"; # Alt (physically same position as Cmd on macOS)
+  mod = "Mod1"; # Set Alt as window manager modifier key
 in
 {
-  # TODO: Check that we are not running in nixos
-  targets.genericLinux.enable = true;
+  targets.genericLinux.enable = lib.mkDefault true;
 
   # Enable font configuration for Linux
   fonts.fontConfig.enable = true;
 
   # Linux-specific packages
   home.packages = with pkgs; [
-    # Add Linux-specific packages here
   ];
 
   programs = {
     fuzzel.enable = true;
     waybar.enable = true;
-  }
+    alacritty.settings.window = {
+      decorations = "full";
+    };
+  };
 
   # Sway window manager for Wayland
   wayland.windowManager.sway = {
@@ -82,8 +82,4 @@ in
     };
   };
 
-  # Alacritty terminal - Linux-specific window settings
-  programs.alacritty.settings.window = {
-    decorations = "full";
-  };
 }
