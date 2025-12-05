@@ -11,7 +11,7 @@ vim.opt.undofile = true
 -- Exit insert mode with jk
 vim.keymap.set("i", "jk", "<Esc>", { noremap = true, silent = true })
 
-vim.opt.colorcolumn = 80
+vim.opt.colorcolumn = "80"
 vim.opt.cursorline = true
 vim.opt.termguicolors = true
 vim.opt.signcolumn = "yes"
