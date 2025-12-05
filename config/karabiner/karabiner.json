@@ -11,7 +11,7 @@
       "complex_modifications": {
         "rules": [
           {
-            "description": "Change spacebar to left_shift. (Post spacebar if pressed alone)",
+            "description": "Map caps_lock to escape on tap, left_control on hold",
             "manipulators": [
               {
                 "from": {
@@ -26,7 +26,7 @@
           {
             "manipulators": [
               {
-                "description": "Change caps_lock to command+control+option+shift.",
+                "description": "Map left_command to command+control+option.",
                 "from": {
                   "key_code": "left_command",
                   "modifiers": { "optional": ["any"] }
@@ -40,8 +40,17 @@
                 "type": "basic"
               }
             ]
-          }
-        ]
+          },
+          {
+            "description": "Map right command to left command",
+            "manipulators": [
+              {
+                "from": { "key_code": "right_command" },
+                "to": [{ "key_code": "left_command" }],
+                "type": "basic"
+              }
+            ]
+          }]
       }
     }
     ]
