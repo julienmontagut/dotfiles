@@ -64,6 +64,9 @@
     timewarrior
     tree-sitter
     xh
+
+    lilex
+    nerd-fonts.lilex
   ];
 
   # Common program configurations
