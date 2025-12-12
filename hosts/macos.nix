@@ -9,7 +9,7 @@
 
   # macOS-specific packages
   home.packages = with pkgs; [
-    karabiner-elements
+    # TODO: Install karabiner-elements using homebrew
   ];
 
   # Configuration for the macOS target
