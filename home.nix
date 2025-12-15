@@ -106,7 +106,7 @@
     enable = true;
     theme = "tokyo_night_storm";
     settings = {
-      font.size = 18;
+      font.size = 16;
       font.normal = {
         family = "Lilex Nerd Font Mono";
         style = "Regular";
