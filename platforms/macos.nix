@@ -2,11 +2,6 @@
 { lib, config, pkgs, ... }:
 
 {
-  home = {
-    username = "julien";
-    homeDirectory = "/Users/julien";
-  };
-
   # macOS-specific packages
   home.packages = with pkgs; [
     # TODO: Install karabiner-elements using homebrew
@@ -126,7 +121,7 @@
 
   # Sketchybar status bar
   programs.sketchybar = {
-    enable = true;
+    enable = false;
     config = {
       source = ../config/sketchybar;
       recursive = true;

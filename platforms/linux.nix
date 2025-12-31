@@ -6,11 +6,12 @@ in
 {
   targets.genericLinux.enable = lib.mkDefault true;
 
-  # Enable font configuration for Linux
-  fonts.fontConfig.enable = true;
+  # TODO: Enable font configuration for Linux
+  # fonts.fontConfig.enable = true;
 
   # Linux-specific packages
   home.packages = with pkgs; [
+    jetbrains.webstorm
   ];
 
   programs = {
