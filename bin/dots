@@ -17,7 +17,20 @@ usage() {
 }
 
 apply() {
-    home-manager switch --flake "$DOTFILES_DIR#$(whoami)@$HOSTNAME"
+    # Auto-detect platform
+    case "$(uname -s)" in
+        Linux*)  platform="linux" ;;
+        Darwin*) platform="macos" ;;
+        *)       echo "Unsupported platform: $(uname -s)"; exit 1 ;;
+    esac
+
+    # Use --impure flag if overrides.nix exists and is not tracked by git
+    local impure_flag=""
+    if [ -f "$DOTFILES_DIR/overrides.nix" ] && ! git -C "$DOTFILES_DIR" ls-files --error-unmatch overrides.nix >/dev/null 2>&1; then
+        impure_flag="--impure"
+    fi
+
+    home-manager switch --flake "$DOTFILES_DIR#$platform" $impure_flag
 }
 
 pull() {

@@ -1,46 +1,21 @@
-{ config, pkgs, ... }:
-
+{ config, pkgs, lib, ... }:
+let
+  # Get environment variables when running with --impure
+  user = if builtins.getEnv "USER" != "" then builtins.getEnv "USER" else "julien";
+  home = builtins.getEnv "HOME";
+in
 {
-  # Import common and platform-specific modules
-  imports = [
-    # Common modules
-    modules/neovim.nix
-    modules/zsh.nix
+  # Read the release notes before changing
+  home.stateVersion = "25.11";
 
-    # Optional modules (uncomment as needed)
-    # ./modules/browser.nix
-    # ./modules/neovim.nix
-  ];
+  home.username = lib.mkDefault user;
+  home.homeDirectory = lib.mkDefault (
+    if home != "" then home
+    else if pkgs.stdenv.isDarwin then "/Users/${user}"
+    else "/home/${user}"
+  );
 
-  nixpkgs = {
-    config.allowUnfree = true;
-    # You can add overlays here
-    # overlays = [
-    #   # If you want to use overlays exported from other flakes:
-    #   # neovim-nightly-overlay.overlays.default
-    #
-    #   # Or define it inline, for example:
-    #   # (final: prev: {
-    #   #   hi = final.hello.overrideAttrs (oldAttrs: {
-    #   #     patches = [ ./change-hello-to-hi.patch ];
-    #   #   });
-    #   # })
-    # ];
-  };
-
-  home = {
-    # inherit username homeDirectory;
-    sessionPath = [ "$HOME/.local/bin" ];
-    preferXdgDirectories = true;
-  };
-
-  # Enable XDG
-  xdg.enable = true;
-
-  # Common packages for all platforms
   home.packages = with pkgs; [
-    ansible
-    bun
     devenv
     dua
     gh
@@ -57,22 +32,41 @@
     lua
     mprocs
     nixfmt-rfc-style
-    nodejs
     pulumi
     rustup
-    talosctl
     timewarrior
     tree-sitter
     xh
-
+    
+    inter
     lilex
     nerd-fonts.lilex
   ];
 
+  home.file = {
+    ".local/bin".source = ./bin;
+  };
+  
+  # Custom path
+  home.sessionPath = [ 
+    "$HOME/.local/bin" 
+  ];
+
+  # Custom environment variables
+  home.sessionVariables = {
+    # EDITOR = "vim";
+  };
+
+  xdg.enable = true;
+  home.preferXdgDirectories = true;
+
+  imports = [
+    modules/neovim.nix
+    modules/zsh.nix
+  ];
+
   # Common program configurations
   programs.claude-code.enable = true;
-  # Enable home-manager
-  programs.home-manager.enable = true;
   programs.lazygit.enable = true;
   programs.k9s.enable = true;
   programs.bacon.enable = true;
@@ -82,6 +76,7 @@
     enable = true;
     # delta.enable = true;
     maintenance.enable = true;
+    # TODO: Move this to a macos configuration
     ignores = [
       ".DS_Store"
       ".AppleDouble"
@@ -90,15 +85,22 @@
       "Icon"
       "._*"
     ];
+    includes = [
+          {
+            condition = "hasconfig:remote.*.url:ssh://tfs.cdbdx.biz:22/tfs/**";
+            contents = {
+              user.email = "julien.montagut@ext.cdiscount.com";
+            };
+          }
+        ];
     settings = {
       # core.excludesfile = "${config.xdg.configHome}/git/ignore";
       init.defaultBranch = "main";
       pull.rebase = true;
       push.autoSetupRemote = true;
       submodule.recurse = true;
-      user.email = "_@julienmontagut.com";
+      user.email = lib.mkDefault "_@julienmontagut.com";
       user.name = "Julien Montagut";
-
     };
   };
   programs.firefox.enable = true;
@@ -113,12 +115,13 @@
       };
       window = {
         opacity = 0.95;
-        blur = true;
         padding = {
           x = 10;
           y = 10;
         };
         dynamic_padding = true;
+      } // lib.optionalAttrs pkgs.stdenv.isDarwin {
+        blur = true;
       };
       keyboard.bindings = [
         {
@@ -147,11 +150,6 @@
       theme = "ansi";
     };
   };
-
-  home.file = {
-    ".local/bin".source = ./bin;
-  };
-
-  # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-  home.stateVersion = "25.11";
+  # Let home manager manage itself
+  programs.home-manager.enable = true;
 }
