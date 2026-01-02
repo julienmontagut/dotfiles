@@ -17,9 +17,6 @@ in
   programs = {
     fuzzel.enable = true;
     waybar.enable = true;
-    alacritty.settings.window = {
-      decorations = "full";
-    };
   };
 
   # Sway window manager for Wayland
