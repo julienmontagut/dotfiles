@@ -146,5 +146,6 @@
   programs.alacritty.settings.window = {
     decorations = "buttonless";
     option_as_alt = "Both";
+    blur = true;
   };
 }
