@@ -98,7 +98,6 @@ in
       }
     ];
     settings = {
-      # core.excludesfile = "${config.xdg.configHome}/git/ignore";
       init.defaultBranch = "main";
       pull.rebase = true;
       push.autoSetupRemote = true;
@@ -112,7 +111,7 @@ in
     enable = true;
     theme = "tokyo_night_storm";
     settings = {
-      font.size = 16;
+      font.size = 14;
       font.normal = {
         family = "Lilex Nerd Font Mono";
         style = "Regular";
@@ -124,9 +123,6 @@ in
           y = 10;
         };
         dynamic_padding = true;
-      }
-      // lib.optionalAttrs pkgs.stdenv.isDarwin {
-        blur = true;
       };
       keyboard.bindings = [
         {
