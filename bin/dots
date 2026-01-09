@@ -53,6 +53,8 @@ status() {
 
 edit() {
     ${EDITOR:-vim} "$DOTFILES_DIR"
+    read -p "Apply changes? (y/n): " choice
+    [[ "$choice" != [yY] ]] && return 0
     apply || return 1
     read -p "Push changes? (y/n): " choice
     [[ "$choice" == [yY] ]] && push
