@@ -37,10 +37,7 @@
       key-mapping.preset = "dvorak";
 
       gaps = {
-        outer.top = [
-          { monitor."Built-in" = 8; }
-          40
-        ];
+        outer.top = 8;
         outer.bottom = 8;
         outer.left = 8;
         outer.right = 8;
