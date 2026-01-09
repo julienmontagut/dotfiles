@@ -8,6 +8,7 @@ in
   # Read the release notes before changing
   home.stateVersion = "25.11";
 
+  # Set the username and home directory
   home.username = lib.mkDefault user;
   home.homeDirectory = lib.mkDefault (
     if home != "" then home
