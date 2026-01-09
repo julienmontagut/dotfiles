@@ -15,20 +15,20 @@ FONT="Lilex Nerd Font Mono"
 
 CURRENT_DIR=$(dirname "$0")
 
-# Detect if the built-in display is the main display
-# Extract the display info and check if Built-in section contains "Main Display: Yes"
-DISPLAY_INFO=$(system_profiler SPDisplaysDataType)
-if echo "$DISPLAY_INFO" | grep -A 20 "Display Type:.*Built-in" | grep -q "Main Display: Yes"; then
-    MAIN_IS_BUILTIN="yes"
-else
-    MAIN_IS_BUILTIN="no"
-fi
+# Detect the main display. If it is the built-in one
 
-# Set bar color based on which display is main
-if [ "$MAIN_IS_BUILTIN" = "yes" ]; then
-    BAR_COLOR=$BLACK  # Built-in is main - use black (blends with notch)
+# Detect display characteristics
+# Check if we're on a high-DPI external display (Studio Display is 5120x2880 or similar)
+MAIN_DISPLAY_WIDTH=$(system_profiler SPDisplaysDataType | grep "Resolution" | head -1 | awk '{print $2}')
+
+# Detect if internal display has notch (MacBook Pro 14"/16" have notch, resolution width is 3024 or 3456)
+INTERNAL_WIDTH=$(system_profiler SPDisplaysDataType | grep -A 20 "Built-In" | grep "Resolution" | awk '{print $2}')
+
+# Set bar color (black for notch displays, Tokyo Night for others)
+if [ "$INTERNAL_WIDTH" = "3024" ] || [ "$INTERNAL_WIDTH" = "3456" ] || [ "$INTERNAL_WIDTH" = "3456" ]; then
+BAR_COLOR=$BLACK
 else
-    BAR_COLOR=$BG     # External is main - use Tokyo Night background
+BAR_COLOR=$BG
 fi
 
 # Bar settings

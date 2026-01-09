@@ -1,0 +1,201 @@
+#!/bin/bash
+set -euo pipefail
+
+# nvim-test - Test and manage Neovim configurations in isolation
+#
+# Uses NVIM_APPNAME to create isolated neovim instances that don't
+# interfere with your main configuration.
+
+DOTFILES_DIR="$HOME/.local/share/dotfiles"
+SOURCE_CONFIG_DIR="$DOTFILES_DIR/config/nvim"
+SANDBOX_NAME="nvim-test"
+SANDBOX_CONFIG_DIR="$HOME/.config/$SANDBOX_NAME"
+SANDBOX_DATA_DIR="$HOME/.local/share/$SANDBOX_NAME"
+SANDBOX_STATE_DIR="$HOME/.local/state/$SANDBOX_NAME"
+SANDBOX_CACHE_DIR="$HOME/.cache/$SANDBOX_NAME"
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+log_info() { echo -e "${BLUE}info:${NC} $1"; }
+log_success() { echo -e "${GREEN}success:${NC} $1"; }
+log_warn() { echo -e "${YELLOW}warn:${NC} $1"; }
+log_error() { echo -e "${RED}error:${NC} $1" >&2; }
+
+usage() {
+    cat << EOF
+Usage: nvim-test <command> [options]
+
+Test and manage Neovim configurations in isolation.
+
+Commands:
+  test [--fresh]     Copy config from dotfiles and launch nvim
+  use [-- args]      Launch nvim with existing sandbox config
+  sync               Sync sandbox changes back to dotfiles
+  cleanup [--all]    Remove sandbox directories
+
+Options:
+  --fresh            Start with empty config (build from scratch)
+  --all              For cleanup: remove all sandbox dirs (config, data, state, cache)
+  -h, --help         Show this help message
+
+Examples:
+  nvim-test test              # Test current dotfiles config
+  nvim-test test --fresh      # Start fresh, build config from scratch
+  nvim-test use               # Continue working on sandbox
+  nvim-test use -- init.lua   # Open specific file in sandbox
+  nvim-test sync              # Save changes to dotfiles
+  nvim-test cleanup --all     # Full cleanup
+EOF
+}
+
+sandbox_exists() {
+    [[ -d "$SANDBOX_CONFIG_DIR" ]]
+}
+
+cmd_test() {
+    local fresh=false
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --fresh) fresh=true; shift ;;
+            *) log_error "Unknown option: $1"; usage; exit 1 ;;
+        esac
+    done
+
+    if sandbox_exists; then
+        log_warn "Sandbox already exists at $SANDBOX_CONFIG_DIR"
+        echo -n "Overwrite? (y/N) "
+        read -r response
+        if [[ ! "$response" =~ ^[Yy]$ ]]; then
+            log_info "Aborting. Use 'nvim-test use' to launch existing sandbox."
+            exit 0
+        fi
+        rm -rf "$SANDBOX_CONFIG_DIR"
+    fi
+
+    mkdir -p "$SANDBOX_CONFIG_DIR"
+
+    if [[ "$fresh" == "true" ]]; then
+        log_info "Creating fresh config (empty)"
+        # Create minimal init.lua
+        echo "-- nvim-test: fresh config" > "$SANDBOX_CONFIG_DIR/init.lua"
+    else
+        if [[ ! -d "$SOURCE_CONFIG_DIR" ]]; then
+            log_error "Source config not found: $SOURCE_CONFIG_DIR"
+            exit 1
+        fi
+        log_info "Copying config from $SOURCE_CONFIG_DIR"
+        cp -r "$SOURCE_CONFIG_DIR"/* "$SANDBOX_CONFIG_DIR/"
+    fi
+
+    log_success "Sandbox created at $SANDBOX_CONFIG_DIR"
+    log_info "Launching neovim..."
+    echo ""
+
+    NVIM_APPNAME="$SANDBOX_NAME" nvim "$SANDBOX_CONFIG_DIR"
+}
+
+cmd_use() {
+    if ! sandbox_exists; then
+        log_error "No sandbox exists. Run 'nvim-test test' first."
+        exit 1
+    fi
+
+    log_info "Launching neovim with sandbox config..."
+    NVIM_APPNAME="$SANDBOX_NAME" nvim "$@"
+}
+
+cmd_sync() {
+    if ! sandbox_exists; then
+        log_error "No sandbox exists. Nothing to sync."
+        exit 1
+    fi
+
+    log_info "Syncing sandbox to $SOURCE_CONFIG_DIR"
+    echo -n "Continue? (y/N) "
+    read -r response
+    if [[ ! "$response" =~ ^[Yy]$ ]]; then
+        log_info "Aborting."
+        exit 0
+    fi
+
+    # Sync changes
+    rm -rf "$SOURCE_CONFIG_DIR"
+    mkdir -p "$SOURCE_CONFIG_DIR"
+    cp -r "$SANDBOX_CONFIG_DIR"/* "$SOURCE_CONFIG_DIR/"
+
+    # Format with stylua if available
+    if command -v stylua &>/dev/null; then
+        log_info "Formatting Lua files with stylua..."
+        stylua "$SOURCE_CONFIG_DIR"/**/*.lua 2>/dev/null || true
+    fi
+
+    log_success "Changes synced to $SOURCE_CONFIG_DIR"
+    log_info "Run 'home-manager switch --flake .' to apply"
+}
+
+cmd_cleanup() {
+    local all=false
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --all) all=true; shift ;;
+            *) log_error "Unknown option: $1"; usage; exit 1 ;;
+        esac
+    done
+
+    local dirs_to_remove=("$SANDBOX_CONFIG_DIR")
+    if [[ "$all" == "true" ]]; then
+        dirs_to_remove+=(
+            "$SANDBOX_DATA_DIR"
+            "$SANDBOX_STATE_DIR"
+            "$SANDBOX_CACHE_DIR"
+        )
+    fi
+
+    log_info "Will remove:"
+    for dir in "${dirs_to_remove[@]}"; do
+        if [[ -d "$dir" ]]; then
+            echo "  $dir"
+        else
+            echo "  $dir (not found)"
+        fi
+    done
+
+    echo -n "Continue? (y/N) "
+    read -r response
+    if [[ ! "$response" =~ ^[Yy]$ ]]; then
+        log_info "Aborting."
+        exit 0
+    fi
+
+    for dir in "${dirs_to_remove[@]}"; do
+        if [[ -d "$dir" ]]; then
+            rm -rf "$dir"
+            log_success "Removed $dir"
+        fi
+    done
+
+    log_success "Cleanup complete"
+}
+
+# Main
+if [[ $# -eq 0 ]]; then
+    usage
+    exit 1
+fi
+
+command="$1"
+shift
+
+case "$command" in
+    test)    cmd_test "$@" ;;
+    use)     cmd_use "$@" ;;
+    sync)    cmd_sync "$@" ;;
+    cleanup) cmd_cleanup "$@" ;;
+    -h|--help) usage ;;
+    *) log_error "Unknown command: $command"; usage; exit 1 ;;
+esac

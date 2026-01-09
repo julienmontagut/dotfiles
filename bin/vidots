@@ -1,9 +1,0 @@
-#!/bin/bash
-
-# Use EDITOR if set, otherwise use vim
-EDITOR="${EDITOR:-vim}"
-
-XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
-
-$EDITOR $XDG_DATA_HOME/dotfiles
-

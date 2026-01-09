@@ -1,30 +1,28 @@
 #!/bin/bash
 
 XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
-DOTFILES_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/dotfiles"
+DOTFILES_DIR="${XDG_DATA_HOME}/dotfiles"
 
 usage() {
-    echo "Usage: $0 subcommand"
-    echo "Manage dot files easily"
+    echo "Usage: dots <command>"
     echo ""
-    echo "Subcommands:"
-    echo "  edit    Edit the dotfiles and sync them"
-    echo "  help    Show this help message"
-    echo "  pull    Pull dotfiles changes from the remote"
-    echo "  push    Push dotfiles changes to the remote"
-    echo "  sync    Sync dotfiles with the remote"
+    echo "Commands:"
+    echo "  edit     Open editor, apply, optionally push"
+    echo "  apply    Apply dotfiles configuration"
+    echo "  pull     Pull from remote and apply"
+    echo "  push     Commit and push to remote"
+    echo "  sync     Pull then push"
+    echo "  status   Show git status"
     echo ""
 }
 
 apply() {
-    # Auto-detect platform
     case "$(uname -s)" in
         Linux*)  platform="linux" ;;
         Darwin*) platform="macos" ;;
         *)       echo "Unsupported platform: $(uname -s)"; exit 1 ;;
     esac
 
-    # Use --impure flag if overrides.nix exists and is not tracked by git
     local impure_flag=""
     if [ -f "$DOTFILES_DIR/overrides.nix" ] && ! git -C "$DOTFILES_DIR" ls-files --error-unmatch overrides.nix >/dev/null 2>&1; then
         impure_flag="--impure"
@@ -34,41 +32,30 @@ apply() {
 }
 
 pull() {
-    cd "$DOTFILES_DIR" || exit 1
-    git pull --rebase
+    git -C "$DOTFILES_DIR" pull --rebase
     apply
 }
 
 push() {
-    cd "$DOTFILES_DIR" || exit 1
-    git add -A
-    git commit -m "Update dotfiles"
-    git push
+    git -C "$DOTFILES_DIR" add -A
+    git -C "$DOTFILES_DIR" commit -m "Update dotfiles"
+    git -C "$DOTFILES_DIR" push
 }
 
 sync() {
-    pull
+    git -C "$DOTFILES_DIR" pull --rebase
     push
 }
 
-edit() {
-    pull
-    EDITOR="${EDITOR:-vim}"
-    $EDITOR "$DOTFILES_DIR"
-    apply
-    if [ $? -eq 0 ]; then
-        readline -p "Apply changes successful. Push to remote? (y/n): " choice
-        if [[ "$choice" == "y" || "$choice" == "Y" ]]; then
-            push
-        fi
-    else
-        echo "Error applying changes. Not pushing to remote."
-    fi
+status() {
+    git -C "$DOTFILES_DIR" status
 }
 
-status() {
-    cd "$DOTFILES_DIR" || exit 1
-    git status
+edit() {
+    ${EDITOR:-vim} "$DOTFILES_DIR"
+    apply || return 1
+    read -p "Push changes? (y/n): " choice
+    [[ "$choice" == [yY] ]] && push
 }
 
 if [ $# -eq 0 ]; then
@@ -77,24 +64,12 @@ if [ $# -eq 0 ]; then
 fi
 
 case $1 in
-    edit)
-        edit
-        ;;
-    help)
-        usage
-        ;;
-    pull)
-        pull
-        ;;
-    push)
-        push
-        ;;
-    sync)
-        sync
-        ;;
-    *)
-        echo "Unknown subcommand: $1"
-        usage
-        exit 1
-        ;;
+    edit)   edit ;;
+    apply)  apply ;;
+    pull)   pull ;;
+    push)   push ;;
+    sync)   sync ;;
+    status) status ;;
+    help|-h|--help) usage ;;
+    *)      echo "Unknown command: $1"; usage; exit 1 ;;
 esac
