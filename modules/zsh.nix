@@ -1,5 +1,5 @@
 # Shell and shell-related tool configurations
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   inherit (pkgs.stdenv) isDarwin;
@@ -10,6 +10,7 @@ in
     # Core shell configuration
     zsh = {
       enable = true;
+      dotDir = "${config.xdg.configHome}/zsh";
       enableCompletion = true;
       autocd = true;
       autosuggestion.enable = true;
