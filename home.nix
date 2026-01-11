@@ -32,7 +32,7 @@ in
     kubectx
     lua
     mprocs
-    nixfmt-rfc-style
+    nixfmt
     pulumi
     rustup
     timewarrior
