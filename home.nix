@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 let
   # Get environment variables when running with --impure
   user = if builtins.getEnv "USER" != "" then builtins.getEnv "USER" else "julien";
@@ -11,9 +11,12 @@ in
   # Set the username and home directory
   home.username = lib.mkDefault user;
   home.homeDirectory = lib.mkDefault (
-    if home != "" then home
-    else if pkgs.stdenv.isDarwin then "/Users/${user}"
-    else "/home/${user}"
+    if home != "" then
+      home
+    else if pkgs.stdenv.isDarwin then
+      "/Users/${user}"
+    else
+      "/home/${user}"
   );
 
   home.packages = with pkgs; [
@@ -38,7 +41,7 @@ in
     timewarrior
     tree-sitter
     xh
-    
+
     inter
     lilex
     nerd-fonts.lilex
@@ -47,10 +50,10 @@ in
   home.file = {
     ".local/bin".source = ./bin;
   };
-  
+
   # Custom path
-  home.sessionPath = [ 
-    "$HOME/.local/bin" 
+  home.sessionPath = [
+    "$HOME/.local/bin"
   ];
 
   # Custom environment variables
@@ -87,13 +90,13 @@ in
       "._*"
     ];
     includes = [
-          {
-            condition = "hasconfig:remote.*.url:ssh://tfs.cdbdx.biz:22/tfs/**";
-            contents = {
-              user.email = "julien.montagut@ext.cdiscount.com";
-            };
-          }
-        ];
+      {
+        condition = "hasconfig:remote.*.url:ssh://tfs.cdbdx.biz:22/tfs/**";
+        contents = {
+          user.email = "julien.montagut@ext.cdiscount.com";
+        };
+      }
+    ];
     settings = {
       # core.excludesfile = "${config.xdg.configHome}/git/ignore";
       init.defaultBranch = "main";
@@ -121,7 +124,8 @@ in
           y = 10;
         };
         dynamic_padding = true;
-      } // lib.optionalAttrs pkgs.stdenv.isDarwin {
+      }
+      // lib.optionalAttrs pkgs.stdenv.isDarwin {
         blur = true;
       };
       keyboard.bindings = [
