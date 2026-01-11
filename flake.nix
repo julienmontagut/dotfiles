@@ -14,9 +14,15 @@
   };
 
   outputs =
-    { nixpkgs, home-manager, stylix, ... }:
+    {
+      nixpkgs,
+      home-manager,
+      stylix,
+      ...
+    }:
     let
-      mkHomeConfig = { system, modules }:
+      mkHomeConfig =
+        { system, modules }:
         home-manager.lib.homeManagerConfiguration {
           pkgs = import nixpkgs {
             inherit system;
