@@ -1,13 +1,10 @@
 { lib, config, pkgs, ... }:
 
 let
-  mod = "Mod1"; # Set Alt as window manager modifier key
+  hmProfile = config.home.profileDirectory;
 in
 {
   targets.genericLinux.enable = lib.mkDefault true;
-
-  # TODO: Enable font configuration for Linux
-  # fonts.fontConfig.enable = true;
 
   # Linux-specific packages
   home.packages = with pkgs; [
@@ -16,55 +13,49 @@ in
 
   programs = {
     fuzzel.enable = true;
-    waybar.enable = true;
+    waybar = {
+      enable = true;
+      systemd.enable = true; # Inherits target from wayland.systemd.target
+    };
   };
 
-  # Sway window manager for Wayland
+  # Global wayland systemd target - all wayland services (waybar, etc.) bind to this
+  wayland.systemd.target = "sway-session.target";
+
+  # Use system sway (apt-installed) but configure it via ~/.config/sway/config
+  # systemd.enable adds exec to import env vars and start sway-session.target
   wayland.windowManager.sway = {
     enable = true;
+    package = null; # Use system sway, don't install from nixpkgs
+    systemd.enable = true; # Enable systemd integration for sway-session.target
     config = {
-      modifier = mod;
-      terminal = "alacritty";
+      modifier = "Mod1";
+      # Use home-manager managed alacritty
+      terminal = "${hmProfile}/bin/alacritty";
+      # Use home-manager managed fuzzel
+      menu = "${hmProfile}/bin/fuzzel";
 
       gaps = {
         inner = 8;
         outer = 8;
       };
 
-      keybindings = lib.mkOptionDefault {
-        # Workspace switching (matches macOS cmd+1/2/3/4)
-        "${mod}+1" = "workspace number 1";
-        "${mod}+2" = "workspace number 2";
-        "${mod}+3" = "workspace number 3";
-        "${mod}+4" = "workspace number 4";
+      input = {
+        "type:keyboard" = {
+          xkb_layout = "us";
+          xkb_variant = "dvorak";
+          xkb_options = "ctrl:hyper_capscontrol";
+        };
 
-        # Move window to workspace (matches macOS cmd-shift+1/2/3/4)
-        "${mod}+Shift+1" = "move container to workspace number 1";
-        "${mod}+Shift+2" = "move container to workspace number 2";
-        "${mod}+Shift+3" = "move container to workspace number 3";
-        "${mod}+Shift+4" = "move container to workspace number 4";
+        "type:touchpad" = {
+          dwt = "enabled";
+          tap = "enabled";
+          natural_scroll = "enabled";
+        };
 
-        # Focus navigation (matches macOS cmd-shift+h/j/k/l)
-        "${mod}+Shift+h" = "focus left";
-        "${mod}+Shift+j" = "focus down";
-        "${mod}+Shift+k" = "focus up";
-        "${mod}+Shift+l" = "focus right";
-
-        # Layout manipulation (matches macOS cmd-shift+s/v/e/z)
-        "${mod}+Shift+s" = "layout stacking"; # split/stack
-        "${mod}+Shift+v" = "splitv"; # vertical split
-        "${mod}+Shift+e" = "layout toggle split"; # toggle
-        "${mod}+Shift+z" = "fullscreen toggle"; # zoom
-        "${mod}+Shift+space" = "floating toggle"; # matches macOS cmd-shift+space
-
-        # Window management (matches macOS cmd-shift+c)
-        "${mod}+Shift+c" = "kill"; # close window
-
-        # Application launching (matches macOS cmd+return)
-        "${mod}+Return" = "exec alacritty"; # terminal
-
-        # Resize mode (matches macOS cmd-shift+r)
-        "${mod}+Shift+r" = "mode resize";
+        "type:pointer" = {
+          natural_scroll = "enabled";
+        };
       };
 
       modes = {
@@ -77,7 +68,16 @@ in
           "Return" = "mode default";
         };
       };
-    };
-  };
 
+      # Disable default bar - we use waybar via home-manager
+      bars = [ ];
+
+      startup = [ ];
+    };
+
+    extraConfig = ''
+      # Include system sway config.d for proper systemd integration
+      include /etc/sway/config.d/*
+    '';
+  };
 }

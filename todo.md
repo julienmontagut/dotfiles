@@ -1,5 +1,7 @@
 # TODO
 
+- [ ] Remove neovim message popups that are too intrusive
+
 - Forbid edition of the .config/karabiner file after addition by using 
   xdg.configFile."karabiner/karbiner.json".onChange
 
