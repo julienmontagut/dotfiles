@@ -6,7 +6,7 @@
     defaultEditor = true;
     vimAlias = true;
     vimdiffAlias = true;
-    
+
     plugins = with pkgs.vimPlugins; [
       blink-cmp
       conform-nvim
@@ -17,7 +17,9 @@
       oil-git-nvim
       oil-nvim
       plenary-nvim
+      snacks-nvim
       telescope-nvim
+      trouble-nvim
       tokyonight-nvim
     ];
 
@@ -98,6 +100,39 @@
         end,
       })
 
+      -- Snacks
+      require('snacks').setup({
+        dashboard = { enable = false }, 
+        dim = { enable = false },
+        explorer = { enable = true },
+        indent = { enable = true },
+        input = { enable = true },
+        lazygit = { enable = true },
+        picker = { enable = true },
+        quickfile = { enable = true },
+        terminal =  { enable = true },
+      })
+
+      -- File explorer
+      -- require('oil').setup()
+      -- vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
+
+      -- Flash (motion)
+      require('flash').setup()
+
+      -- Telescope
+      local telescope = require('telescope.builtin')
+      vim.keymap.set('n', '<leader>sf', telescope.find_files, { desc = 'Search files' })
+      vim.keymap.set('n', '<leader>sg', telescope.live_grep, { desc = 'Search grep' })
+      vim.keymap.set('n', '<leader>sb', telescope.buffers, { desc = 'Search buffers' })
+      vim.keymap.set('n', '<leader>sh', telescope.help_tags, { desc = 'Search help' })
+      vim.keymap.set('n', '<leader>sr', telescope.lsp_references, { desc = 'Search references' })
+      vim.keymap.set('n', '<leader>ss', telescope.lsp_document_symbols, { desc = 'Search symbols' })
+      vim.keymap.set('n', '<leader>sd', telescope.diagnostics, { desc = 'Search diagnostics' })
+
+      -- Trouble
+      require('trouble').setup()
+
       -- Completion
       local blink = require('blink-cmp')
       blink.setup({
@@ -106,7 +141,7 @@
           documentation = { auto_show = true },
         },
         sources = {
-          default = { 'lsp', 'path', 'buffer' },
+          default = { 'lsp', 'snippets', 'path', 'buffer' },
         },
       })
 
@@ -138,22 +173,6 @@
         end,
       })
 
-      -- File explorer
-      require('oil').setup()
-      vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
-
-      -- Flash (motion)
-      require('flash').setup()
-
-      -- Telescope
-      local telescope = require('telescope.builtin')
-      vim.keymap.set('n', '<leader>sf', telescope.find_files, { desc = 'Search files' })
-      vim.keymap.set('n', '<leader>sg', telescope.live_grep, { desc = 'Search grep' })
-      vim.keymap.set('n', '<leader>sb', telescope.buffers, { desc = 'Search buffers' })
-      vim.keymap.set('n', '<leader>sh', telescope.help_tags, { desc = 'Search help' })
-      vim.keymap.set('n', '<leader>sr', telescope.lsp_references, { desc = 'Search references' })
-      vim.keymap.set('n', '<leader>ss', telescope.lsp_document_symbols, { desc = 'Search symbols' })
-      vim.keymap.set('n', '<leader>sd', telescope.diagnostics, { desc = 'Search diagnostics' })
 
       -- LSP keybindings
       vim.api.nvim_create_autocmd('LspAttach', {
@@ -190,7 +209,7 @@
         'nickel_ls',
         'nixd',
         'postgres_lsp',
-        'roslyn',
+        'roslyn_ls',
         'rust_analyzer',
         'tailwindcss',
         'taplo',
