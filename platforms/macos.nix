@@ -145,7 +145,8 @@
   # Alacritty terminal - macOS-specific window settings
   programs.alacritty.settings.window = {
     decorations = "buttonless";
-    option_as_alt = "Both";
     blur = true;
+    opacity = 0.95;
+    option_as_alt = "Both";
   };
 }

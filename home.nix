@@ -1,4 +1,9 @@
-{ pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   # Get environment variables when running with --impure
   user = if builtins.getEnv "USER" != "" then builtins.getEnv "USER" else "julien";
@@ -59,6 +64,7 @@ in
   # Custom environment variables
   home.sessionVariables = {
     # EDITOR = "vim";
+    XDG_RUNTIME_DIR = "/run/user/$(id -u)";
   };
 
   xdg.enable = true;
@@ -117,11 +123,8 @@ in
         style = "Regular";
       };
       window = {
-        opacity = 0.95;
-        padding = {
-          x = 10;
-          y = 10;
-        };
+        padding.x = 10;
+        padding.y = 10;
         dynamic_padding = true;
       };
       keyboard.bindings = [
