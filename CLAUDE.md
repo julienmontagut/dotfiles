@@ -83,21 +83,21 @@ From `flake.nix`:
 
 Configured in `modules/neovim.nix` with:
 
-**Plugins**: blink-cmp, conform-nvim, flash-nvim, nvim-lspconfig, nvim-treesitter (all grammars), oil-nvim, telescope-nvim, tokyonight-nvim
+**Plugins**: blink-cmp, conform-nvim, flash-nvim, nvim-lspconfig, nvim-treesitter (all grammars), oil-nvim, snacks-nvim (dashboard, lazygit, picker, terminal, indent, explorer), telescope-nvim, trouble-nvim, tokyonight-nvim
 
-**LSP Servers**: bashls, biome, cssls, dockerls, gopls, helm_ls, html, htmx, jsonls, lua_ls, marksman, nickel_ls, nixd, postgres_lsp, roslyn, rust_analyzer, tailwindcss, taplo, terraformls, vtsls, yamlls
+**LSP Servers**: bashls, biome, buf_ls, clangd, cssls, dockerls, gopls, helm_ls, html, htmx, jsonls, lua_ls, marksman, nickel_ls, nixd, postgres_lsp, roslyn_ls, rust_analyzer, tailwindcss, taplo, terraformls, vtsls, yamlls
 
 **Formatters** (via conform.nvim): shfmt (bash), gofmt (go), stylua (lua), nixfmt (nix), rustfmt (rust), with LSP fallback
 
 **Key Bindings**:
 - `<leader>` = Space
-- `<leader>sf/sg/sb/sh/sr/ss/sd` - Telescope search
-- `gd/gD/gi/gr` - LSP navigation
+- `<leader>sf/sg/sb/sh/sr/ss/sd` - Telescope search (files, grep, buffers, help, references, symbols, diagnostics)
+- `gd/gD/gi/gr` - LSP navigation (definition, declaration, implementation, references)
 - `K` - Hover documentation
 - `<leader>rn` - Rename
 - `<leader>ca` - Code action
 - `<leader>cf` - Format
-- `-` - Oil file explorer
+- `[d/]d` - Previous/next diagnostic
 
 ### Shell Environment
 
@@ -140,3 +140,5 @@ Configured in `modules/zsh.nix`:
 - XDG directories are preferred (`preferXdgDirectories = true`)
 - Stylix is included but not actively configured
 - The `dots` script in `bin/` provides convenient commands for managing dotfiles
+- For local overrides, create `overrides.nix` (gitignored) and run with `--impure` flag
+- State version is `25.11` - check Home Manager release notes before changing
