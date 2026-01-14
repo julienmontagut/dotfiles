@@ -43,6 +43,7 @@ in
     nixfmt
     pulumi
     rustup
+    slides
     timewarrior
     tree-sitter
     xh
@@ -113,6 +114,37 @@ in
     };
   };
   programs.firefox.enable = true;
+  programs.wezterm = {
+    enable = true;
+    extraConfig = ''
+      local config = wezterm.config_builder()
+
+      -- Font
+      config.font = wezterm.font('Lilex Nerd Font Mono')
+      config.font_size = 16
+
+      -- Theme
+      config.color_scheme = 'Tokyo Night Storm'
+
+      -- Simple tab bar (text-based, not fancy)
+      config.use_fancy_tab_bar = false
+      config.hide_tab_bar_if_only_one_tab = true
+
+      -- Platform-specific window decorations
+      if wezterm.target_triple:find('darwin') then
+        -- macOS: resizable, no title bar
+        config.window_decorations = 'RESIZE'
+      elseif os.getenv('SWAYSOCK') then
+        -- Sway: no decorations (tiling WM handles this)
+        config.window_decorations = 'NONE'
+      else
+        -- GNOME/other: resizable with resize handles
+        config.window_decorations = 'RESIZE'
+      end
+
+      return config
+    '';
+  };
   programs.alacritty = {
     enable = true;
     theme = "tokyo_night_storm";
