@@ -102,15 +102,23 @@
 
       -- Snacks
       require('snacks').setup({
-        dashboard = { enable = false }, 
-        dim = { enable = false },
-        explorer = { enable = true },
-        indent = { enable = true },
-        input = { enable = true },
-        lazygit = { enable = true },
-        picker = { enable = true },
-        quickfile = { enable = true },
-        terminal =  { enable = true },
+        dashboard = {
+          enabled = true,
+          sections = {
+            { section = 'header' },
+            { section = 'keys', gap = 1, padding = 1 },
+            { section = 'recent_files', icon = ' ', title = 'Recent Files', padding = 1 },
+            { section = 'projects', icon = ' ', title = 'Projects', padding = 1 },
+          },
+        },
+        dim = { enabled = false },
+        explorer = { enabled = true },
+        indent = { enabled = true },
+        input = { enabled = true },
+        lazygit = { enabled = true },
+        picker = { enabled = true },
+        quickfile = { enabled = true },
+        terminal =  { enabled = true },
       })
 
       -- File explorer
@@ -118,7 +126,16 @@
       -- vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
 
       -- Flash (motion)
-      require('flash').setup()
+      require('flash').setup({
+        modes = {
+          search = {
+            enabled = true,
+          },
+          char = {
+            jump_labels = true,
+          },
+        }
+      })
 
       -- Telescope
       local telescope = require('telescope.builtin')
