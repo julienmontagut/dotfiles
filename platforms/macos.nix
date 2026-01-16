@@ -1,5 +1,10 @@
 # macOS-specific configuration
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 {
   # macOS-specific packages
@@ -97,7 +102,7 @@
         "cmd-ctrl-alt-shift-r" = "mode resize";
 
         # Applications
-        "cmd-ctrl-alt-enter" = "exec-and-forget open -na Alacritty";
+        "cmd-ctrl-alt-enter" = "exec-and-forget open -a WezTerm";
         "cmd-ctrl-alt-w" = "exec-and-forget open -na Firefox";
       };
 
