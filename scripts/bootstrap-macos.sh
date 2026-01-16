@@ -58,6 +58,13 @@ echo "  ${YELLOW}⚠ Manual action required:${NC}"
 echo "    Go to System Settings > Keyboard > Keyboard Shortcuts > Modifier Keys"
 echo "    and set Caps Lock to Control"
 
+# Disable Ctrl+Space input source switching (conflicts with terminal leader keys)
+# Key 60 = "Select the previous input source", Key 61 = "Select next source in Input menu"
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 "<dict><key>enabled</key><false/></dict>"
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 61 "<dict><key>enabled</key><false/></dict>"
+# Apply changes immediately without requiring a reboot
+/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+
 echo "✓ System defaults configured"
 
 echo "\n${GREEN}[3/6]${NC} Configuring TouchID for sudo..."
