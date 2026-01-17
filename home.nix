@@ -81,7 +81,7 @@ in
   programs.k9s.enable = true;
   programs.bacon.enable = true;
   # programs.delta.enable = true;
-  # programs.zed-editor.enable = true;
+  programs.zed-editor.enable = true;
   programs.git = {
     enable = true;
     # delta.enable = true;

@@ -14,8 +14,8 @@
       nvim-lspconfig
       nvim-treesitter.withAllGrammars
       nvim-treesitter-textobjects
-      oil-git-nvim
       oil-nvim
+      oil-git-nvim
       plenary-nvim
       snacks-nvim
       telescope-nvim
@@ -112,7 +112,7 @@
           },
         },
         dim = { enabled = false },
-        explorer = { enabled = true },
+        explorer = { enabled = true, replace_netrw = false },
         indent = { enabled = true },
         input = { enabled = true },
         lazygit = { enabled = true },
@@ -122,8 +122,8 @@
       })
 
       -- File explorer
-      -- require('oil').setup()
-      -- vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
+      require('oil').setup()
+      vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
 
       -- Flash (motion)
       require('flash').setup({
