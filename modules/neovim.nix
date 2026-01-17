@@ -92,7 +92,7 @@
       require('tokyonight').setup({ style = 'storm' })
       vim.cmd.colorscheme('tokyonight')
 
-      -- Treesitter (built-in in Neovim 0.10+)
+      -- Treesitter
       vim.api.nvim_create_autocmd('FileType', {
         callback = function(args)
           pcall(vim.treesitter.start, args.buf)
@@ -107,7 +107,6 @@
           sections = {
             { section = 'header' },
             { section = 'keys', gap = 1, padding = 1 },
-            { section = 'recent_files', icon = ' ', title = 'Recent Files', padding = 1 },
             { section = 'projects', icon = ' ', title = 'Projects', padding = 1 },
           },
         },
@@ -131,9 +130,9 @@
           search = {
             enabled = true,
           },
-          char = {
-            jump_labels = true,
-          },
+          -- char = {
+          --   jump_labels = true,
+          -- },
         }
       })
 
