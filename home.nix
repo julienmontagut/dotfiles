@@ -62,11 +62,6 @@ in
     "$HOME/.local/bin"
   ];
 
-  # Custom environment variables
-  home.sessionVariables = {
-    XDG_RUNTIME_DIR = "/run/user/$(id -u)";
-  };
-
   xdg.enable = true;
   home.preferXdgDirectories = true;
 

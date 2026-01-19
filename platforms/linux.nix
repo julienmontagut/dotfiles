@@ -1,10 +1,19 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 let
   hmProfile = config.home.profileDirectory;
 in
 {
   targets.genericLinux.enable = lib.mkDefault true;
+
+  home.sessionVariables = {
+    XDG_RUNTIME_DIR = "/run/user/$(id -u)";
+  };
 
   # Linux-specific packages
   home.packages = with pkgs; [
