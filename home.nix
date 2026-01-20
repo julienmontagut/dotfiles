@@ -29,6 +29,7 @@ in
     dua
     gh
     glab
+    glow
     jetbrains.goland
     jetbrains.rider
     jetbrains.rust-rover
