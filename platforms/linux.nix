@@ -9,6 +9,7 @@ let
   hmProfile = config.home.profileDirectory;
 in
 {
+  # By default this config is meant for non-nixos
   targets.genericLinux.enable = lib.mkDefault true;
 
   home.sessionVariables = {
@@ -29,7 +30,21 @@ in
   };
 
   # Global wayland systemd target - all wayland services (waybar, etc.) bind to this
-  wayland.systemd.target = "sway-session.target";
+  # wayland.systemd.target = "sway-session.target";
+  services.kanshi.enable = true;
+
+  # Override wezterm .desktop with full path (fuzzel doesn't have nix-profile in PATH)
+  # xdg.desktopEntries.wezterm = {
+  #   name = "WezTerm";
+  #   comment = "Wez's Terminal Emulator";
+  #   exec = "${hmProfile}/bin/wezterm start --cwd .";
+  #   icon = "org.wezfurlong.wezterm";
+  #   terminal = false;
+  #   categories = [ "System" "TerminalEmulator" "Utility" ];
+  #   settings = {
+  #     StartupWMClass = "org.wezfurlong.wezterm";
+  #   };
+  # };
 
   # Use system sway (apt-installed) but configure it via ~/.config/sway/config
   # systemd.enable adds exec to import env vars and start sway-session.target
@@ -39,8 +54,9 @@ in
     systemd.enable = true; # Enable systemd integration for sway-session.target
     config = {
       modifier = "Mod1";
+      # terminal = "wezterm";
       # Use home-manager managed alacritty
-      terminal = "${hmProfile}/bin/alacritty";
+      terminal = "${hmProfile}/bin/wezterm";
       # Use home-manager managed fuzzel
       menu = "${hmProfile}/bin/fuzzel";
 
@@ -80,6 +96,10 @@ in
 
       # Disable default bar - we use waybar via home-manager
       bars = [ ];
+
+      keybindings = lib.mkOptionDefault {
+        "Mod1+space" = "exec ${hmProfile}/bin/fuzzel";
+      };
 
       startup = [ ];
     };
