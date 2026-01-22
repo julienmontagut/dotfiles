@@ -11,6 +11,7 @@
       blink-cmp
       conform-nvim
       flash-nvim
+      lualine-nvim
       nvim-lspconfig
       nvim-treesitter.withAllGrammars
       nvim-treesitter-textobjects
@@ -88,9 +89,23 @@
       vim.opt.scrolloff = 8
       vim.opt.wrap = false
 
-      -- Colorscheme
-      require('tokyonight').setup({ style = 'storm' })
+      -- Colorscheme (transparent background)
+      require('tokyonight').setup({
+        style = 'storm',
+        transparent = true,
+        styles = {
+          sidebars = 'transparent',
+          floats = 'transparent',
+        },
+      })
       vim.cmd.colorscheme('tokyonight')
+
+      -- Lualine statusline
+      require('lualine').setup({
+        options = {
+          theme = 'tokyonight',
+        },
+      })
 
       -- Treesitter
       vim.api.nvim_create_autocmd('FileType', {
