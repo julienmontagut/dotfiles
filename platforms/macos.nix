@@ -57,66 +57,75 @@
         "${pkgs.sketchybar}/bin/sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE"
       ];
 
-      # Hyper key bindings (Ctrl+Alt+Cmd+Shift)
-      # Karabiner transforms left_command+key into cmd-ctrl-alt-shift+key
       mode.main.binding = {
         # Workspace switching
         "cmd-ctrl-alt-1" = "workspace 1";
         "cmd-ctrl-alt-2" = "workspace 2";
         "cmd-ctrl-alt-3" = "workspace 3";
         "cmd-ctrl-alt-4" = "workspace 4";
+        "cmd-ctrl-alt-5" = "workspace 5";
 
         # Move window to workspace and follow
-        "cmd-ctrl-alt-shift-1" = [
-          "move-node-to-workspace 1"
-          "workspace 1"
-        ];
-        "cmd-ctrl-alt-shift-2" = [
-          "move-node-to-workspace 2"
-          "workspace 2"
-        ];
-        "cmd-ctrl-alt-shift-3" = [
-          "move-node-to-workspace 3"
-          "workspace 3"
-        ];
-        "cmd-ctrl-alt-shift-4" = [
-          "move-node-to-workspace 4"
-          "workspace 4"
-        ];
+        "cmd-ctrl-alt-shift-1" = "move-node-to-workspace 1";
+        "cmd-ctrl-alt-shift-2" = "move-node-to-workspace 2";
+        "cmd-ctrl-alt-shift-3" = "move-node-to-workspace 3";
+        "cmd-ctrl-alt-shift-4" = "move-node-to-workspace 4";
+        "cmd-ctrl-alt-shift-5" = "move-node-to-workspace 5";
 
         # Focus navigation
-        "cmd-ctrl-alt-shift-h" = "focus left";
-        "cmd-ctrl-alt-shift-j" = "focus down";
-        "cmd-ctrl-alt-shift-k" = "focus up";
-        "cmd-ctrl-alt-shift-l" = "focus right";
+        "cmd-ctrl-alt-h" = "focus left";
+        "cmd-ctrl-alt-j" = "focus down";
+        "cmd-ctrl-alt-k" = "focus up";
+        "cmd-ctrl-alt-l" = "focus right";
 
         # Layout control
-        "cmd-ctrl-alt-shift-s" = "layout h_accordion";
-        "cmd-ctrl-alt-shift-v" = "layout v_accordion";
-        "cmd-ctrl-alt-shift-e" = "layout tiles";
-        "cmd-ctrl-alt-shift-z" = "fullscreen";
-        "cmd-ctrl-alt-shift-space" = "layout floating tiling";
+        "cmd-ctrl-alt-shift-a" = "layout h_accordion";
+        "cmd-ctrl-alt-shift-o" = "layout tiles";
+        "cmd-ctrl-alt-shift-u" = "layout floating tiling";
 
         # Window management
-        "cmd-ctrl-alt-shift-q" = "close";
-        "cmd-ctrl-alt-shift-r" = "mode resize";
+        "cmd-ctrl-alt-q" = "close";
+        "cmd-ctrl-alt-shift-m" = "mode layout";
 
         # Applications
-        "cmd-ctrl-alt-enter" = "exec-and-forget open -a WezTerm";
-        "cmd-ctrl-alt-w" = "exec-and-forget open -na Firefox";
+        "cmd-ctrl-alt-enter" = "exec-and-forget open -na WezTerm";
+        "cmd-ctrl-alt-shift-f" = "exec-and-forget open -a Firefox";
       };
 
       # Define resize mode with clear exit strategy
-      mode.resize.binding = {
+      mode.layout.binding = {
+
+        # Move window to workspace and follow
+        "1" = [
+          "move-node-to-workspace 1"
+          "workspace 1"
+        ];
+        "2" = [
+          "move-node-to-workspace 2"
+          "workspace 2"
+        ];
+        "3" = [
+          "move-node-to-workspace 3"
+          "workspace 3"
+        ];
+        "4" = [
+          "move-node-to-workspace 4"
+          "workspace 4"
+        ];
+        "5" = [
+          "move-node-to-workspace 5"
+          "workspace 5"
+        ];
+
         # Use hjkl to resize windows
-        h = "resize width -50";
-        j = "resize height +50";
-        k = "resize height -50";
-        l = "resize width +50";
+        "shift-h" = "resize width -50";
+        "shift-j" = "resize height +50";
+        "shift-k" = "resize height -50";
+        "shift-l" = "resize width +50";
 
         # Exit resize mode with ESC or Enter
         esc = "mode main";
-        enter = "mode main";
+        "cmd-ctrl-alt-c" = "mode main";
       };
     };
   };
