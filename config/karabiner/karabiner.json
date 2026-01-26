@@ -14,6 +14,12 @@
             "description": "Map caps_lock to escape on tap, left_control on hold",
             "manipulators": [
               {
+                "conditions": [
+                  {
+                    "type": "device_unless",
+                    "identifiers": [{ "vendor_id": 12951 }]
+                  }
+                ],
                 "from": {
                   "key_code": "caps_lock"
                 },
@@ -24,9 +30,39 @@
             ]
           },
           {
+            "description": "Map left_control to hyper",
             "manipulators": [
               {
-                "description": "Map left_command to command+control+option.",
+                "conditions": [
+                  {
+                    "type": "device_unless",
+                    "identifiers": [{ "vendor_id": 12951 }]
+                  }
+                ],
+                "from": {
+                  "key_code": "left_control",
+                  "modifiers": { "optional": ["any"] }
+                },
+                "to": [
+                  {
+                    "key_code": "left_control",
+                    "modifiers": ["left_command", "left_option"]
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "Map left_command to command+control+option",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "device_unless",
+                    "identifiers": [{ "vendor_id": 12951 }]
+                  }
+                ],
                 "from": {
                   "key_code": "left_command",
                   "modifiers": { "optional": ["any"] }
@@ -45,13 +81,20 @@
             "description": "Map right command to left command",
             "manipulators": [
               {
+                "conditions": [
+                  {
+                    "type": "device_unless",
+                    "identifiers": [{ "vendor_id": 12951 }]
+                  }
+                ],
                 "from": { "key_code": "right_command" },
                 "to": [{ "key_code": "left_command" }],
                 "type": "basic"
               }
             ]
-          }]
+          }
+        ]
       }
     }
-    ]
+  ]
 }
