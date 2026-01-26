@@ -69,7 +69,7 @@
       postgres-language-server
     ];
 
-    extraLuaConfig = ''
+    initLua = ''
       -- Space as leader
       vim.g.mapleader = ' '
       vim.g.maplocalleader = ' '
