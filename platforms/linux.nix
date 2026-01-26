@@ -25,7 +25,7 @@ in
     fuzzel.enable = true;
     waybar = {
       enable = true;
-      systemd.enable = true; # Inherits target from wayland.systemd.target
+      systemd.enable = true;
     };
   };
 
@@ -51,7 +51,7 @@ in
   wayland.windowManager.sway = {
     enable = true;
     package = null; # Use system sway, don't install from nixpkgs
-    systemd.enable = true; # Enable systemd integration for sway-session.target
+    # systemd.enable = true; # Enable systemd integration for sway-session.target
     config = {
       modifier = "Mod1";
       # terminal = "wezterm";
@@ -66,10 +66,17 @@ in
       };
 
       input = {
+        # Every keyboard except the ZSA Voyager
         "type:keyboard" = {
           xkb_layout = "us";
           xkb_variant = "dvorak";
           xkb_options = "ctrl:hyper_capscontrol";
+        };
+
+        "*ZSA*" = {
+          xkb_layout = "us";
+          xkb_variant = "dvorak";
+          xkb_options = "";
         };
 
         "type:touchpad" = {
