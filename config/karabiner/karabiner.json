@@ -14,41 +14,11 @@
             "description": "Map caps_lock to escape on tap, left_control on hold",
             "manipulators": [
               {
-                "conditions": [
-                  {
-                    "type": "device_unless",
-                    "identifiers": [{ "vendor_id": 12951 }]
-                  }
-                ],
                 "from": {
                   "key_code": "caps_lock"
                 },
                 "to": [{ "key_code": "left_control" }],
                 "to_if_alone": [{ "key_code": "escape" }],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "Map left_control to hyper",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "device_unless",
-                    "identifiers": [{ "vendor_id": 12951 }]
-                  }
-                ],
-                "from": {
-                  "key_code": "left_control",
-                  "modifiers": { "optional": ["any"] }
-                },
-                "to": [
-                  {
-                    "key_code": "left_control",
-                    "modifiers": ["left_command", "left_option"]
-                  }
-                ],
                 "type": "basic"
               }
             ]
