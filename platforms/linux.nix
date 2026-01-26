@@ -66,17 +66,10 @@ in
       };
 
       input = {
-        # Every keyboard except the ZSA Voyager
         "type:keyboard" = {
           xkb_layout = "us";
           xkb_variant = "dvorak";
-          xkb_options = "ctrl:hyper_capscontrol";
-        };
-
-        "*ZSA*" = {
-          xkb_layout = "us";
-          xkb_variant = "dvorak";
-          xkb_options = "";
+          xkb_options = "ctrl:nocaps";
         };
 
         "type:touchpad" = {
