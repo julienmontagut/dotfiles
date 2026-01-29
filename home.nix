@@ -34,6 +34,7 @@ in
     jq
     k9s
     kind
+    keymapp
     kubectl
     kubectx
     lua
