@@ -33,6 +33,7 @@
     };
   };
 
+  programs.firefox.package = lib.mkForce null;
   # AeroSpace tiling window manager
   programs.aerospace = {
     enable = true;

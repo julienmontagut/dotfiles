@@ -17,9 +17,7 @@
       nvim-treesitter-textobjects
       oil-nvim
       oil-git-nvim
-      plenary-nvim
       snacks-nvim
-      telescope-nvim
       trouble-nvim
       tokyonight-nvim
     ];
@@ -88,6 +86,8 @@
       vim.opt.undofile = true
       vim.opt.scrolloff = 8
       vim.opt.wrap = false
+      vim.opt.cursorline = true
+      vim.opt.colorcolumn = '100'
 
       -- Colorscheme (transparent background)
       require('tokyonight').setup({
@@ -151,25 +151,91 @@
         }
       })
 
-      -- Telescope
-      local telescope = require('telescope.builtin')
-      vim.keymap.set('n', '<leader>sf', telescope.find_files, { desc = 'Search files' })
-      vim.keymap.set('n', '<leader>sg', telescope.live_grep, { desc = 'Search grep' })
-      vim.keymap.set('n', '<leader>sb', telescope.buffers, { desc = 'Search buffers' })
-      vim.keymap.set('n', '<leader>sh', telescope.help_tags, { desc = 'Search help' })
-      vim.keymap.set('n', '<leader>sr', telescope.lsp_references, { desc = 'Search references' })
-      vim.keymap.set('n', '<leader>ss', telescope.lsp_document_symbols, { desc = 'Search symbols' })
-      vim.keymap.set('n', '<leader>sd', telescope.diagnostics, { desc = 'Search diagnostics' })
+      -- Search/Picker (snacks.nvim)
+      vim.keymap.set('n', '<leader>sf', function() Snacks.picker.files() end, { desc = 'Search files' })
+      vim.keymap.set('n', '<leader>sg', function() Snacks.picker.grep() end, { desc = 'Search grep' })
+      vim.keymap.set('n', '<leader>sw', function() Snacks.picker.grep_word() end, { desc = 'Search word under cursor' })
+      vim.keymap.set('n', '<leader>sb', function() Snacks.picker.buffers() end, { desc = 'Search buffers' })
+      vim.keymap.set('n', '<leader>sh', function() Snacks.picker.help() end, { desc = 'Search help' })
+      vim.keymap.set('n', '<leader>sr', function() Snacks.picker.lsp_references() end, { desc = 'Search references' })
+      vim.keymap.set('n', '<leader>ss', function() Snacks.picker.lsp_symbols() end, { desc = 'Search symbols (buffer)' })
+      vim.keymap.set('n', '<leader>sa', function() Snacks.picker.lsp_workspace_symbols() end, { desc = 'Search symbols (all)' })
+      vim.keymap.set('n', '<leader>si', function() Snacks.picker.lsp_implementations() end, { desc = 'Search implementations' })
+      vim.keymap.set('n', '<leader>st', function() Snacks.picker.lsp_type_definitions() end, { desc = 'Search type definitions' })
+      vim.keymap.set('n', '<leader>sp', function() Snacks.picker.diagnostics() end, { desc = 'Search problems' })
+      vim.keymap.set('n', '<leader>sc', function() Snacks.picker.commands() end, { desc = 'Search commands' })
+      vim.keymap.set('n', '<leader>sk', function() Snacks.picker.keymaps() end, { desc = 'Search keymaps' })
+      vim.keymap.set('n', '<leader>sl', function() Snacks.picker.lines() end, { desc = 'Search lines in buffer' })
+      vim.keymap.set('n', '<leader>sm', function() Snacks.picker.marks() end, { desc = 'Search marks' })
+      vim.keymap.set('n', '<leader>sj', function() Snacks.picker.jumps() end, { desc = 'Search jumplist' })
+      vim.keymap.set('n', '<leader>s/', function() Snacks.picker.grep_buffers() end, { desc = 'Search in open buffers' })
+
+      -- Git
+      vim.keymap.set('n', '<leader>gg', function() Snacks.lazygit.open() end, { desc = 'Git lazygit' })
+      vim.keymap.set('n', '<leader>gl', function() Snacks.lazygit.log() end, { desc = 'Git log (file)' })
+      vim.keymap.set('n', '<leader>gf', function() Snacks.picker.git_files() end, { desc = 'Git files' })
+      vim.keymap.set('n', '<leader>gs', function() Snacks.picker.git_status() end, { desc = 'Git status' })
+      vim.keymap.set('n', '<leader>gb', function() Snacks.picker.git_branches() end, { desc = 'Git branches' })
+      vim.keymap.set('n', '<leader>gc', function() Snacks.picker.git_log() end, { desc = 'Git commits' })
+
+      -- Tools
+      vim.keymap.set('n', '<leader>e', function() Snacks.explorer.toggle() end, { desc = 'Toggle explorer' })
+      vim.keymap.set('n', '<C-`>', function() Snacks.terminal.toggle() end, { desc = 'Toggle terminal' })
+      vim.keymap.set('t', '<C-`>', function() Snacks.terminal.toggle() end, { desc = 'Toggle terminal' })
+      vim.keymap.set('n', '<leader>tt', function() Snacks.terminal.toggle() end, { desc = 'Toggle terminal' })
+      vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
       -- Trouble
-      require('trouble').setup()
+      require('trouble').setup({
+        auto_preview = false,
+        focus = true,
+        modes = {
+          diagnostics = {
+            auto_open = false,
+            auto_close = true,
+            auto_preview = true,
+            auto_refresh = true,
+            focus = true,
+            follow = true,
+          },
+        },
+      })
+
+      -- Underline diagnostics
+      vim.diagnostic.config({
+        underline = true,
+        virtual_text = { spacing = 4, prefix = '●' },
+        signs = true,
+        update_in_insert = false,
+      })
+
+      -- Problems (Trouble)
+      vim.keymap.set('n', '<leader>pp', '<cmd>Trouble diagnostics toggle<cr>', { desc = 'Problems (all)' })
+      vim.keymap.set('n', '<leader>pb', '<cmd>Trouble diagnostics toggle filter.buf=0<cr>', { desc = 'Problems (buffer)' })
+      vim.keymap.set('n', '<leader>ps', '<cmd>Trouble symbols toggle<cr>', { desc = 'Problems symbols' })
+      vim.keymap.set('n', '<leader>pq', '<cmd>Trouble qflist toggle<cr>', { desc = 'Problems quickfix' })
+      vim.keymap.set('n', '<leader>pl', '<cmd>Trouble loclist toggle<cr>', { desc = 'Problems loclist' })
+
+      -- Quickfix navigation
+      vim.keymap.set('n', '<leader>qo', '<cmd>copen<cr>', { desc = 'Open quickfix' })
+      vim.keymap.set('n', '<leader>qc', '<cmd>cclose<cr>', { desc = 'Close quickfix' })
+      vim.keymap.set('n', '[q', '<cmd>cprev<cr>', { desc = 'Previous quickfix item' })
+      vim.keymap.set('n', ']q', '<cmd>cnext<cr>', { desc = 'Next quickfix item' })
 
       -- Completion
       local blink = require('blink-cmp')
       blink.setup({
-        keymap = { preset = 'default' },
+        keymap = {
+          preset = 'default',
+          ['<Tab>'] = { 'select_and_accept', 'fallback' },
+          ['<CR>'] = { 'select_and_accept', 'fallback' },
+        },
         completion = {
           documentation = { auto_show = true },
+          trigger = {
+            show_on_insert_on_trigger_character = true,
+            show_on_keyword = true,
+          },
         },
         sources = {
           default = { 'lsp', 'snippets', 'path', 'buffer' },
