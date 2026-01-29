@@ -7,6 +7,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-darwin = {
+      url = "github:nix-darwin/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     stylix = {
       url = "github:nix-community/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -16,6 +20,7 @@
   outputs =
     {
       nixpkgs,
+      nix-darwin,
       home-manager,
       stylix,
       ...
@@ -32,6 +37,11 @@
         };
     in
     {
+      darwinConfigurations."Julien-MacBook" = nix-darwin.lib.darwinSystem {
+        modules = [ ./hosts/macos.nix ];
+        # specialArgs = { inherit inputs; };
+      };
+
       homeConfigurations = {
         "macos" = mkHomeConfig {
           system = "aarch64-darwin";
