@@ -37,8 +37,8 @@
         };
     in
     {
-      darwinConfigurations."Julien-MacBook" = nix-darwin.lib.darwinSystem {
-        modules = [ ./hosts/macos.nix ];
+      darwinConfigurations."Julien-Macbook" = nix-darwin.lib.darwinSystem {
+        modules = [ ./hosts/macbook.nix ];
         # specialArgs = { inherit inputs; };
       };
 

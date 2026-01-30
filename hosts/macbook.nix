@@ -6,7 +6,7 @@
   nixpkgs.config.allowUnfree = true;
 
   # Nix configuration
-  nix.enable = false;
+  nix.package = pkgs.lix;
   nix.settings = {
     experimental-features = [
       "nix-command"
@@ -20,8 +20,18 @@
 
   # List packages installed in system profile
   environment.systemPackages = with pkgs; [
-    vim
+    neovim
   ];
+
+  homebrew = {
+    enable = true;
+    
+    casks = [
+      "firefox"
+    ];
+  };
+
+  system.primaryUser = "julien";
 
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog
