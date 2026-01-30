@@ -13,7 +13,75 @@
       flash-nvim
       lualine-nvim
       nvim-lspconfig
-      nvim-treesitter.withAllGrammars
+      (nvim-treesitter.withPlugins (
+        grammars: with grammars; [
+          bash
+          c
+          c_sharp
+          cmake
+          comment
+          cpp
+          css
+          csv
+          diff
+          dockerfile
+          editorconfig
+          gitcommit
+          git_config
+          git_rebase
+          gitattributes
+          gitignore
+          go
+          gomod
+          gosum
+          gotmpl
+          gpg
+          graphql
+          hcl
+          html
+          http
+          hyprlang
+          ini
+          javascript
+          jsdoc
+          json
+          json5
+          just
+          lua
+          luadoc
+          make
+          markdown
+          markdown_inline
+          mermaid
+          meson
+          nickel
+          ninja
+          nix
+          pkl
+          printf
+          properties
+          proto
+          python
+          query
+          regex
+          ron
+          rust
+          scss
+          slint
+          sql
+          ssh_config
+          svelte
+          terraform
+          toml
+          tsx
+          typescript
+          vim
+          vimdoc
+          xml
+          yaml
+          zig
+        ]
+      ))
       nvim-treesitter-textobjects
       oil-nvim
       oil-git-nvim
@@ -34,7 +102,7 @@
       roslyn-ls
 
       # Nix
-      nixd
+      nil
       nixfmt
 
       # Lua
@@ -309,7 +377,7 @@
         'lua_ls',
         'marksman',
         'nickel_ls',
-        'nixd',
+        'nil_ls',
         'postgres_lsp',
         'roslyn_ls',
         'rust_analyzer',
