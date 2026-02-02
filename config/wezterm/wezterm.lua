@@ -15,7 +15,7 @@ config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = true
 
 config.window_decorations = "RESIZE"
-config.window_background_opacity = 0.9
+config.window_background_opacity = 0.95
 
 -- Leader key: Ctrl+Space (timeout 1 second)
 config.leader = { key = "Space", mods = "CTRL", timeout_milliseconds = 1000 }
