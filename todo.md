@@ -1,12 +1,9 @@
 # TODO
 
-- [ ] Remove neovim message popups that are too intrusive
+Move aerospace, jankyborders, sketchybar, karabiner elements to nix-darwin configuration
 
-- Forbid edition of the .config/karabiner file after addition by using 
-  xdg.configFile."karabiner/karbiner.json".onChange
+Use dotter for configuration files
 
-MacOS: Set a system-wide karabiner config if needed
-MacOS: Update the system setup to install karabiner with homebrew
 Automatically handle terminal title updates in zsh.
 
 ```zsh
