@@ -16,9 +16,8 @@ in
     XDG_RUNTIME_DIR = "/run/user/$(id -u)";
   };
 
-  # Linux-specific packages
+  # Linux-specific packages (GUI apps installed via system package manager)
   home.packages = with pkgs; [
-    jetbrains.webstorm
   ];
 
   programs = {
