@@ -52,7 +52,7 @@ in
   ];
 
   home.file = {
-    ".local/bin".source = ./bin;
+    # ".local/bin".source = ./bin;
   };
 
   # Custom path

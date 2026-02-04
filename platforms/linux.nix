@@ -18,6 +18,7 @@ in
 
   # Linux-specific packages (GUI apps installed via system package manager)
   home.packages = with pkgs; [
+    # jetbrains-toolbox
   ];
 
   programs = {
