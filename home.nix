@@ -56,6 +56,10 @@ in
     # ".local/bin".source = ./bin;
   };
 
+  xdg.configFile = {
+    "ideavim/ideavimrc".source = ./config/ideavimrc;
+  };
+
   # Custom path
   home.sessionPath = [
     "$HOME/.local/bin"
@@ -75,6 +79,7 @@ in
   programs.k9s.enable = true;
   programs.bacon.enable = true;
   # programs.delta.enable = true;
+
   programs.git = {
     enable = true;
     # delta.enable = true;
