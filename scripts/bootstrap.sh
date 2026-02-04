@@ -37,6 +37,10 @@ DOTFILES_DIR=${DOTFILES_DIR:-"${XDG_DATA_HOME}/dotfiles"}
       else
         echo "Homebrew already installed, skipping installation..."
       fi
+
+      # Install GUI apps via Homebrew Bundle
+      echo "Installing macOS applications via Homebrew..."
+      PATH="/opt/homebrew/bin:$PATH" brew bundle --file="$DOTFILES_DIR/scripts/Brewfile" --no-lock
     fi
 
     # Install Home Manager on WSL if not already installed
