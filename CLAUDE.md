@@ -60,9 +60,9 @@ nix flake show
 flake.nix              # Entry point, defines home configurations
 home.nix               # Shared configuration (CLI packages, programs, imports)
 platforms/
-  macos.nix            # macOS-specific (AeroSpace, JankyBorders configs)
-  linux.nix            # Linux-specific (Sway, Waybar, Fuzzel configs)
-modules/
+  macos.nix            # macOS-specific (AeroSpace, JankyBorders, Karabiner)
+  linux.nix            # Linux-specific (Sway, Waybar, Fuzzel)
+programs/
   neovim.nix           # Neovim with LSP, treesitter, telescope, conform
   zsh.nix              # Zsh with modern tools (fzf, ripgrep, zoxide, etc.)
 config/
@@ -81,15 +81,15 @@ SETUP.md               # Manual setup docs, Linux package lists
 ### Module Imports
 
 From `home.nix`:
-- `modules/neovim.nix` - Editor configuration
-- `modules/zsh.nix` - Shell and CLI tools
+- `programs/neovim.nix` - Editor configuration
+- `programs/zsh.nix` - Shell and CLI tools
 
 From `flake.nix`:
 - `platforms/macos.nix` or `platforms/linux.nix` depending on target
 
 ### Neovim Configuration
 
-Configured in `modules/neovim.nix` with:
+Configured in `programs/neovim.nix` with:
 
 **Plugins**: blink-cmp, conform-nvim, flash-nvim, nvim-lspconfig, nvim-treesitter (all grammars), oil-nvim, snacks-nvim (dashboard, lazygit, picker, terminal, indent, explorer), telescope-nvim, trouble-nvim, tokyonight-nvim
 
@@ -109,7 +109,7 @@ Configured in `modules/neovim.nix` with:
 
 ### Shell Environment
 
-Configured in `modules/zsh.nix`:
+Configured in `programs/zsh.nix`:
 - **Zsh**: vim mode, autosuggestions, syntax highlighting, history substring search
 - **Tools**: eza, bat, fzf, fd, ripgrep, zoxide (aliased to cd), direnv with nix-direnv
 - **Prompt**: Starship

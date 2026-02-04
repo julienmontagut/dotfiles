@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# tvim - Testable Neovim configuration
+# Uses NVIM_APPNAME=tvim for a separate config at ~/.config/tvim
+
+DOTFILES_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/dotfiles"
+TVIM_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/tvim"
+TVIM_SOURCE="$DOTFILES_DIR/config/tvim"
+
+usage() {
+    echo "Usage: tvim [command] [args...]"
+    echo ""
+    echo "Commands:"
+    echo "  (none)   Launch tvim (passes all args to nvim)"
+    echo "  sync     Copy config from dotfiles to ~/.config/tvim"
+    echo "  edit     Edit the tvim config directly"
+    echo "  reset    Remove tvim config and data, then sync fresh"
+    echo "  path     Print the tvim config path"
+    echo ""
+    echo "tvim uses NVIM_APPNAME=tvim for an isolated, editable Neovim config."
+    echo "Edit ~/.config/tvim/init.lua directly for quick iteration."
+    echo ""
+}
+
+sync_config() {
+    echo "Syncing tvim config from $TVIM_SOURCE to $TVIM_CONFIG..."
+    mkdir -p "$TVIM_CONFIG"
+
+    # Copy all config files
+    cp -r "$TVIM_SOURCE/"* "$TVIM_CONFIG/"
+
+    echo "Done. Config is at $TVIM_CONFIG"
+    echo "Run 'tvim' to start, plugins will auto-install on first launch."
+}
+
+reset_config() {
+    echo "Removing tvim config and data..."
+    rm -rf "$TVIM_CONFIG"
+    rm -rf "${XDG_DATA_HOME:-$HOME/.local/share}/tvim"
+    rm -rf "${XDG_STATE_HOME:-$HOME/.local/state}/tvim"
+    rm -rf "${XDG_CACHE_HOME:-$HOME/.cache}/tvim"
+    sync_config
+}
+
+edit_config() {
+    if [ ! -d "$TVIM_CONFIG" ]; then
+        echo "tvim config not found. Running sync first..."
+        sync_config
+    fi
+    NVIM_APPNAME=tvim nvim "$TVIM_CONFIG"
+}
+
+launch_tvim() {
+    if [ ! -d "$TVIM_CONFIG" ]; then
+        echo "tvim config not found. Running sync first..."
+        sync_config
+    fi
+    NVIM_APPNAME=tvim nvim "$@"
+}
+
+case "${1:-}" in
+    sync)   sync_config ;;
+    reset)  reset_config ;;
+    edit)   edit_config ;;
+    path)   echo "$TVIM_CONFIG" ;;
+    help|-h|--help) usage ;;
+    *)      launch_tvim "$@" ;;
+esac
