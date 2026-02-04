@@ -1,13 +1,12 @@
 # Shell and shell-related tool configurations
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  ...
+}:
 
-let
-  inherit (pkgs.stdenv) isDarwin;
-
-in
 {
   programs = {
-    # Core shell configuration
     zsh = {
       enable = true;
       dotDir = "${config.xdg.configHome}/zsh";
@@ -24,7 +23,6 @@ in
       };
 
       initContent = ''
-        # Initialize completion system
         zstyle ':completion:*' menu select
         zmodload zsh/complist
 
@@ -43,8 +41,8 @@ in
 
         # Use vim keys in completion menu
         bindkey -M menuselect 'h' vi-backward-char
-        bindkey -M menuselect 'k' vi-up-line-or-history
         bindkey -M menuselect 'l' vi-forward-char
+        bindkey -M menuselect 'k' vi-up-line-or-history
         bindkey -M menuselect 'j' vi-down-line-or-history
 
         # Ctrl-n/Ctrl-p navigate completion menu or history
@@ -61,35 +59,6 @@ in
         bindkey -M vicmd 'k' history-substring-search-up
         bindkey -M vicmd 'j' history-substring-search-down
       '';
-    };
-
-    # Directory environment management
-    direnv = {
-      enable = true;
-      silent = true;
-      nix-direnv.enable = true;
-    };
-
-    # Shell prompt
-    starship.enable = true;
-
-    # Modern alternatives to classic Unix commands
-    eza = {
-      enable = true;
-      icons = "auto";
-    };
-    bat = {
-      enable = true;
-      config.theme = "ansi";
-    };
-
-    # Search and navigation tools
-    fzf.enable = true;
-    fd.enable = true;
-    ripgrep.enable = true;
-    zoxide = {
-      enable = true;
-      options = [ "--cmd cd" ];
     };
   };
 }

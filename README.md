@@ -46,7 +46,7 @@ home.nix               # Shared Home Manager configuration
 platforms/
   macos.nix            # macOS: AeroSpace, JankyBorders, Karabiner
   linux.nix            # Linux: Sway, Waybar, Fuzzel
-modules/
+programs/
   neovim.nix           # Neovim with LSP, treesitter, telescope
   zsh.nix              # Zsh with modern CLI tools
 config/

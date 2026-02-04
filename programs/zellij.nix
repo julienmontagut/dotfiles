@@ -2,7 +2,7 @@
 
 {
   programs.zellij = {
-    enable = true;
+    enable = false;
     settings = {
       default_mode = "locked";
       session_name = "default";

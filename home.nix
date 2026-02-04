@@ -69,8 +69,10 @@ in
   home.preferXdgDirectories = true;
 
   imports = [
-    modules/neovim.nix
-    modules/zsh.nix
+    programs/firefox.nix
+    programs/neovim.nix
+    programs/zed.nix
+    programs/zsh.nix
   ];
 
   # Common program configurations
@@ -78,8 +80,7 @@ in
   programs.lazygit.enable = true;
   programs.k9s.enable = true;
   programs.bacon.enable = true;
-  # programs.delta.enable = true;
-
+  programs.delta.enable = true;
   programs.git = {
     enable = true;
     # delta.enable = true;
@@ -125,6 +126,32 @@ in
       theme = "ansi";
     };
   };
+
+  programs.direnv = {
+    enable = true;
+    silent = true;
+    nix-direnv.enable = true;
+  };
+
+  programs.starship.enable = true;
+
+  programs.eza = {
+    enable = true;
+    icons = "auto";
+  };
+  programs.bat = {
+    enable = true;
+    config.theme = "ansi";
+  };
+
+  programs.fzf.enable = true;
+  programs.fd.enable = true;
+  programs.ripgrep.enable = true;
+  programs.zoxide = {
+    enable = true;
+    options = [ "--cmd cd" ];
+  };
+
   # Let home manager manage itself
   programs.home-manager.enable = true;
 }
