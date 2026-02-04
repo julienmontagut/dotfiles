@@ -4,7 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This is a Nix-based dotfiles repository using Home Manager to manage configuration for development tools, window managers, and shell environments targeting macOS (aarch64-darwin) and Linux (x86_64-linux).
+This is a Nix-based dotfiles repository using a **three-layer architecture**:
+
+1. **Nix/Home Manager** - CLI tools, shell config, Neovim, dotfiles
+2. **Native Package Managers** - GUI apps (Homebrew on macOS, APT on Linux)
+3. **Documentation** - Manual setup steps tracked in SETUP.md
+
+Home Manager targets macOS (aarch64-darwin) and Linux (x86_64-linux).
 
 ## Key Commands
 
@@ -52,22 +58,24 @@ nix flake show
 
 ```
 flake.nix              # Entry point, defines home configurations
-home.nix               # Shared configuration (packages, programs, imports)
+home.nix               # Shared configuration (CLI packages, programs, imports)
 platforms/
-  macos.nix            # macOS-specific (AeroSpace, JankyBorders, Karabiner)
-  linux.nix            # Linux-specific (Sway, Waybar, Fuzzel)
+  macos.nix            # macOS-specific (AeroSpace, JankyBorders configs)
+  linux.nix            # Linux-specific (Sway, Waybar, Fuzzel configs)
 modules/
   neovim.nix           # Neovim with LSP, treesitter, telescope, conform
   zsh.nix              # Zsh with modern tools (fzf, ripgrep, zoxide, etc.)
 config/
+  wezterm/             # WezTerm config (symlinked via xdg.configFile)
   karabiner/           # Karabiner keyboard remapping (macOS)
   sketchybar/          # Status bar config (macOS)
 bin/
   dots                 # Dotfiles management helper script
 scripts/
-  bootstrap.sh         # Initial setup script (installs Nix, clones repo)
+  bootstrap.sh         # Initial setup (installs Nix, Homebrew + GUI apps)
   bootstrap-macos.sh   # macOS system configuration (TouchID, defaults)
-  Brewfile             # Homebrew packages for macOS
+  Brewfile             # macOS GUI apps (WezTerm, AeroSpace, Firefox, etc.)
+SETUP.md               # Manual setup docs, Linux package lists
 ```
 
 ### Module Imports
@@ -109,12 +117,26 @@ Configured in `modules/zsh.nix`:
 ### Window Management
 
 **macOS** (in `platforms/macos.nix`):
-- **AeroSpace**: Tiling window manager with Karabiner integration
-- **JankyBorders**: Window borders (Tokyo Night Storm colors)
-- **Karabiner**: Remaps Cmd to hyper key for window management
+- **AeroSpace**: Tiling window manager with Karabiner integration (installed via Homebrew, config via Home Manager)
+- **JankyBorders**: Window borders (installed via Homebrew, config via Home Manager)
+- **Karabiner**: Remaps Cmd to hyper key (installed via Homebrew, config via Home Manager)
 
 **Linux** (in `platforms/linux.nix`):
-- **Sway**: Wayland tiling compositor with Alt-based keybindings
+- **Sway**: Wayland tiling compositor with Alt-based keybindings (installed via APT, config via Home Manager)
+
+### GUI Applications (Native Package Managers)
+
+**NOT managed by Home Manager** - installed via native package managers for better OS integration:
+
+**macOS (via Brewfile):**
+- WezTerm, Firefox, JetBrains Toolbox
+- AeroSpace, Karabiner Elements, JankyBorders
+
+**Linux (via APT/Flatpak):**
+- WezTerm, Sway, Waybar (system packages)
+- JetBrains IDEs (via Toolbox or Flatpak)
+
+Home Manager only manages the **configuration files** for these apps, not the packages themselves.
 
 ### Cross-Platform Keybindings
 
@@ -142,3 +164,5 @@ Configured in `modules/zsh.nix`:
 - The `dots` script in `bin/` provides convenient commands for managing dotfiles
 - For local overrides, create `overrides.nix` (gitignored) and run with `--impure` flag
 - State version is `25.11` - check Home Manager release notes before changing
+- **GUI apps are NOT in Home Manager** - use Homebrew (macOS) or APT (Linux), see SETUP.md
+- WezTerm config is at `config/wezterm/wezterm.lua` and symlinked via `xdg.configFile`

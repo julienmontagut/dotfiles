@@ -1,8 +1,20 @@
+tap "FelixKratz/formulae"
 tap "netbirdio/tap"
+tap "nikitabobko/tap"
+
+# CLI tools
 brew "defaultbrowser"
 brew "glab"
 brew "go"
 brew "gopls"
+
+# Window management
+brew "borders"
+cask "aerospace"
+cask "karabiner-elements"
+
+# Terminal
+cask "wezterm"
 cask "anytype"
 cask "appcleaner"
 cask "bitwarden"
