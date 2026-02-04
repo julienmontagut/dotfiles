@@ -26,23 +26,26 @@ in
 
   home.packages = with pkgs; [
     devenv
+    dotter
     dua
     gh
     glab
     glow
-    just
     jq
+    just
     k9s
-    kind
     keymapp
+    kind
     kubectl
     kubectx
     lua
     mprocs
+    nb
     nixfmt
     pulumi
     rustup
     slides
+    stow
     timewarrior
     tree-sitter
     xh
