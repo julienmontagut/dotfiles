@@ -85,9 +85,14 @@
       vim.opt.swapfile = false
       vim.opt.undofile = true
       vim.opt.scrolloff = 8
+      vim.opt.sidescrolloff = 8
+      vim.opt.clipboard = 'unnamedplus'
       vim.opt.wrap = false
       vim.opt.cursorline = true
       vim.opt.colorcolumn = '100'
+
+      -- Paste in visual mode without yanking replaced text
+      vim.keymap.set('x', 'p', '"_dP', { desc = 'Paste without yanking replaced text' })
 
       -- Colorscheme (transparent background)
       require('tokyonight').setup({

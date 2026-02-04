@@ -32,17 +32,24 @@ in
         bindkey -v
         export KEYTIMEOUT=1
 
-        # Use vim keys in tab complete menu (both insert and normal mode)
+        # Tab triggers completion in insert mode
+        bindkey -M viins '^I' expand-or-complete
+
+        # In menu: Tab/Enter/Ctrl-y accepts, Ctrl-e cancels
+        bindkey -M menuselect '^I' accept-line
+        bindkey -M menuselect '^M' accept-line
+        bindkey -M menuselect '^Y' accept-line
+        bindkey -M menuselect '^E' send-break
+
+        # Use vim keys in completion menu
         bindkey -M menuselect 'h' vi-backward-char
         bindkey -M menuselect 'k' vi-up-line-or-history
         bindkey -M menuselect 'l' vi-forward-char
         bindkey -M menuselect 'j' vi-down-line-or-history
 
-        # Accept completion with more convenient keys
-        bindkey -M menuselect '^Y' accept-line
-        bindkey -M menuselect 'Tab' accept-line
-
-        # Better history search with Ctrl-p and Ctrl-n (both insert and normal mode)
+        # Ctrl-n/Ctrl-p navigate completion menu or history
+        bindkey -M menuselect '^N' down-line-or-history
+        bindkey -M menuselect '^P' up-line-or-history
         bindkey -M viins '^P' history-substring-search-up
         bindkey -M viins '^N' history-substring-search-down
         bindkey -M vicmd '^P' history-substring-search-up

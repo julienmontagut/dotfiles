@@ -1,50 +1,88 @@
-" Configuration file for IdeaVim plugin. It uses
-" You can find a list of commands here: https://jb.gg/h38q75
-" Find more examples here: https://jb.gg/share-ideavimrc
-let mapleader=' '
+" Leader key
+let mapleader = " "
 
-" General options
-set scrolloff=3
+" General settings
 set number
-set clipboard+=unnamedplus
-
-" Search options
-set incsearch
 set ignorecase
 set smartcase
+set scrolloff=8
+set sidescrolloff=8
+set clipboard+=unnamedplus
+set incsearch
+set hlsearch
 
-" Don't use Ex mode, use Q for formatting.
-map Q gq
+" IdeaVim plugins
+set surround
+set commentary
+set highlightedyank
+set nerdtree
+set which-key
+set notimeout
 
-" --- Enable IdeaVim plugins https://jb.gg/ideavim-plugins
+" Search (matching neovim <leader>s* bindings)
+map <leader>sf <Action>(GotoFile)
+map <leader>sg <Action>(FindInPath)
+map <leader>sw <Action>(FindWordAtCaret)
+map <leader>sb <Action>(Switcher)
+map <leader>sh <Action>(HelpTopics)
+map <leader>sr <Action>(FindUsages)
+map <leader>ss <Action>(FileStructurePopup)
+map <leader>sa <Action>(GotoSymbol)
+map <leader>si <Action>(GotoImplementation)
+map <leader>st <Action>(GotoTypeDeclaration)
+map <leader>sp <Action>(ActivateProblemsViewToolWindow)
+map <leader>sc <Action>(GotoAction)
+map <leader>sk <Action>(ShowSettings)
+map <leader>sl <Action>(Find)
+map <leader>sm <Action>(ShowBookmarks)
+map <leader>sj <Action>(ShowRecentLocations)
 
-Plug 'machakann/vim-highlightedyank'
-Plug 'tpope/vim-commentary'
-Plug 'preservim/nerdtree'
+" Git (matching neovim <leader>g* bindings)
+map <leader>gg <Action>(ActivateVersionControlToolWindow)
+map <leader>gl <Action>(Vcs.ShowTabbedFileHistory)
+map <leader>gf <Action>(Git.Fetch)
+map <leader>gs <Action>(Vcs.Show.Local.Changes)
+map <leader>gb <Action>(Git.Branches)
+map <leader>gc <Action>(Vcs.Show.Log)
 
-" Insert mode mapping
-inoremap jk <Esc>
+" Problems (matching neovim <leader>p* bindings)
+map <leader>pp <Action>(ActivateProblemsViewToolWindow)
+map <leader>pb <Action>(ShowErrorsInProject)
+map <leader>ps <Action>(FileStructurePopup)
+map <leader>pq <Action>(ActivateFindToolWindow)
+map <leader>pl <Action>(ActivateFindToolWindow)
 
-" Jump between methods
-nnoremap [[ <Action>(MethodUp)
-nnoremap ]] <Action>(MethodDown)
+" Quickfix navigation
+map <leader>qo <Action>(ActivateFindToolWindow)
+map <leader>qc <Action>(HideActiveWindow)
+map [q <Action>(PreviousOccurence)
+map ]q <Action>(NextOccurence)
 
+" Tools (matching neovim bindings)
+map <leader>e :NERDTreeToggle<CR>
+map <leader>tt <Action>(ActivateTerminalToolWindow)
 
-"" -- Map IDE actions to IdeaVim -- https://jb.gg/abva4t
-"" Map \r to the Reformat Code action
-"map \r <Action>(ReformatCode)
+" LSP/Code navigation (g* bindings - gD and K are standard vim uppercase)
+map gd <Action>(GotoDeclaration)
+map gD <Action>(GotoTypeDeclaration)
+map gi <Action>(GotoImplementation)
+map gr <Action>(FindUsages)
+map K <Action>(QuickJavaDoc)
 
-"" Map <leader>d to start debug
-"map <leader>rd <Action>(Debug)
+" Code actions (matching neovim <leader>c* and <leader>r* bindings)
+map <leader>rn <Action>(RenameElement)
+map <leader>ca <Action>(ShowIntentionActions)
+map <leader>cf <Action>(ReformatCode)
 
-"" Map \b to toggle the breakpoint on the current line
-"map \b <Action>(ToggleLineBreakpoint)
+" Diagnostics navigation
+map [d <Action>(GotoPreviousError)
+map ]d <Action>(GotoNextError)
 
-" Go to code
-nmap <leader>gd <Action>(GotoDeclaration)
-nmap <leader>gy <Action>(GotoTypeDeclaration)
-nmap <leader>gi <Action>(GotoImplementation)
-nmap <leader>gu <Action>(ShowUsages)
-nmap <leader>gt <Action>(GotoTest)
-nmap <leader>gf <Action>(Back)
-nmap <leader>gb <Action>(Forward)
+" Paste in visual mode without yanking replaced text
+xmap p "_dP
+
+" Window navigation (Ctrl-w bindings)
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-l> <C-w>l
