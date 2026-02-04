@@ -2,8 +2,7 @@
 
 {
   programs.firefox = {
-    enable = true;
-    package = pkgs.firefox-bin;
+    enable = false;
     # settings = { "identity.fxaccounts.enabled" = true; };
   };
 }
