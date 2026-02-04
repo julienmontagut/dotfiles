@@ -14,11 +14,11 @@ config.color_scheme = "Tokyo Night Storm"
 config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = true
 
-config.window_decorations = "RESIZE"
-config.window_background_opacity = 0.95
+local is_gnome = (os.getenv("XDG_CURRENT_DESKTOP") or ""):match("GNOME") ~= nil
+config.window_decorations = is_gnome and "TITLE|RESIZE" or "RESIZE"
 
 -- Leader key: Ctrl+Space (timeout 1 second)
-config.leader = { key = "Space", mods = "CTRL", timeout_milliseconds = 1000 }
+config.leader = { key = "A", mods = "CTRL", timeout_milliseconds = 1000 }
 
 config.keys = {
     -- Pane splitting (vim style)
