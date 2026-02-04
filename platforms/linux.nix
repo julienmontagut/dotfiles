@@ -33,19 +33,6 @@ in
   # wayland.systemd.target = "sway-session.target";
   services.kanshi.enable = true;
 
-  # Override wezterm .desktop with full path (fuzzel doesn't have nix-profile in PATH)
-  # xdg.desktopEntries.wezterm = {
-  #   name = "WezTerm";
-  #   comment = "Wez's Terminal Emulator";
-  #   exec = "${hmProfile}/bin/wezterm start --cwd .";
-  #   icon = "org.wezfurlong.wezterm";
-  #   terminal = false;
-  #   categories = [ "System" "TerminalEmulator" "Utility" ];
-  #   settings = {
-  #     StartupWMClass = "org.wezfurlong.wezterm";
-  #   };
-  # };
-
   # Use system sway (apt-installed) but configure it via ~/.config/sway/config
   # systemd.enable adds exec to import env vars and start sway-session.target
   wayland.windowManager.sway = {

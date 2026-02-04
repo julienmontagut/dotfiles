@@ -34,7 +34,6 @@ in
     jq
     just
     k9s
-    keymapp
     kind
     kubectl
     kubectx
@@ -45,7 +44,6 @@ in
     pulumi
     rustup
     slides
-    stow
     timewarrior
     tree-sitter
     xh
