@@ -30,9 +30,6 @@ in
     gh
     glab
     glow
-    jetbrains.goland
-    jetbrains.rider
-    jetbrains.rust-rover
     just
     jq
     k9s
@@ -77,7 +74,6 @@ in
   programs.k9s.enable = true;
   programs.bacon.enable = true;
   # programs.delta.enable = true;
-  programs.zed-editor.enable = true;
   programs.git = {
     enable = true;
     # delta.enable = true;
@@ -108,39 +104,8 @@ in
       user.name = "Julien Montagut";
     };
   };
-  programs.firefox.enable = true;
-  programs.wezterm = {
-    enable = true;
-    extraConfig = builtins.readFile ./config/wezterm/wezterm.lua;
-  };
-  programs.alacritty = {
-    enable = true;
-    theme = "tokyo_night_storm";
-    settings = {
-      font.size = 14;
-      font.normal = {
-        family = "Lilex Nerd Font Mono";
-        style = "Regular";
-      };
-      window = {
-        padding.x = 10;
-        padding.y = 10;
-        dynamic_padding = true;
-      };
-      keyboard.bindings = [
-        {
-          key = "C";
-          mods = "Control|Shift";
-          action = "Copy";
-        }
-        {
-          key = "V";
-          mods = "Control|Shift";
-          action = "Paste";
-        }
-      ];
-    };
-  };
+  # WezTerm config (installed via native package manager)
+  xdg.configFile."wezterm/wezterm.lua".source = ./config/wezterm/wezterm.lua;
   programs.jujutsu.enable = true;
   programs.go.enable = true;
   programs.zellij = {
