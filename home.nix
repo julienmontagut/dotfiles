@@ -70,7 +70,7 @@ in
   home.preferXdgDirectories = true;
 
   imports = [
-    programs/firefox.nix
+    programs/librewolf.nix
     programs/neovim.nix
     programs/zed.nix
     programs/zsh.nix
