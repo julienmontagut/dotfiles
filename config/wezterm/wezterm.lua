@@ -17,8 +17,8 @@ config.tab_bar_at_bottom = true
 local is_gnome = (os.getenv("XDG_CURRENT_DESKTOP") or ""):match("GNOME") ~= nil
 config.window_decorations = is_gnome and "TITLE|RESIZE" or "RESIZE"
 
--- Leader key: Ctrl+Space (timeout 1 second)
-config.leader = { key = "A", mods = "CTRL", timeout_milliseconds = 1000 }
+-- Leader key: Super+Ctrl+Alt+a (Karabiner on macOS, keyd on Linux)
+config.leader = { key = "a", mods = "SUPER|CTRL|ALT", timeout_milliseconds = 1000 }
 
 config.keys = {
     -- Pane splitting (vim style)
@@ -73,9 +73,6 @@ config.keys = {
 
     -- Copy mode (like vim visual mode)
     { key = "[", mods = "LEADER", action = act.ActivateCopyMode },
-
-    -- Send Ctrl+Space to terminal when pressed twice
-    { key = "Space", mods = "LEADER|CTRL", action = act.SendKey({ key = "Space", mods = "CTRL" }) },
 }
 
 return config
