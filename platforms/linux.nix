@@ -56,7 +56,7 @@ in
         "type:keyboard" = {
           xkb_layout = "us";
           xkb_variant = "dvorak";
-          xkb_options = "ctrl:nocaps";
+          xkb_options = "";
         };
 
         "type:touchpad" = {
