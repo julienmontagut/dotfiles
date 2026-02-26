@@ -42,7 +42,7 @@ in
     nb
     nixfmt
     pulumi
-    rustup
+    # rustup
     slides
     timewarrior
     tree-sitter
