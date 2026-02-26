@@ -39,7 +39,7 @@
       # "font-lilex"
       # "font-lilex-nerd-font"
       # "font-literata"
-      # "ghostty"
+      "ghostty"
       # "google-chrome"
       # "google-drive"
       "jetbrains-toolbox"
