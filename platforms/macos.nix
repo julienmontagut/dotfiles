@@ -10,12 +10,13 @@
   # macOS-specific packages
   home.packages = with pkgs; [
     # TODO: Install karabiner-elements using homebrew
+    # jetbrains.rider
   ];
 
   # Configuration for the macOS target
   targets.darwin = {
     # Store applications directly under ~/Applications
-    copyApps.directory = "Applications";
+    # copyApps.directory = "Applications";
 
     # Set some sensible macOS defaults
     defaults = {
