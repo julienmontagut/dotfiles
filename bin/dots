@@ -7,7 +7,7 @@ usage() {
     echo ""
     echo "Commands:"
     echo "  edit     Open editor, apply, optionally push"
-    echo "  apply    Apply dotfiles configuration"
+    echo "  apply    Deploy dotfiles via Dotter"
     echo "  pull     Pull from remote and apply"
     echo "  push     Commit and push to remote"
     echo "  sync     Pull then push"
@@ -16,18 +16,8 @@ usage() {
 }
 
 apply() {
-    case "$(uname -s)" in
-        Linux*)  platform="linux" ;;
-        Darwin*) platform="macos" ;;
-        *)       echo "Unsupported platform: $(uname -s)"; exit 1 ;;
-    esac
-
-    local impure_flag=""
-    if [ -f "$DOTFILES_DIR/overrides.nix" ] && ! git -C "$DOTFILES_DIR" ls-files --error-unmatch overrides.nix >/dev/null 2>&1; then
-        impure_flag="--impure"
-    fi
-
-    home-manager switch --flake "$DOTFILES_DIR#$platform" $impure_flag
+    cd "$DOTFILES_DIR"
+    dotter deploy --force
 }
 
 pull() {

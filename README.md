@@ -1,17 +1,14 @@
 # Dotfiles
 
-Nix-based dotfiles using Home Manager for macOS and Linux.
+Dotfiles managed with [Dotter](https://github.com/SuperCuber/dotter) and shell scripts for macOS and Linux.
 
 ## Quick Start
 
 ### Fresh Install
 
 ```bash
-# Run the bootstrap script (installs Nix, Homebrew on macOS, clones repo)
+# Run the bootstrap script (installs Homebrew on macOS, clones repo, deploys configs)
 curl -fsSL https://raw.githubusercontent.com/julienmontagut/dotfiles/main/scripts/bootstrap.sh | bash
-
-# On macOS, also run the system configuration script
-~/.local/share/dotfiles/scripts/bootstrap-macos.sh
 ```
 
 ### Apply Changes
@@ -20,9 +17,8 @@ curl -fsSL https://raw.githubusercontent.com/julienmontagut/dotfiles/main/script
 # Using the dots helper (recommended)
 dots apply
 
-# Or directly with home-manager
-home-manager switch --flake ~/.local/share/dotfiles#macos  # macOS
-home-manager switch --flake ~/.local/share/dotfiles#linux  # Linux
+# Or directly with dotter
+cd ~/.local/share/dotfiles && dotter deploy --force
 ```
 
 ## The `dots` Command
@@ -31,7 +27,7 @@ A helper script for managing dotfiles:
 
 ```bash
 dots edit     # Open editor, apply changes, optionally push
-dots apply    # Apply configuration
+dots apply    # Deploy configs via Dotter
 dots pull     # Pull from remote and apply
 dots push     # Commit and push changes
 dots sync     # Pull then push
@@ -41,31 +37,37 @@ dots status   # Show git status
 ## Repository Structure
 
 ```
-flake.nix              # Nix flake entry point
-home.nix               # Shared Home Manager configuration
-platforms/
-  macos.nix            # macOS: AeroSpace, JankyBorders, Karabiner
-  linux.nix            # Linux: Sway, Waybar, Fuzzel
-programs/
-  neovim.nix           # Neovim with LSP, treesitter, telescope
-  zsh.nix              # Zsh with modern CLI tools
+.dotter/
+  global.toml            # Dotter symlink configuration
 config/
-  karabiner/           # Keyboard remapping (macOS)
-  sketchybar/          # Status bar (macOS)
+  git/                   # Git configuration
+  nvim/                  # Neovim configuration
+  zsh/                   # Zsh configuration
+  wezterm/               # WezTerm terminal
+  zed/                   # Zed editor
+  starship.toml          # Starship prompt
+  karabiner/             # Keyboard remapping (macOS)
+  aerospace/             # Tiling window manager (macOS)
+  borders/               # Window borders (macOS)
+  sway/                  # Tiling window manager (Linux)
+  waybar/                # Status bar (Linux)
+  kanshi/                # Display management (Linux)
+  fuzzel/                # App launcher (Linux)
+  keyd/                  # Key remapping (Linux)
 bin/
-  dots                 # Dotfiles management script
+  dots                   # Dotfiles management script
 scripts/
-  bootstrap.sh         # Initial setup (Nix, repo clone)
-  bootstrap-macos.sh   # macOS system defaults, TouchID sudo
-  Brewfile             # Homebrew packages
+  bootstrap.sh           # Initial setup
+  install-macos.sh       # macOS setup (Homebrew, Dotter, defaults)
+  install-linux.sh       # Linux setup (apt, Linuxbrew, Dotter)
+  Brewfile               # Homebrew/Linuxbrew packages
 ```
 
 ## What's Included
 
 ### Editor (Neovim)
-- LSP support for 20+ languages (Rust, Go, .NET, Nix, TypeScript, etc.)
+- LSP support for multiple languages
 - Treesitter for syntax highlighting and indentation
-- Telescope for fuzzy finding
 - Format on save with conform.nvim
 - Tokyo Night Storm theme
 
@@ -74,25 +76,20 @@ scripts/
 - Autosuggestions and syntax highlighting
 - Modern tools: eza, bat, fzf, fd, ripgrep, zoxide
 - Starship prompt
-- Direnv with nix-direnv
 
 ### Window Management
 - **macOS**: AeroSpace + Karabiner + JankyBorders
 - **Linux**: Sway + Waybar + Fuzzel
 
 ### Terminal
-- Alacritty with Tokyo Night Storm theme
-- Zellij terminal multiplexer
+- WezTerm with Tokyo Night Storm theme
 
 ## Maintenance
 
 ```bash
-# Update flake inputs
-nix flake update
+# Update packages
+brew update && brew upgrade
 
-# Garbage collect old generations
-nix-collect-garbage -d
-
-# Format Nix files
-nixfmt **/*.nix
+# Re-deploy configs after changes
+dots apply
 ```

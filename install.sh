@@ -14,12 +14,6 @@ NC='\033[0m'
 # Configuration
 SCRIPT_USER="${SUDO_USER:-$USER}"
 SCRIPT_HOME=$(getent passwd "$SCRIPT_USER" | cut -d: -f6)
-SKIP_NIX=false
-
-# Parse arguments
-if [[ "${1:-}" == "--skip-nix" ]]; then
-    SKIP_NIX=true
-fi
 
 log() {
     echo -e "${BLUE}[INFO]${NC} $1"; 
@@ -152,27 +146,6 @@ else
     log "User shell already set to zsh"
 fi
 
-# Install Nix
-if [[ "$SKIP_NIX" == "false" ]]; then
-    if [[ -d "/nix" ]] && sudo -u "$SCRIPT_USER" bash -c 'command -v nix' &> /dev/null; then
-        log "Nix already installed"
-    else
-        log "Installing Nix..."
-        curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
-
-        # Add Nix to .profile
-        if ! grep -q "nix-daemon.sh" "$SCRIPT_HOME/.profile" 2>/dev/null; then
-            sudo -u "$SCRIPT_USER" tee -a "$SCRIPT_HOME/.profile" > /dev/null <<'EOF'
-
-# Nix package manager
-if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
-    . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-fi
-EOF
-        fi
-    fi
-fi
-
 # Set neovim as default editor
 if command -v nvim &> /dev/null; then
     update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 30 || true
@@ -195,17 +168,14 @@ ${BLUE}Next steps:${NC}
 
 1. Log out and log back in for group changes to take effect
 
-2. Install Home Manager:
-   $ nix run home-manager/master -- init --switch
-
-3. Install additional Flatpak applications:
+2. Install additional Flatpak applications:
    $ flatpak install flathub org.mozilla.Thunderbird
    $ flatpak install flathub com.github.IsmaelMartinez.teams_for_linux
 
-4. Configure SSH keys:
+3. Configure SSH keys:
    $ ssh-keygen -t ed25519 -C "your_email@example.com"
 
-5. Configure git:
+4. Configure git:
    $ git config --global user.name "Your Name"
    $ git config --global user.email "your.email@example.com"
 
