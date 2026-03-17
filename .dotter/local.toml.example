@@ -1,0 +1,17 @@
+# Dotter local configuration
+# Copy this file to local.toml and customize for your system
+#
+# Available packages:
+#   - default: Shared configs (git, zsh, nvim, wezterm, zed, starship)
+#   - macos: macOS-specific configs (AeroSpace, Karabiner, JankyBorders)
+#   - linux: Linux-specific configs (Sway, Waybar, Kanshi, Fuzzel, keyd)
+
+# For macOS:
+packages = ["default", "macos"]
+
+# For Linux:
+# packages = ["default", "linux"]
+
+# Optional: Override specific file mappings
+# [files]
+# "config/custom" = "~/.config/custom"
