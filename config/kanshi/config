@@ -1,0 +1,22 @@
+# Kanshi configuration
+# Automatic display configuration for Wayland
+# See: https://sr.ht/~emersion/kanshi/
+
+# Example profiles - customize for your displays
+
+# Laptop only
+profile laptop {
+    output eDP-1 enable scale 1
+}
+
+# Laptop with external monitor
+profile docked {
+    output eDP-1 disable
+    output DP-1 enable scale 1 position 0,0
+}
+
+# Laptop with external monitor side by side
+profile dual {
+    output eDP-1 enable scale 1 position 0,0
+    output DP-1 enable scale 1 position 1920,0
+}
