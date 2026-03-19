@@ -14,7 +14,6 @@ return {
             ["lua"] = true,
             ["rust"] = true,
             ["python"] = true,
-            ["go"] = true,
             ["java"] = true,
             ["c"] = true,
             ["cpp"] = true,

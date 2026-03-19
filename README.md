@@ -1,17 +1,30 @@
 # Dotfiles
 
-Nix-based dotfiles using Home Manager for macOS and Linux.
+Dotfiles managed with [dotter](https://github.com/SuperCuber/dotter) and bash scripts for macOS and Linux.
 
 ## Quick Start
 
 ### Fresh Install
 
 ```bash
-# Run the bootstrap script (installs Nix, Homebrew on macOS, clones repo)
-curl -fsSL https://raw.githubusercontent.com/julienmontagut/dotfiles/main/scripts/bootstrap.sh | bash
+# Linux
+./scripts/install-linux.sh
 
-# On macOS, also run the system configuration script
-~/.local/share/dotfiles/scripts/bootstrap-macos.sh
+# macOS
+./scripts/install-macos.sh
+./scripts/bootstrap-macos.sh
+```
+
+### Configure Dotter (platform selection)
+
+Dotter uses a local configuration file to determine which packages/profiles to deploy for each platform.
+Before running `dotter` directly, copy the example and enable the profile for your OS:
+
+```bash
+cp .dotter/local.toml.example .dotter/local.toml
+# Then edit .dotter/local.toml and enable the appropriate profiles for:
+# - macOS
+# - Linux
 ```
 
 ### Apply Changes
@@ -20,9 +33,8 @@ curl -fsSL https://raw.githubusercontent.com/julienmontagut/dotfiles/main/script
 # Using the dots helper (recommended)
 dots apply
 
-# Or directly with home-manager
-home-manager switch --flake ~/.local/share/dotfiles#macos  # macOS
-home-manager switch --flake ~/.local/share/dotfiles#linux  # Linux
+# Or directly with dotter (requires a configured .dotter/local.toml)
+dotter deploy
 ```
 
 ## The `dots` Command
@@ -41,29 +53,29 @@ dots status   # Show git status
 ## Repository Structure
 
 ```
-flake.nix              # Nix flake entry point
-home.nix               # Shared Home Manager configuration
-platforms/
-  macos.nix            # macOS: AeroSpace, JankyBorders, Karabiner
-  linux.nix            # Linux: Sway, Waybar, Fuzzel
-programs/
-  neovim.nix           # Neovim with LSP, treesitter, telescope
-  zsh.nix              # Zsh with modern CLI tools
+Brewfile              # Homebrew packages
 config/
+  nvim/                # Neovim configuration
+  zsh/                 # Zsh configuration
+  wezterm/             # WezTerm terminal
+  zed/                 # Zed editor
+  aerospace/           # Window management (macOS)
   karabiner/           # Keyboard remapping (macOS)
-  sketchybar/          # Status bar (macOS)
+  sway/                # Window management (Linux)
+  waybar/              # Status bar (Linux)
+  starship.toml        # Starship prompt
 bin/
   dots                 # Dotfiles management script
 scripts/
-  bootstrap.sh         # Initial setup (Nix, repo clone)
+  install-linux.sh     # Linux setup (apt packages, dotter, apps)
+  install-macos.sh     # macOS setup (Homebrew, dotter, apps)
   bootstrap-macos.sh   # macOS system defaults, TouchID sudo
-  Brewfile             # Homebrew packages
 ```
 
 ## What's Included
 
 ### Editor (Neovim)
-- LSP support for 20+ languages (Rust, Go, .NET, Nix, TypeScript, etc.)
+- LSP support for 20+ languages
 - Treesitter for syntax highlighting and indentation
 - Telescope for fuzzy finding
 - Format on save with conform.nvim
@@ -74,25 +86,12 @@ scripts/
 - Autosuggestions and syntax highlighting
 - Modern tools: eza, bat, fzf, fd, ripgrep, zoxide
 - Starship prompt
-- Direnv with nix-direnv
+- Direnv
 
 ### Window Management
 - **macOS**: AeroSpace + Karabiner + JankyBorders
 - **Linux**: Sway + Waybar + Fuzzel
 
 ### Terminal
-- Alacritty with Tokyo Night Storm theme
+- WezTerm with Tokyo Night Storm theme
 - Zellij terminal multiplexer
-
-## Maintenance
-
-```bash
-# Update flake inputs
-nix flake update
-
-# Garbage collect old generations
-nix-collect-garbage -d
-
-# Format Nix files
-nixfmt **/*.nix
-```

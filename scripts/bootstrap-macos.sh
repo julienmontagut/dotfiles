@@ -3,8 +3,7 @@
 set -e
 
 # macOS Setup Script
-# Replicates nix-darwin system configuration operations
-# This script should be run manually after home-manager setup
+# Configures system defaults, TouchID, Homebrew, and environment
 
 echo "🍎 Starting macOS system configuration..."
 
@@ -30,16 +29,8 @@ check_sudo() {
   fi
 }
 
-echo "\n${GREEN}[1/6]${NC} Configuring Nix settings..."
-# Configure Nix settings in user config (avoids needing sudo for /etc/nix/nix.conf)
-mkdir -p ~/.config/nix
-cat > ~/.config/nix/nix.conf <<EOF
-experimental-features = nix-command flakes
-auto-optimise-store = true
-EOF
-echo "✓ Nix settings configured"
-
-echo "\n${GREEN}[2/6]${NC} Configuring macOS system defaults..."
+echo
+echo "${GREEN}[1/5]${NC} Configuring macOS system defaults..."
 
 # Menu bar clock - 24 hour format
 defaults write com.apple.menuextra.clock Show24Hour -bool true
@@ -67,7 +58,7 @@ defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 61 "<dic
 
 echo "✓ System defaults configured"
 
-echo "\n${GREEN}[3/6]${NC} Configuring TouchID for sudo..."
+echo "\n${GREEN}[2/5]${NC} Configuring TouchID for sudo..."
 # Enable TouchID for sudo
 check_sudo
 if [ ! -f /etc/pam.d/sudo_local ]; then
@@ -84,7 +75,7 @@ else
   fi
 fi
 
-echo "\n${GREEN}[4/6]${NC} Configuring environment variables..."
+echo "\n${GREEN}[3/5]${NC} Configuring environment variables..."
 # Add Homebrew environment variables to shell profile
 if ! grep -q "HOMEBREW_NO_ANALYTICS" ~/.zshrc 2>/dev/null; then
   cat >> ~/.zshrc <<'EOF'
@@ -98,7 +89,7 @@ else
   echo "✓ Homebrew environment variables already configured"
 fi
 
-echo "\n${GREEN}[5/6]${NC} Checking Homebrew installation..."
+echo "\n${GREEN}[4/5]${NC} Checking Homebrew installation..."
 if ! command -v brew >/dev/null 2>&1; then
   echo "${YELLOW}Homebrew not found. Installing...${NC}"
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -107,7 +98,7 @@ else
   echo "✓ Homebrew is installed"
 fi
 
-echo "\n${GREEN}[6/6]${NC} Installing Homebrew packages from Brewfile..."
+echo "\n${GREEN}[5/5]${NC} Installing Homebrew packages from Brewfile..."
 # Find the dotfiles directory (where this script lives)
 SCRIPT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 BREWFILE="$SCRIPT_DIR/Brewfile"
@@ -135,5 +126,3 @@ echo "  4. Configure Netbird VPN if needed"
 echo "\n${YELLOW}Maintenance commands:${NC}"
 echo "  • Update Homebrew: brew update && brew upgrade"
 echo "  • Clean Homebrew: brew cleanup"
-echo "  • Nix garbage collection: nix-collect-garbage -d"
-echo "  • Optimize Nix store: nix-store --optimise"

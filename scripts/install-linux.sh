@@ -206,9 +206,6 @@ post_install() {
     echo ""
     echo "Your old configs are backed up at: $BACKUP_DIR"
     echo ""
-    echo "To uninstall Nix (if installed), run:"
-    echo "  $DOTFILES_DIR/scripts/uninstall-nix.sh"
-    echo ""
 }
 
 # =============================================================================
