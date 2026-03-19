@@ -1,6 +1,6 @@
-tap "felixkratz/formulae" if OS.mac?
-tap "netbirdio/tap" if OS.mac?
-tap "nikitabobko/tap" if OS.mac?
+tap "felixkratz/formulae"
+tap "netbirdio/tap"
+tap "nikitabobko/tap"
 brew "bacon"
 brew "bash-language-server"
 brew "bat"
@@ -24,6 +24,7 @@ brew "kubectx"
 brew "lazygit"
 brew "lua"
 brew "lua-language-server"
+brew "mas"
 brew "mprocs"
 brew "ripgrep"
 brew "nb"
@@ -47,6 +48,7 @@ brew "felixkratz/formulae/borders"
 cask "nikitabobko/tap/aerospace"
 cask "appcleaner"
 cask "claude"
+cask "claude-code"
 cask "devpod"
 cask "dotnet-sdk"
 cask "font-inter"
@@ -59,10 +61,16 @@ cask "google-drive"
 cask "jetbrains-toolbox"
 cask "karabiner-elements"
 cask "lm-studio"
+cask "mythic"
 cask "netbirdio/tap/netbird-ui"
 cask "orbstack"
 cask "spotify"
 cask "steam"
 cask "wezterm"
 cask "zed"
-cask "mythic"
+mas "GarageBand", id: 682658836
+mas "iMovie", id: 408981434
+mas "Keynote", id: 409183694
+mas "Numbers", id: 409203825
+mas "Pages", id: 409201541
+mas "Xcode", id: 497799835
