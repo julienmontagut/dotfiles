@@ -1,6 +1,8 @@
+# Dotter local files
+.dotter/cache
+.dotter/cache.toml
+.dotter/local.toml
+
 # AI Assistant
 .claude/
 
-# IDEs
-.idea
-.vscode
