@@ -27,7 +27,3 @@ fi
 
 # Rust
 [[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
-
-# Go
-export GOPATH="$XDG_DATA_HOME/go"
-export PATH="$GOPATH/bin:$PATH"

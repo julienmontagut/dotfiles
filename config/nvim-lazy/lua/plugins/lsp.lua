@@ -163,7 +163,6 @@ return {
         local servers = {
             astro = {},
             clangd = {},
-            -- gopls = {},
             htmx = {},
             omnisharp = {},
             rust_analyzer = {},

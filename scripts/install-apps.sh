@@ -58,7 +58,7 @@ command_exists() {
 # ============================================================================
 
 install_apt_packages() {
-    log_header "[1/5] System Package Manager Setup"
+    log_header "[1/4] System Package Manager Setup"
 
     if ! command_exists apt-get; then
         log_warning "APT package manager not found. Skipping system package updates."
@@ -75,7 +75,7 @@ install_apt_packages() {
 # ============================================================================
 
 install_wezterm() {
-    log_header "[2/5] Installing WezTerm Terminal"
+    log_header "[2/4] Installing WezTerm Terminal"
 
     if command_exists wezterm; then
         log_success "WezTerm is already installed"
@@ -105,7 +105,7 @@ install_wezterm() {
 # ============================================================================
 
 install_zed() {
-    log_header "[3/5] Installing Zed Editor"
+    log_header "[3/4] Installing Zed Editor"
 
     if command_exists zed; then
         log_success "Zed is already installed"
@@ -131,7 +131,7 @@ install_zed() {
 # ============================================================================
 
 install_jetbrains_toolbox() {
-    log_header "[4/5] Installing JetBrains Toolbox"
+    log_header "[4/4] Installing JetBrains Toolbox"
 
     if [ -f "$XDG_BIN_HOME/jetbrains-toolbox" ]; then
         log_success "JetBrains Toolbox is already installed"
@@ -184,48 +184,6 @@ install_jetbrains_toolbox() {
 }
 
 # ============================================================================
-# GPU Driver Setup (for Nix packages)
-# ============================================================================
-
-setup_gpu_drivers() {
-    log_header "[5/5] Configuring GPU Drivers for Nix Packages"
-
-    local MARKER_FILE="$HOME/.cache/nix-gpu-configured"
-
-    if [ -f "$MARKER_FILE" ]; then
-        log_success "GPU drivers already configured"
-        return
-    fi
-
-    log_info "Checking GPU driver setup for Nix packages..."
-
-    # Find the non-nixos-gpu setup script
-    local GPU_SETUP=$(find /nix/store -maxdepth 1 -name '*non-nixos-gpu*' -type d 2>/dev/null | \
-                grep -m1 'non-nixos-gpu' | \
-                awk '{print $1"/bin/non-nixos-gpu-setup"}' || echo "")
-
-    if [ -z "$GPU_SETUP" ] || [ ! -f "$GPU_SETUP" ]; then
-        log_warning "GPU setup script not found yet"
-        log_info "This is normal if this is your first install."
-        log_info "Run 'home-manager switch --flake .' first, then run this script again."
-        return
-    fi
-
-    log_info "Found GPU setup script: $GPU_SETUP"
-    log_info "This will configure Nix packages to access your system GPU drivers."
-
-    if sudo "$GPU_SETUP"; then
-        mkdir -p "$(dirname "$MARKER_FILE")"
-        touch "$MARKER_FILE"
-        log_success "GPU drivers configured successfully"
-        log_info "Terminal apps like Alacritty and Ghostty should now work."
-    else
-        log_error "GPU setup failed"
-        return 1
-    fi
-}
-
-# ============================================================================
 # Main Installation Flow
 # ============================================================================
 
@@ -239,7 +197,6 @@ main() {
     install_wezterm
     install_zed
     install_jetbrains_toolbox
-    setup_gpu_drivers
 
     log_header "Installation Summary"
     log_success "All installations completed!"
@@ -253,8 +210,6 @@ main() {
     echo ""
     log_info "Next steps:"
     echo "  1. Add '\$XDG_BIN_HOME' to your PATH if not already done"
-    echo "  2. Run 'home-manager switch --flake .' to apply Nix configuration"
-    echo "  3. If on non-NixOS, run this script again to configure GPU drivers"
     echo ""
     log_success "Setup complete!"
 }
