@@ -29,7 +29,8 @@ check_sudo() {
   fi
 }
 
-echo "\n${GREEN}[1/5]${NC} Configuring macOS system defaults..."
+echo
+echo "${GREEN}[1/5]${NC} Configuring macOS system defaults..."
 
 # Menu bar clock - 24 hour format
 defaults write com.apple.menuextra.clock Show24Hour -bool true

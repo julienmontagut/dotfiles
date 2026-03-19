@@ -15,13 +15,25 @@ Dotfiles managed with [dotter](https://github.com/SuperCuber/dotter) and bash sc
 ./scripts/bootstrap-macos.sh
 ```
 
+### Configure Dotter (platform selection)
+
+Dotter uses a local configuration file to determine which packages/profiles to deploy for each platform.
+Before running `dotter` directly, copy the example and enable the profile for your OS:
+
+```bash
+cp .dotter/local.toml.example .dotter/local.toml
+# Then edit .dotter/local.toml and enable the appropriate profiles for:
+# - macOS
+# - Linux
+```
+
 ### Apply Changes
 
 ```bash
 # Using the dots helper (recommended)
 dots apply
 
-# Or directly with dotter
+# Or directly with dotter (requires a configured .dotter/local.toml)
 dotter deploy
 ```
 
@@ -41,6 +53,7 @@ dots status   # Show git status
 ## Repository Structure
 
 ```
+Brewfile              # Homebrew packages
 config/
   nvim/                # Neovim configuration
   zsh/                 # Zsh configuration
@@ -57,13 +70,12 @@ scripts/
   install-linux.sh     # Linux setup (apt packages, dotter, apps)
   install-macos.sh     # macOS setup (Homebrew, dotter, apps)
   bootstrap-macos.sh   # macOS system defaults, TouchID sudo
-  Brewfile             # Homebrew packages
 ```
 
 ## What's Included
 
 ### Editor (Neovim)
-- LSP support for 20+ languages (Rust, Go, .NET, TypeScript, etc.)
+- LSP support for 20+ languages
 - Treesitter for syntax highlighting and indentation
 - Telescope for fuzzy finding
 - Format on save with conform.nvim
