@@ -16,12 +16,10 @@ $kubernetes\
 $docker_context\
 $package\
 $rust\
-$golang\
 $lua\
 $nodejs\
 $python\
 $terraform\
-$nix_shell\
 $direnv\
 $cmd_duration\
 $line_break\

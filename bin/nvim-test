@@ -135,7 +135,7 @@ cmd_sync() {
     fi
 
     log_success "Changes synced to $SOURCE_CONFIG_DIR"
-    log_info "Run 'home-manager switch --flake .' to apply"
+    log_info "Run 'dotter deploy' to apply"
 }
 
 cmd_cleanup() {
