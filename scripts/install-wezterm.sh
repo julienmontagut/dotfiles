@@ -1,4 +1,7 @@
+#!/usr/bin/env bash
 # Install wezterm on
+
+set -euo pipefail
 
 install_wezterm() {
     # Add the wezterm repository
@@ -8,7 +11,7 @@ install_wezterm() {
 
     sudo apt update
 
-    sudo apt install wezterm
+    sudo apt install -y wezterm
 }
 
 install_wezterm

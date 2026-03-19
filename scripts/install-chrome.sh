@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
 # Import the signing key into a dedicated keyring
 wget -qO- https://dl.google.com/linux/linux_signing_key.pub |
     gpg --dearmor |
@@ -8,4 +11,4 @@ echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] https://d
     sudo tee /etc/apt/sources.list.d/google-chrome.list
 
 # Install
-sudo apt update && sudo apt install google-chrome-stable
+sudo apt-get update && sudo apt-get install -y google-chrome-stable
