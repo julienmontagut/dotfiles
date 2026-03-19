@@ -1,4 +1,7 @@
 {
+  "edit_predictions": {
+    "provider": "copilot"
+  },
   "agent": {
     // "always_allow_tool_actions": false,
     "default_model": {
@@ -76,9 +79,6 @@
   "use_system_path_prompts": false,
   "always_treat_brackets_as_autoclosed": true,
   "base_keymap": "SublimeText",
-  "features": {
-    "edit_prediction_provider": "copilot",
-  },
   "load_direnv": "shell_hook",
   "preferred_line_length": 100,
   "project_panel": {
@@ -94,5 +94,7 @@
   "scrollbar": {
     "show": "never",
   },
+  "ui_font_size": 18,
+  "buffer_font_size": 16,
   "vim_mode": true,
 }

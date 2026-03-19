@@ -44,7 +44,7 @@ brew "yaml-language-server"
 brew "zoxide"
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
-brew "felixkratz/formulae/borders"
+brew "felixkratz/formulae/borders" if OS.mac?
 cask "nikitabobko/tap/aerospace"
 cask "appcleaner"
 cask "claude"
