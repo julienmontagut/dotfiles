@@ -8,9 +8,9 @@ This dotfiles repository uses a layered strategy:
 
 ### Layer 1: Package Managers (CLI tools + GUI apps)
 
-**macOS (Homebrew):** All CLI tools and GUI apps via `brew bundle` from `scripts/Brewfile`.
+**macOS (Homebrew):** All CLI tools and GUI apps via `brew bundle` from `./Brewfile`.
 
-**Linux (APT + Linuxbrew):** System packages via APT (`scripts/linux-packages.sh`), CLI tools via Linuxbrew (`scripts/Brewfile`).
+**Linux (APT + Linuxbrew):** System packages via APT (`scripts/linux-packages.sh`), CLI tools via Linuxbrew (`./Brewfile`).
 
 ### Layer 2: Dotter (Configuration deployment)
 
@@ -31,7 +31,7 @@ Items documented in this file: GNOME/KDE settings, system-level configs, SSH/GPG
 bash scripts/install-homebrew.sh
 
 # 2. Install CLI tools and GUI apps from Brewfile
-brew bundle --file=scripts/Brewfile
+brew bundle --file=./Brewfile
 
 # 3. Deploy configs via Dotter
 dotter deploy
@@ -42,7 +42,7 @@ bash scripts/macos-defaults.sh
 
 ### What Gets Installed
 
-**Via Homebrew (scripts/Brewfile):**
+**Via Homebrew (`./Brewfile`):**
 - CLI tools: neovim, ripgrep, fd, fzf, bat, eza, jq, starship, zoxide, lazygit, etc.
 - Window management: AeroSpace, Karabiner Elements, JankyBorders
 - Terminal: WezTerm
