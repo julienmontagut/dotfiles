@@ -3,6 +3,13 @@ set -euo pipefail
 
 DOTS_DIR="${DOTS_DIR:-$HOME/.local/share/dots}"
 REPO_URL="https://github.com/julienmontagut/dotfiles.git"
+FORCE=false
+
+for arg in "$@"; do
+  case "$arg" in
+    --force) FORCE=true ;;
+  esac
+done
 
 # Detect operating system
 
@@ -69,6 +76,21 @@ if ! command -v dotter &>/dev/null; then
 fi
 
 # Applying dotter config
+if [[ "$OS" == "Darwin" ]]; then
+  DOTTER_PACKAGES='packages = ["default", "macos"]'
+else
+  DOTTER_PACKAGES='packages = ["default", "linux"]'
+fi
+
+cat > "$DOTS_DIR/.dotter/local.toml" <<EOF
+$DOTTER_PACKAGES
+EOF
+
+if [[ "$FORCE" == true ]]; then
+  (cd "$DOTS_DIR" && dotter deploy --force)
+else
+  (cd "$DOTS_DIR" && dotter deploy)
+fi
 
 # Applying homebrew config
 
@@ -78,5 +100,8 @@ if [[ "$OS" == "Darwin" ]]; then
 else
   mkdir -p "$HOME/Sources"
 fi
+
+# Installing rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 # TODO: Think about a minimal VIM config with system packages

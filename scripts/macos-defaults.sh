@@ -13,16 +13,16 @@ echo "Applying macOS defaults..."
 echo "Configuring keyboard..."
 
 # Fast key repeat rate
-defaults write NSGlobalDomain KeyRepeat -int 1
+defaults write -g KeyRepeat -int 1
 
 # Short delay until key repeat
-defaults write NSGlobalDomain InitialKeyRepeat -int 15
+defaults write -g InitialKeyRepeat -int 15
 
 # Use metric units
-defaults write NSGlobalDomain AppleMetricUnits -bool true
+defaults write -g AppleMetricUnits -bool true
 
 # Disable press-and-hold for keys in favor of key repeat
-defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+defaults write -g ApplePressAndHoldEnabled -bool false
 
 # =============================================================================
 # Dock
@@ -56,7 +56,7 @@ echo "Configuring Finder..."
 defaults write com.apple.finder AppleShowAllFiles -bool true
 
 # Show all filename extensions
-defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+defaults write -g AppleShowAllExtensions -bool true
 
 # Disable warning when changing file extension
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
@@ -85,7 +85,7 @@ echo "Configuring trackpad..."
 # Tap to click
 defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
-defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+defaults -currentHost write -g com.apple.mouse.tapBehavior -int 1
 
 # Three finger drag
 defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool true
@@ -114,15 +114,15 @@ defaults write com.apple.screencapture disable-shadow -bool true
 echo "Configuring other settings..."
 
 # Disable natural scrolling (optional - comment out if you prefer natural)
-# defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
+# defaults write -g com.apple.swipescrolldirection -bool false
 
 # Expand save panel by default
-defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
-defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
+defaults write -g NSNavPanelExpandedStateForSaveMode -bool true
+defaults write -g NSNavPanelExpandedStateForSaveMode2 -bool true
 
 # Expand print panel by default
-defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
-defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
+defaults write -g PMPrintingExpandedStateForPrint -bool true
+defaults write -g PMPrintingExpandedStateForPrint2 -bool true
 
 # Disable the "Are you sure you want to open this application?" dialog
 defaults write com.apple.LaunchServices LSQuarantine -bool false
