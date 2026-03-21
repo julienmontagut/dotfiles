@@ -1,0 +1,35 @@
+[colors]
+ansi = [
+    "#5c5f77",
+    "#d20f39",
+    "#40a02b",
+    "#df8e1d",
+    "#1e66f5",
+    "#8839ef",
+    "#179299",
+    "#4c4f69",
+]
+background = "#fcf9f8"
+brights = [
+    "#acb0be",
+    "#d20f39",
+    "#40a02b",
+    "#df8e1d",
+    "#1e66f5",
+    "#8839ef",
+    "#179299",
+    "#bcc0cc",
+]
+cursor_bg = "#4c4f69"
+cursor_border = "#4c4f69"
+cursor_fg = "#fcf9f8"
+foreground = "#4c4f69"
+selection_bg = "#ccd0da"
+selection_fg = "#4c4f69"
+
+[colors.indexed]
+16 = "#315dad"
+17 = "#694aa1"
+
+[metadata]
+name = "Sweet Neutral Light"
