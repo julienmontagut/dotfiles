@@ -14,6 +14,8 @@ config.color_scheme = "Sweet Neutral Dark"
 config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = true
 
+config.max_fps = 120
+
 local is_gnome = (os.getenv("XDG_CURRENT_DESKTOP") or ""):match("GNOME") ~= nil
 config.window_decorations = is_gnome and "TITLE|RESIZE" or "RESIZE"
 
