@@ -9,7 +9,7 @@ config.default_prog = { shell, "-l" }
 config.font = wezterm.font("Lilex")
 config.font_size = 16
 
-config.color_scheme = "Sweet Neutral Dark"
+config.color_scheme = "Basalt Dark"
 
 config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = true
