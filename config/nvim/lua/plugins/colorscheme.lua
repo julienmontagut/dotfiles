@@ -1,23 +1,15 @@
 return {
     {
         "folke/tokyonight.nvim",
+        lazy = true,
+    },
+    {
+        dir = vim.fn.stdpath("config") .. "/colors",
+        name = "basalt",
         lazy = false,
         priority = 1000,
         config = function()
-            require("tokyonight").setup({
-                style = "storm",
-                transparent = true,
-                terminal_colors = true,
-                styles = {
-                    comments = { italic = true },
-                    keywords = { italic = true },
-                    functions = {},
-                    variables = {},
-                    sidebars = "transparent",
-                    floats = "transparent",
-                },
-            })
-            vim.cmd([[colorscheme tokyonight]])
+            vim.cmd([[colorscheme basalt]])
         end,
     },
 }
