@@ -119,8 +119,12 @@ return {
                         vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, opts)
 
                         -- Diagnostic navigation
-                        vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
-                        vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+                        vim.keymap.set("n", "[d", function()
+                            vim.diagnostic.jump({ count = -1 })
+                        end, opts)
+                        vim.keymap.set("n", "]d", function()
+                            vim.diagnostic.jump({ count = 1 })
+                        end, opts)
                         vim.keymap.set("n", "<Leader>d", vim.diagnostic.open_float, opts)
                         vim.keymap.set("n", "<Leader>dl", vim.diagnostic.setloclist, opts)
 
@@ -133,7 +137,7 @@ return {
 
                         -- Enable inlay hints by default
                         if client.server_capabilities.inlayHintProvider then
-                            vim.lsp.inlay_hint.enable(bufnr, true)
+                            vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
                         end
 
                         -- Print notification when rust-analyzer attaches
@@ -260,7 +264,7 @@ return {
             vim.api.nvim_create_autocmd("FileType", {
                 pattern = "rust",
                 callback = function()
-                    local clients = vim.lsp.get_active_clients()
+                    local clients = vim.lsp.get_clients()
                     local has_rust_analyzer = false
                     for _, client in ipairs(clients) do
                         if client.name == "rust_analyzer" then
