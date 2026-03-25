@@ -6,47 +6,42 @@
 # pre_deploy = "scripts/pre-deploy.sh"
 # post_deploy = "scripts/post-deploy.sh"
 
-# =============================================================================
 # Shared files (all platforms)
-# =============================================================================
-
+#
 [default.files]
-# Git
-"config/git/config" = "~/.config/git/config"
-"config/git/ignore" = "~/.config/git/ignore"
-"config/git/config-work" = "~/.config/git/config-work"
-
-# Shell
-"config/zsh/.zshrc" = "~/.config/zsh/.zshrc"
-"config/zsh/.zshenv" = "~/.zshenv"
-"config/zsh/aliases.zsh" = "~/.config/zsh/aliases.zsh"
-
-# Prompt
+"config/git" = "~/.config/git"
+"config/ideavim" = "~/.config/ideavim"
+"config/nvim" = { target = "~/.config/nvim", type = "symbolic", recurse = false }
 "config/starship.toml" = "~/.config/starship.toml"
-
-# Editors
-"config/nvim" = "~/.config/nvim"
-"config/ideavim/ideavimrc" = "~/.config/ideavim/ideavimrc"
 "config/wezterm" = "~/.config/wezterm"
 "config/zed" = "~/.config/zed"
+"config/zsh/.zshenv" = "~/.zshenv"
+"config/zsh/.zshrc" = "~/.config/zsh/.zshrc"
+"config/zsh/aliases.zsh" = "~/.config/zsh/aliases.zsh"
 
-# =============================================================================
 # macOS-specific files
-# =============================================================================
+# 
+[macos]
+depends = [
+  "default"
+]
 
 [macos.files]
+"config/aerospace" = "~/.config/aerospace"
+"config/borders" = "~/.config/borders"
 "config/karabiner" = "~/.config/karabiner"
-"config/aerospace/aerospace.toml" = "~/.config/aerospace/aerospace.toml"
-"config/borders/bordersrc" = "~/.config/borders/bordersrc"
 
-# =============================================================================
 # Linux-specific files
-# =============================================================================
+#
+[linux]
+depends = [
+  "default"
+]
 
 [linux.files]
-"config/keyd/default.conf" = "~/.config/keyd/default.conf"
-"config/sway/config" = "~/.config/sway/config"
-"config/waybar/config" = "~/.config/waybar/config"
-"config/waybar/style.css" = "~/.config/waybar/style.css"
-"config/kanshi/config" = "~/.config/kanshi/config"
-"config/fuzzel/fuzzel.ini" = "~/.config/fuzzel/fuzzel.ini"
+"config/fuzzel" = "~/.config/fuzzel"
+"config/kanshi" = "~/.config/kanshi"
+"config/keyd" = "~/.config/keyd"
+"config/sway" = "~/.config/sway"
+"config/waybar" = "~/.config/waybar"
+
