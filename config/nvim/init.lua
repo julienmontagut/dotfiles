@@ -48,12 +48,6 @@ vim.opt.rtp:prepend(lazypath)
 -- Load all plugins
 require("lazy").setup({
     spec = {
-        {
-            "actionshrimp/direnv.nvim",
-            lazy = false,
-            priority = 1000,
-        },
-        -- Import all plugin configurations
         { import = "plugins" },
         { import = "plugins.lang" },
         performance = {
@@ -71,5 +65,5 @@ require("lazy").setup({
             },
         },
     },
-    lockfile = vim.fn.stdpath("data") .. "/lazy-lock.json",
+    -- lockfile = vim.fn.stdpath("data") .. "/lazy-lock.json",
 })
