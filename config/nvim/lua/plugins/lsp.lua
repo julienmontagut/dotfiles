@@ -33,7 +33,7 @@ return {
 
             -- Common on_attach function with semantic keybindings
             _G.common_on_attach = function(client, bufnr)
-                vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+                vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
 
                 local opts = { noremap = true, silent = true, buffer = bufnr }
 
@@ -107,18 +107,12 @@ return {
                 end, vim.tbl_extend("force", opts, { desc = "Format code" }))
 
                 -- Diagnostics (d = diagnostic)
-                vim.keymap.set(
-                    "n",
-                    "<leader>dn",
-                    vim.diagnostic.goto_next,
-                    vim.tbl_extend("force", opts, { desc = "Next diagnostic" })
-                )
-                vim.keymap.set(
-                    "n",
-                    "<leader>dp",
-                    vim.diagnostic.goto_prev,
-                    vim.tbl_extend("force", opts, { desc = "Previous diagnostic" })
-                )
+                vim.keymap.set("n", "<leader>dn", function()
+                    vim.diagnostic.jump({ count = 1 })
+                end, vim.tbl_extend("force", opts, { desc = "Next diagnostic" }))
+                vim.keymap.set("n", "<leader>dp", function()
+                    vim.diagnostic.jump({ count = -1 })
+                end, vim.tbl_extend("force", opts, { desc = "Previous diagnostic" }))
                 vim.keymap.set(
                     "n",
                     "<leader>dd",
@@ -156,7 +150,7 @@ return {
 
                 -- Enable inlay hints if supported
                 if client.server_capabilities.inlayHintProvider then
-                    vim.lsp.inlay_hint.enable(bufnr, true)
+                    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
                 end
             end
 
