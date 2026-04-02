@@ -35,3 +35,5 @@
 [maintenance]
 	auto = true
 	strategy = incremental
+[color]
+	ui = auto
