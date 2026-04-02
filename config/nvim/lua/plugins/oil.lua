@@ -3,11 +3,23 @@ return {
   ---@module 'oil'
   ---@type oil.SetupOpts
   opts = {
-    show_hidden = true
+    default_file_explorer = true,
+    show_hidden = true,
+    keymaps = {
+      ["<CR>"] = function()
+        local oil = require("oil")
+        local entry = oil.get_cursor_entry()
+        if entry and entry.type == "file" then
+          oil.select({ vertical = true })
+        else
+          oil.select()
+        end
+      end,
+    },
   },
-  -- Optional dependencies
+  keys = {
+    { "-", "<CMD>Oil<CR>", desc = "Open parent directory" },
+  },
   dependencies = { "nvim-mini/mini.icons" },
-  -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
-  -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
   lazy = false,
 }
