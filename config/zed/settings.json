@@ -1,4 +1,5 @@
 {
+  "close_on_file_delete": true,
   "edit_predictions": {
     "provider": "copilot"
   },

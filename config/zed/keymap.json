@@ -4,6 +4,7 @@
     "bindings": {},
   },
   {
+    "context": "Editor && showing_completions",
     "bindings": {
       "ctrl-e": "editor::Cancel",
       "ctrl-n": "editor::SelectNext",
@@ -12,16 +13,16 @@
       "enter": "editor::ConfirmCompletion",
       "tab": "editor::ConfirmCompletion",
     },
-    "context": "Editor && showing_completions",
   },
   {
+    "context": "Editor && vim_mode == normal && !menu",
     "bindings": {
       "space s a": "project_symbols::Toggle",
       "space s b": "tab_switcher::Toggle",
       "space s c": "command_palette::Toggle",
       "space s f": "file_finder::Toggle",
       "space s g": "pane::DeploySearch",
-      "space s h": "zed::OpenBrowser",
+      // "space s h": "zed::OpenBrowser",
       "space s i": "editor::GoToImplementation",
       "space s j": "pane::GoBack",
       "space s k": "zed::OpenKeymap",
@@ -52,7 +53,6 @@
       "space c f": "editor::Format",
       "space r n": "editor::Rename",
     },
-    "context": "Editor && vim_mode == normal && !menu",
   },
   {
     "context": "Workspace",

@@ -132,7 +132,6 @@ source "$ZDOTDIR/aliases.zsh"
 [[ -f "$ZDOTDIR/local.zsh" ]] && source "$ZDOTDIR/local.zsh"
 eval "$(mise activate zsh)"
 
-# TODO: Add the following path if they exist to prepend path
-# export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
-
-# export PATH="$HOME/.aspire/bin:$PATH"
+# Conditionally prepend directories to PATH
+[[ -d /home/linuxbrew/.linuxbrew/bin ]] && path=(/home/linuxbrew/.linuxbrew/bin $path)
+[[ -d "$HOME/.aspire/bin" ]] && path=("$HOME/.aspire/bin" $path)
