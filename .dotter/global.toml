@@ -9,6 +9,10 @@
 # Shared files (all platforms)
 #
 [default.files]
+"claude/CLAUDE.md" = "~/.claude/CLAUDE.md"
+"claude/settings.json" = "~/.claude/settings.json"
+"claude/skills" = { target = "~/.claude/skills", type = "symbolic", recurse = false }
+"claude/agents" = { target = "~/.claude/agents", type = "symbolic", recurse = false }
 "config/git" = "~/.config/git"
 "config/ideavim" = "~/.config/ideavim"
 "config/nvim" = { target = "~/.config/nvim", type = "symbolic", recurse = false }
