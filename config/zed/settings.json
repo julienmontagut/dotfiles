@@ -1,11 +1,15 @@
 {
   "close_on_file_delete": true,
   "edit_predictions": {
-    "provider": "copilot"
+    "provider": "copilot",
   },
   "agent": {
     // "always_allow_tool_actions": false,
     "default_model": {
+      "provider": "copilot_chat",
+      "model": "oswe-vscode-prime",
+    },
+    "commit_message_model": {
       "provider": "copilot_chat",
       "model": "oswe-vscode-prime",
     },
