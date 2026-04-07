@@ -91,7 +91,7 @@ install_homebrew() {
 
 install_packages() {
     echo "Installing packages from Brewfile..."
-    brew bundle --file="$DOTFILES_DIR/scripts/Brewfile"
+    brew bundle --file="$DOTFILES_DIR/Brewfile"
 
     # Initialize rustup if installed
     if command -v rustup &>/dev/null; then

@@ -27,16 +27,13 @@ Items documented in this file: GNOME/KDE settings, system-level configs, SSH/GPG
 ### Quick Start
 
 ```bash
-# 1. Install Homebrew (if not present)
-bash scripts/install-homebrew.sh
-
-# 2. Install CLI tools and GUI apps from Brewfile
+# 1. Install CLI tools and GUI apps from Brewfile
 brew bundle --file=./Brewfile
 
-# 3. Deploy configs via Dotter
+# 2. Deploy configs via Dotter
 dotter deploy
 
-# 4. Apply macOS defaults
+# 3. Apply macOS defaults
 bash scripts/macos-defaults.sh
 ```
 
@@ -45,7 +42,7 @@ bash scripts/macos-defaults.sh
 **Via Homebrew (`./Brewfile`):**
 - CLI tools: neovim, ripgrep, fd, fzf, bat, eza, jq, starship, zoxide, lazygit, etc.
 - Window management: AeroSpace, Karabiner Elements, JankyBorders
-- Terminal: WezTerm
+- Terminals: Alacritty, WezTerm
 - Editors: Zed
 - IDE: JetBrains Toolbox
 - Other: Claude, OrbStack, Spotify, etc.
@@ -53,7 +50,8 @@ bash scripts/macos-defaults.sh
 **Via Dotter:**
 - Shell config (zsh, starship)
 - Git config
-- Editor configs (Neovim, WezTerm, Zed, IdeaVim)
+- Editor configs (Neovim, Zed, IdeaVim)
+- Terminal configs (Alacritty, WezTerm, tmux)
 - Window manager configs (AeroSpace, Karabiner, Borders)
 
 ### JetBrains IDE Setup
@@ -89,17 +87,14 @@ This script runs the following steps in order:
 # 1. Install system packages
 bash scripts/linux-packages.sh
 
-# 2. Install Linuxbrew
-bash scripts/install-homebrew.sh
+# 2. Install CLI tools from Brewfile
+brew bundle --file=./Brewfile --no-lock
 
-# 3. Install CLI tools from Brewfile
-brew bundle --file=scripts/Brewfile --no-lock
-
-# 4. Deploy configs via Dotter
+# 3. Deploy configs via Dotter
 cp .dotter/local.toml.example .dotter/local.toml  # edit for your platform
 dotter deploy
 
-# 5. Set zsh as default shell
+# 4. Set zsh as default shell
 chsh -s $(which zsh)
 ```
 
@@ -111,7 +106,7 @@ chsh -s $(which zsh)
 - Keyboard remapping: keyd
 - Fonts: Lilex Nerd Font
 
-**Via Linuxbrew (scripts/Brewfile):**
+**Via Linuxbrew (Brewfile):**
 - CLI tools: neovim, ripgrep, fd, fzf, bat, eza, jq, starship, zoxide, lazygit, etc.
 - Language servers: bash-language-server, lua-language-server, helm-ls, yaml-language-server, etc.
 - Kubernetes: kubectl, kubectx, k9s, kind, helm
@@ -119,7 +114,8 @@ chsh -s $(which zsh)
 **Via Dotter:**
 - Shell config (zsh, starship)
 - Git config
-- Editor configs (Neovim, WezTerm, Zed, IdeaVim)
+- Editor configs (Neovim, Zed, IdeaVim)
+- Terminal configs (Alacritty, WezTerm, tmux)
 - Sway, Waybar, Kanshi, Fuzzel configs
 - keyd config
 
