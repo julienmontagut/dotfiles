@@ -135,3 +135,4 @@ eval "$(mise activate zsh)"
 # Conditionally prepend directories to PATH
 [[ -d /home/linuxbrew/.linuxbrew/bin ]] && path=(/home/linuxbrew/.linuxbrew/bin $path)
 [[ -d "$HOME/.aspire/bin" ]] && path=("$HOME/.aspire/bin" $path)
+[[ -d "$HOME/.dotnet/tools" ]] && path=("$HOME/.dotnet/tools" $path)
