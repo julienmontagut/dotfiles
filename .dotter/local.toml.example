@@ -2,8 +2,8 @@
 # Copy this file to local.toml and customize for your system
 #
 # Available packages:
-#   - default: Shared configs (git, zsh, nvim, wezterm, zed, starship)
-#   - macos: macOS-specific configs (AeroSpace, Karabiner, JankyBorders)
+#   - default: Shared configs (git, zsh, nvim, alacritty, wezterm, tmux, zed, starship, ideavim, claude)
+#   - macos: macOS-specific configs (AeroSpace, Karabiner, Borders)
 #   - linux: Linux-specific configs (Sway, Waybar, Kanshi, Fuzzel, keyd)
 
 # For macOS:
