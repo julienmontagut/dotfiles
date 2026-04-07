@@ -65,8 +65,8 @@ echo "Running from cloned repo at $DOTS_DIR"
 # Installing homebrew
 if ! command -v brew &>/dev/null; then
   bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  echo >> /Users/julien/.zprofile
-  echo 'eval "$(/opt/homebrew/bin/brew shellenv zsh)"' >> /Users/julien/.zprofile
+  echo >> "$HOME/.zprofile"
+  echo 'eval "$(/opt/homebrew/bin/brew shellenv zsh)"' >> "$HOME/.zprofile"
   eval "$(/opt/homebrew/bin/brew shellenv zsh)"
 fi
 

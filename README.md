@@ -55,43 +55,65 @@ dots status   # Show git status
 ```
 Brewfile              # Homebrew packages
 config/
-  nvim/                # Neovim configuration
-  zsh/                 # Zsh configuration
-  wezterm/             # WezTerm terminal
-  zed/                 # Zed editor
-  aerospace/           # Window management (macOS)
-  karabiner/           # Keyboard remapping (macOS)
-  sway/                # Window management (Linux)
-  waybar/              # Status bar (Linux)
-  starship.toml        # Starship prompt
+  nvim/               # Neovim configuration (vim.pack)
+  tvim/               # Experimental Neovim sandbox (lazy.nvim)
+  zsh/                # Zsh configuration
+  alacritty/          # Alacritty terminal
+  wezterm/            # WezTerm terminal
+  tmux/               # Tmux configuration
+  zed/                # Zed editor
+  ideavim/            # IdeaVim (JetBrains)
+  git/                # Git configuration
+  starship.toml       # Starship prompt
+  aerospace/          # Window management (macOS)
+  karabiner/          # Keyboard remapping (macOS)
+  borders/            # JankyBorders (macOS)
+  sketchybar/         # Status bar (macOS)
+  sway/               # Window management (Linux)
+  waybar/             # Status bar (Linux)
+  kanshi/             # Display management (Linux)
+  fuzzel/             # Launcher (Linux)
+  keyd/               # Keyboard remapping (Linux)
 bin/
-  dots                 # Dotfiles management script
+  dots                # Dotfiles management script
+  tvim                # Testable Neovim launcher
 scripts/
-  install-linux.sh     # Linux setup (apt packages, dotter, apps)
-  install-macos.sh     # macOS setup (Homebrew, dotter, apps)
-  bootstrap-macos.sh   # macOS system defaults, TouchID sudo
+  install-linux.sh    # Linux setup (apt packages, dotter, apps)
+  install-macos.sh    # macOS setup (Homebrew, dotter, apps)
+  bootstrap-macos.sh  # macOS system defaults, TouchID sudo
+  macos-defaults.sh   # macOS system preferences
+  macos-services.sh   # macOS service configuration
+  install-apps.sh     # App installation helpers
+  install-toolkits.sh # Development toolkit setup
+  linux-packages.sh   # Linux APT packages
 ```
 
 ## What's Included
 
 ### Editor (Neovim)
-- LSP support for 20+ languages
-- Treesitter for syntax highlighting and indentation
-- Telescope for fuzzy finding
-- Format on save with conform.nvim
-- Tokyo Night Storm theme
+
+- Native `vim.pack` plugin manager (no lazy.nvim)
+- LSP support (Lua, Rust, C#, Bash, JSON, HTML, CSS, Swift, Nickel, TOML)
+- Treesitter for syntax highlighting and textobjects
+- Snacks.nvim for fuzzy finding, notifications, and UI
+- Oil.nvim for file exploration
+- Flash.nvim for motion
+- Basalt color scheme
 
 ### Shell (Zsh)
-- Vim keybindings
+
+- Vi keybindings
 - Autosuggestions and syntax highlighting
 - Modern tools: eza, bat, fzf, fd, ripgrep, zoxide
 - Starship prompt
-- Direnv
+- Direnv and mise
 
 ### Window Management
-- **macOS**: AeroSpace + Karabiner + JankyBorders
-- **Linux**: Sway + Waybar + Fuzzel
+
+- **macOS**: AeroSpace + Karabiner + JankyBorders + Sketchybar
+- **Linux**: Sway + Waybar + Fuzzel + Kanshi
 
 ### Terminal
-- WezTerm with Tokyo Night Storm theme
-- Zellij terminal multiplexer
+
+- Alacritty with tmux (primary)
+- WezTerm with Basalt color scheme

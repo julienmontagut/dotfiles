@@ -47,6 +47,7 @@ brew "zoxide"
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
 brew "felixkratz/formulae/borders" if OS.mac?
+cask "alacritty"
 cask "nikitabobko/tap/aerospace"
 cask "appcleaner"
 cask "claude"
