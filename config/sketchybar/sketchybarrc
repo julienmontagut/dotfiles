@@ -102,11 +102,6 @@ sketchybar --add item wifi right \
                     click_script="open /System/Library/PreferencePanes/Network.prefPane" \
                     script="$HOME/.config/sketchybar/plugins/wifi.sh"
 
-sketchybar --add item network right \
-         --set wifi update_freq=30 \
-                    click_script="open /System/Library/PreferencePanes/Network.prefPane" \
-                    script="$HOME/.config/sketchybar/plugins/network.sh"
-
 sketchybar --update
 
 INITIAL_WORKSPACE=$(aerospace list-workspaces --focused)
