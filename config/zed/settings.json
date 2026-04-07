@@ -1,4 +1,7 @@
 {
+  "session": {
+    "trust_all_worktrees": true
+  },
   "close_on_file_delete": true,
   "edit_predictions": {
     "provider": "copilot",
