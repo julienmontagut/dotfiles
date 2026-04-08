@@ -54,7 +54,8 @@ if [[ -z "$SCRIPT_DIR" ]] || [[ ! -f "$SCRIPT_DIR/.git/HEAD" ]]; then
     echo "Cloning dotfiles to $DOTS_DIR..."
     git clone --depth 1 "$REPO_URL" "$DOTS_DIR"
   fi
-  # exec bash "$DOTS_DIR/install.sh"
+  exec bash "$DOTS_DIR/install.sh"
+  exit 
 fi
 
 DOTS_DIR="$SCRIPT_DIR"
@@ -77,9 +78,9 @@ fi
 
 # Applying dotter config
 if [[ "$OS" == "Darwin" ]]; then
-  DOTTER_PACKAGES='packages = ["default", "macos"]'
+  DOTTER_PACKAGES='packages = ["macos"]'
 else
-  DOTTER_PACKAGES='packages = ["default", "linux"]'
+  DOTTER_PACKAGES='packages = ["linux"]'
 fi
 
 cat > "$DOTS_DIR/.dotter/local.toml" <<EOF
@@ -92,7 +93,8 @@ else
   (cd "$DOTS_DIR" && dotter deploy)
 fi
 
-# Applying homebrew config
+# Installing packages
+brew bundle --global
 
 # Creating the directory for source code
 if [[ "$OS" == "Darwin" ]]; then
