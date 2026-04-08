@@ -9,10 +9,11 @@
 # Shared files (all platforms)
 #
 [default.files]
+"Brewfile" = "~/.Brewfile"
+"claude/agents" = { target = "~/.claude/agents", type = "symbolic", recurse = false }
 "claude/CLAUDE.md" = "~/.claude/CLAUDE.md"
 "claude/settings.json" = "~/.claude/settings.json"
 "claude/skills" = { target = "~/.claude/skills", type = "symbolic", recurse = false }
-"claude/agents" = { target = "~/.claude/agents", type = "symbolic", recurse = false }
 "config/alacritty" = "~/.config/alacritty"
 "config/git" = "~/.config/git"
 "config/ideavim" = "~/.config/ideavim"
