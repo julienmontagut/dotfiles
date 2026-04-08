@@ -16,15 +16,12 @@ defaults write -g InitialKeyRepeat -int 15
 
 echo "Configuring Dock..."
 
-# Auto-hide the Dock
 defaults write com.apple.dock autohide -bool true
 defaults write com.apple.dock autohide-delay -float 0
 defaults write com.apple.dock autohide-time-modifier -float 0.3
 
-# Position Dock on the left
 defaults write com.apple.dock orientation -string "left"
 
-# Don't show recent applications
 defaults write com.apple.dock show-recents -bool false
 
 # Set up Dock apps
