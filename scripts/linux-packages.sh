@@ -17,13 +17,12 @@ detect_distro() {
     if [[ -f /etc/os-release ]]; then
         . /etc/os-release
         DISTRO="$ID"
-        DISTRO_VERSION="$VERSION_ID"
     else
         echo "Error: Cannot detect distribution"
         exit 1
     fi
 
-    echo "Detected: $DISTRO $DISTRO_VERSION"
+    echo "Detected: $DISTRO"
 }
 
 # =============================================================================
@@ -63,9 +62,7 @@ setup_extrepo() {
         sudo apt install -y extrepo
     fi
 
-    # List available repos
-    echo "Available extrepo repositories:"
-    extrepo search || true
+    echo "extrepo ready."
 }
 
 # =============================================================================
