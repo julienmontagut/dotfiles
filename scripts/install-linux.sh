@@ -142,6 +142,24 @@ deploy_configs() {
 }
 
 # =============================================================================
+# Apply GNOME defaults
+# =============================================================================
+
+apply_gnome_defaults() {
+    if [[ "${XDG_CURRENT_DESKTOP:-}" == *"GNOME"* ]]; then
+        echo ""
+        read -p "Apply GNOME desktop defaults (extensions, keybindings, settings)? [y/N] " -n 1 -r
+        echo ""
+
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            "$DOTFILES_DIR/scripts/gnome-defaults.sh"
+        else
+            echo "Skipping GNOME defaults."
+        fi
+    fi
+}
+
+# =============================================================================
 # Configure keyd
 # =============================================================================
 
@@ -202,7 +220,6 @@ post_install() {
     echo "Next steps:"
     echo "  1. Log out and back in for shell changes"
     echo "  2. Run 'nvim' to let plugins install"
-    echo "  3. Start Sway with 'sway' if using Wayland"
     echo ""
     echo "Your old configs are backed up at: $BACKUP_DIR"
     echo ""
@@ -219,6 +236,7 @@ main() {
     install_brew_packages
     setup_dotter
     deploy_configs
+    apply_gnome_defaults
     configure_keyd
     set_default_shell
     post_install
