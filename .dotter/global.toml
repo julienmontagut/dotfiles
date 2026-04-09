@@ -18,6 +18,7 @@
 "config/git" = "~/.config/git"
 "config/ideavim" = "~/.config/ideavim"
 "config/nvim" = { target = "~/.config/nvim", type = "symbolic", recurse = false }
+"config/sesh" = "~/.config/sesh"
 "config/starship.toml" = "~/.config/starship.toml"
 "config/tmux" = "~/.config/tmux"
 "config/wezterm" = "~/.config/wezterm"
