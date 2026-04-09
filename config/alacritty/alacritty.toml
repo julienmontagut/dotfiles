@@ -1,6 +1,6 @@
 [shell]
 program = "/usr/bin/env"
-args = ["zsh", "-l", "-c", "tmux ls 2>/dev/null && exec tmux attach \\; choose-tree -Zs || exec tmux new-session"]
+args = ["zsh", "-l", "-c", "exec sesh picker -itzHd"]
 
 [env]
 TERM = "xterm-256color"
