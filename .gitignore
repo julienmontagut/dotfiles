@@ -1,8 +1,8 @@
+# No claude config. Rely on the user one defined under `claude/`
+.claude/
+
 # Dotter local files
 .dotter/cache
 .dotter/cache.toml
 .dotter/local.toml
-
-# AI Assistant
-.claude/
 
