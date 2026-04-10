@@ -15,6 +15,7 @@
 "claude/settings.json" = "~/.claude/settings.json"
 "claude/skills" = { target = "~/.claude/skills", type = "symbolic", recurse = false }
 "config/alacritty" = "~/.config/alacritty"
+"config/ghostty" = { target = "~/.config/ghostty", type = "symbolic", recurse = false }
 "config/git" = "~/.config/git"
 "config/ideavim" = "~/.config/ideavim"
 "config/nvim" = { target = "~/.config/nvim", type = "symbolic", recurse = false }

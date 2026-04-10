@@ -1,0 +1,19 @@
+# Theme
+theme = basalt-dark
+
+# Font
+font-family = Lilex
+font-size = 16
+
+# Performance — use GPU, minimize latency
+window-vsync = false
+repaint-after-input = true
+
+# Window
+window-decoration = false
+macos-titlebar-style = hidden
+window-padding-x = 0
+window-padding-y = 0
+
+# Shell
+command = /bin/zsh -l
