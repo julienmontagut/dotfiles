@@ -38,6 +38,9 @@ compinit -d "$XDG_CACHE_HOME/zsh/zcompdump"
 # Menu-style completion
 zstyle ':completion:*' menu select
 zmodload zsh/complist
+bindkey -M menuselect '^p' up-line-or-history
+bindkey -M menuselect '^n' down-line-or-history
+bindkey -M menuselect '^y' accept-search
 
 # Case-insensitive completion
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
