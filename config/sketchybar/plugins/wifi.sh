@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-# Tokyo Night Storm colors
-BLUE=0xff7aa2f7
-RED=0xfff7768e
+# Basalt Dark colors
+BLUE=0xff7ca2d8
+RED=0xffd47080
 
 # Find the WiFi interface (usually en0, but could be different)
 WIFI_DEVICE=$(networksetup -listallhardwareports | awk '/Wi-Fi/{getline; print $2}')

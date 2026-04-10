@@ -27,3 +27,32 @@ opacity = 0.95
 
 [scrolling]
 history = 10000
+
+# Basalt Dark
+[colors.primary]
+background = "#0e0e0e"
+foreground = "#e7e5e5"
+
+[colors.selection]
+background = "#252626"
+text = "#e7e5e5"
+
+[colors.normal]
+black   = "#0e0e0e"
+red     = "#d47080"
+green   = "#5eb88a"
+yellow  = "#d4a656"
+blue    = "#7ca2d8"
+magenta = "#ae86d2"
+cyan    = "#5ca8aa"
+white   = "#cccccc"
+
+[colors.bright]
+black   = "#3e3e44"
+red     = "#e2949e"
+green   = "#84cca6"
+yellow  = "#e4c080"
+blue    = "#9cb8e4"
+magenta = "#c4a2e0"
+cyan    = "#80beba"
+white   = "#ffffff"

@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
-BG=0xff24283b
+BG=0xff191a1a
 BLACK=0xff000000
-FG=0xffc0caf5
-BLUE=0xff7aa2f7
-CYAN=0xff7dcfff
-GREEN=0xff9ece6a
-YELLOW=0xffe0af68
-RED=0xfff7768e
-MAGENTA=0xffbb9af7
-GRAY=0xff565f89
+FG=0xffe7e5e5
+BLUE=0xff7ca2d8
+CYAN=0xff5ca8aa
+GREEN=0xff5eb88a
+YELLOW=0xffd4a656
+RED=0xffd47080
+MAGENTA=0xffae86d2
+GRAY=0xff767575
 
 FONT="Lilex Nerd Font Mono"
 
@@ -24,7 +24,7 @@ MAIN_DISPLAY_WIDTH=$(system_profiler SPDisplaysDataType | grep "Resolution" | he
 # Detect if internal display has notch (MacBook Pro 14"/16" have notch, resolution width is 3024 or 3456)
 INTERNAL_WIDTH=$(system_profiler SPDisplaysDataType | grep -A 20 "Built-In" | grep "Resolution" | awk '{print $2}')
 
-# Set bar color (black for notch displays, Tokyo Night for others)
+# Set bar color (black for notch displays, Basalt Dark for others)
 if [ "$INTERNAL_WIDTH" = "3024" ] || [ "$INTERNAL_WIDTH" = "3456" ] || [ "$INTERNAL_WIDTH" = "3456" ]; then
 BAR_COLOR=$BLACK
 else

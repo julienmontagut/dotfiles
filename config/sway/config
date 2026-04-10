@@ -45,11 +45,11 @@ gaps outer 8
 default_border pixel 2
 default_floating_border pixel 2
 
-# Colors (Tokyo Night Storm)
+# Colors (Basalt Dark)
 # class                 border  backgr. text    indicator child_border
-client.focused          #7aa2f7 #7aa2f7 #1a1b26 #7aa2f7   #7aa2f7
-client.focused_inactive #565f89 #565f89 #c0caf5 #565f89   #565f89
-client.unfocused        #414868 #414868 #a9b1d6 #414868   #414868
+client.focused          #7ca2d8 #7ca2d8 #0e0e0e #7ca2d8   #7ca2d8
+client.focused_inactive #767575 #767575 #e7e5e5 #767575   #767575
+client.unfocused        #3e3e44 #3e3e44 #acabaa #3e3e44   #3e3e44
 
 # =============================================================================
 # Key bindings - Basics

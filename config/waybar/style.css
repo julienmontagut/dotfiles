@@ -1,4 +1,4 @@
-/* Waybar style - Tokyo Night Storm theme */
+/* Waybar style - Basalt Dark theme */
 
 * {
     font-family: "Lilex", "Lilex Nerd Font", monospace;
@@ -6,35 +6,35 @@
 }
 
 window#waybar {
-    background-color: #1a1b26;
-    color: #c0caf5;
-    border-bottom: 2px solid #414868;
+    background-color: #0e0e0e;
+    color: #e7e5e5;
+    border-bottom: 2px solid #3e3e44;
 }
 
 #workspaces button {
     padding: 0 8px;
-    color: #565f89;
+    color: #767575;
     background-color: transparent;
     border: none;
     border-radius: 0;
 }
 
 #workspaces button:hover {
-    background: #414868;
+    background: #3e3e44;
 }
 
 #workspaces button.focused {
-    color: #7aa2f7;
-    border-bottom: 2px solid #7aa2f7;
+    color: #7ca2d8;
+    border-bottom: 2px solid #7ca2d8;
 }
 
 #workspaces button.urgent {
-    color: #f7768e;
+    color: #d47080;
 }
 
 #mode {
-    background-color: #f7768e;
-    color: #1a1b26;
+    background-color: #d47080;
+    color: #0e0e0e;
     padding: 0 8px;
 }
 
@@ -49,23 +49,23 @@ window#waybar {
 }
 
 #battery.charging {
-    color: #9ece6a;
+    color: #5eb88a;
 }
 
 #battery.warning:not(.charging) {
-    color: #e0af68;
+    color: #d4a656;
 }
 
 #battery.critical:not(.charging) {
-    color: #f7768e;
+    color: #d47080;
 }
 
 #network.disconnected {
-    color: #f7768e;
+    color: #d47080;
 }
 
 #pulseaudio.muted {
-    color: #565f89;
+    color: #767575;
 }
 
 #tray > .passive {
