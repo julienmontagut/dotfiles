@@ -78,6 +78,11 @@ map <leader>cf <Action>(ReformatCode)
 map [d <Action>(GotoPreviousError)
 map ]d <Action>(GotoNextError)
 
+" Let IDE handle ctrl+n/p/y for popup navigation (code actions, completions)
+sethandler <C-n> n:vim i:ide v:ide
+sethandler <C-p> n:vim i:ide v:ide
+sethandler <C-y> n:vim i:ide v:ide
+
 " Paste in visual mode without yanking replaced text
 xmap p "_dP
 
