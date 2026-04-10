@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-# Tokyo Night Storm colors
-GREEN=0xff9ece6a
-YELLOW=0xffe0af68
-RED=0xfff7768e
+# Basalt Dark colors
+GREEN=0xff5eb88a
+YELLOW=0xffd4a656
+RED=0xffd47080
 
 STATUS=$(pmset -g batt)
 
