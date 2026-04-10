@@ -69,7 +69,16 @@ vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
 -- Snacks
 require("snacks").setup {
-    picker = { enabled = true },
+    picker = {
+        enabled = true,
+        win = {
+            input = {
+                keys = {
+                    ["<c-y>"] = { "confirm", mode = { "i", "n" } },
+                },
+            },
+        },
+    },
     indent = { enabled = true },
     notifier = { enabled = true },
     quickfile = { enabled = true },

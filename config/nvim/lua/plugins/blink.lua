@@ -12,6 +12,9 @@ return {
         end,
         keymap = {
             preset = "super-tab",
+            ["<C-n>"] = { "select_next", "fallback" },
+            ["<C-p>"] = { "select_prev", "fallback" },
+            ["<C-y>"] = { "accept", "fallback" },
             mappings = {
                 ["<Tab>"] = {
                     action = function(fallback)

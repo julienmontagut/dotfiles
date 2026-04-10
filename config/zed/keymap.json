@@ -15,6 +15,14 @@
     },
   },
   {
+    "context": "Picker > Editor",
+    "bindings": {
+      "ctrl-n": "picker::SelectNext",
+      "ctrl-p": "picker::SelectPrevious",
+      "ctrl-y": "picker::Confirm",
+    },
+  },
+  {
     "context": "Editor && vim_mode == normal && !menu",
     "bindings": {
       "space s a": "project_symbols::Toggle",
