@@ -8,11 +8,17 @@ if vim.fn.exists("syntax_on") then
 end
 
 vim.g.colors_name = "basalt"
-vim.o.background = "dark"
+vim.o.background = vim.env.THEME_VARIANT == "light" and "light" or "dark"
 vim.o.termguicolors = true
 
 local hi = function(group, opts)
   vim.api.nvim_set_hl(0, group, opts)
+end
+
+-- Use transparent background when terminal and neovim share the same theme
+local bg = "#0e0e0e"
+if vim.env.THEME == "basalt" then
+  bg = "NONE"
 end
 
 -- Terminal colors
@@ -34,9 +40,9 @@ vim.g.terminal_color_14 = "#80beba"
 vim.g.terminal_color_15 = "#ffffff"
 
 -- Editor UI
-hi("Normal", { fg = "#e7e5e5", bg = "#0e0e0e" })
+hi("Normal", { fg = "#e7e5e5", bg = bg })
 hi("NormalFloat", { fg = "#e7e5e5", bg = "#191a1a" })
-hi("NormalNC", { fg = "#e7e5e5", bg = "#0e0e0e" })
+hi("NormalNC", { fg = "#e7e5e5", bg = bg })
 hi("FloatBorder", { fg = "#3e3e44", bg = "#191a1a" })
 hi("FloatTitle", { fg = "#96b4e0", bg = "#191a1a", bold = true })
 hi("WinSeparator", { fg = "#3e3e44" })
@@ -47,16 +53,16 @@ hi("CursorColumn", { link = "CursorLine" })
 hi("ColorColumn", { bg = "#141414" })
 hi("LineNr", { fg = "#3e3e44" })
 hi("CursorLineNr", { fg = "#acabaa", bold = true })
-hi("SignColumn", { fg = "#3e3e44", bg = "#0e0e0e" })
-hi("FoldColumn", { fg = "#3e3e44", bg = "#0e0e0e" })
+hi("SignColumn", { fg = "#3e3e44", bg = bg })
+hi("FoldColumn", { fg = "#3e3e44", bg = bg })
 hi("Folded", { fg = "#acabaa", bg = "#141414" })
 hi("StatusLine", { fg = "#acabaa", bg = "#191a1a" })
 hi("StatusLineNC", { fg = "#767575", bg = "#141414" })
 hi("TabLine", { fg = "#acabaa", bg = "#141414" })
 hi("TabLineFill", { bg = "#141414" })
 hi("TabLineSel", { fg = "#e7e5e5", bg = "#1f2020", bold = true })
-hi("WinBar", { fg = "#acabaa", bg = "#0e0e0e" })
-hi("WinBarNC", { fg = "#767575", bg = "#0e0e0e" })
+hi("WinBar", { fg = "#acabaa", bg = bg })
+hi("WinBarNC", { fg = "#767575", bg = bg })
 hi("Pmenu", { fg = "#e7e5e5", bg = "#191a1a" })
 hi("PmenuSel", { fg = "#e7e5e5", bg = "#252626", bold = true })
 hi("PmenuSbar", { bg = "#1f2020" })
