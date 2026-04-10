@@ -43,26 +43,10 @@ zmodload zsh/complist
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 
 # =============================================================================
-# Vi mode
+# Emacs mode
 # =============================================================================
 
-bindkey -v
-export KEYTIMEOUT=1
-
-# Tab triggers completion in insert mode
-bindkey -M viins '^I' expand-or-complete
-
-# In menu: Tab/Enter/Ctrl-y accepts, Ctrl-e cancels
-bindkey -M menuselect '^I' accept-line
-bindkey -M menuselect '^M' accept-line
-bindkey -M menuselect '^Y' accept-line
-bindkey -M menuselect '^E' send-break
-
-# Use vim keys in completion menu
-bindkey -M menuselect 'h' vi-backward-char
-bindkey -M menuselect 'l' vi-forward-char
-bindkey -M menuselect 'k' vi-up-line-or-history
-bindkey -M menuselect 'j' vi-down-line-or-history
+bindkey -e
 
 # =============================================================================
 # Shell plugins (via Homebrew)
@@ -84,16 +68,12 @@ zle -N history-beginning-search-backward-end history-search-end
 zle -N history-beginning-search-forward-end history-search-end
 
 # Ctrl-n/Ctrl-p navigate history
-bindkey -M viins '^P' history-beginning-search-backward-end
-bindkey -M viins '^N' history-beginning-search-forward-end
-bindkey -M vicmd '^P' history-beginning-search-backward-end
-bindkey -M vicmd '^N' history-beginning-search-forward-end
+bindkey '^P' history-beginning-search-backward-end
+bindkey '^N' history-beginning-search-forward-end
 
 # Up/down arrow keys
-bindkey -M viins '^[[A' history-beginning-search-backward-end
-bindkey -M viins '^[[B' history-beginning-search-forward-end
-bindkey -M vicmd 'k' history-beginning-search-backward-end
-bindkey -M vicmd 'j' history-beginning-search-forward-end
+bindkey '^[[A' history-beginning-search-backward-end
+bindkey '^[[B' history-beginning-search-forward-end
 
 # =============================================================================
 # Tool initializations

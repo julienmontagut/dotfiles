@@ -95,6 +95,12 @@ install_brew_packages() {
     fi
 }
 
+install_ghostty() {
+    sudo add-apt-repository ppa:mkasberg/ghostty-ubuntu
+    sudo apt update
+    sudo apt install ghostty
+}
+
 # =============================================================================
 # Setup Dotter
 # =============================================================================
