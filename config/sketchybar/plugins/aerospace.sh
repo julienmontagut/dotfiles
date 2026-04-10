@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-# Tokyo Night Storm colors
-BLUE=0xff7aa2f7
-GRAY=0xff565f89
+# Basalt Dark colors
+BLUE=0xff7ca2d8
+GRAY=0xff767575
 
 # Workspace ID passed as argument
 WORKSPACE_ID="$1"
