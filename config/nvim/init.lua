@@ -44,7 +44,15 @@ vim.pack.add {
     "https://github.com/nvim-treesitter/nvim-treesitter",
     "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
     "https://github.com/seblj/roslyn.nvim",
+    "https://github.com/christoomey/vim-tmux-navigator",
 }
+
+-- Tmux navigation (seamless Ctrl+W h/j/k/l across neovim splits and tmux panes)
+vim.g.tmux_navigator_no_mappings = 1
+vim.keymap.set("n", "<C-w>h", "<cmd>TmuxNavigateLeft<cr>", { desc = "Navigate left (vim/tmux)" })
+vim.keymap.set("n", "<C-w>j", "<cmd>TmuxNavigateDown<cr>", { desc = "Navigate down (vim/tmux)" })
+vim.keymap.set("n", "<C-w>k", "<cmd>TmuxNavigateUp<cr>", { desc = "Navigate up (vim/tmux)" })
+vim.keymap.set("n", "<C-w>l", "<cmd>TmuxNavigateRight<cr>", { desc = "Navigate right (vim/tmux)" })
 
 -- Plugin setup
 require("blink.cmp").setup{}
