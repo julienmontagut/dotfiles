@@ -44,10 +44,9 @@ install_apt_packages() {
         unzip \
         fontconfig \
         pkg-config \
-        libssl-dev
-
-    # Optional: Sway and Wayland tools (uncomment if using Sway)
-    # sudo apt install -y sway waybar kanshi fuzzel wl-clipboard
+        libssl-dev \
+        kanshi \
+        fuzzel
 }
 
 # =============================================================================
