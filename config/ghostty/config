@@ -18,3 +18,5 @@ font-size = 16
 
 # Keybindings
 # keybind = super+shift+n=new_window
+keybind = ctrl+shift+c=copy_to_clipboard
+keybind = ctrl+shift+v=paste_from_clipboard
