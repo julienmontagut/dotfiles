@@ -14,14 +14,14 @@
       "tab": "editor::ConfirmCompletion",
     },
   },
-  {
-    "context": "Picker > Editor",
-    "bindings": {
-      "ctrl-n": "picker::SelectNext",
-      "ctrl-p": "picker::SelectPrevious",
-      "ctrl-y": "picker::Confirm",
-    },
-  },
+  // {
+  //   "context": "Picker > Editor",
+  //   "bindings": {
+  //     "ctrl-n": "picker::SelectNext",
+  //     "ctrl-p": "picker::SelectPrevious",
+  //     "ctrl-y": "picker::Confirm",
+  //   },
+  // },
   {
     "context": "Editor && vim_mode == normal && !menu",
     "bindings": {
