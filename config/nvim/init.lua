@@ -55,7 +55,9 @@ vim.keymap.set("n", "<C-w>k", "<cmd>TmuxNavigateUp<cr>", { desc = "Navigate up (
 vim.keymap.set("n", "<C-w>l", "<cmd>TmuxNavigateRight<cr>", { desc = "Navigate right (vim/tmux)" })
 
 -- Plugin setup
-require("blink.cmp").setup{}
+require("blink.cmp").setup {
+    fuzzy = { implementation = "prefer_rust" },
+}
 require("flash").setup{}
 require("mini.icons").setup{}
 require("trouble").setup{}

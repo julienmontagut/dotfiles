@@ -1,7 +1,7 @@
 # Icon
 macos-icon = custom-style
-macos-icon-ghost-color = #ae86d2
-macos-icon-screen-color = #0e0e0e
+macos-icon-ghost-color = #c4a2e0
+macos-icon-screen-color = #7ca2d8
 
 # Theme
 theme = basalt-dark
