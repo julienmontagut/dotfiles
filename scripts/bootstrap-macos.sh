@@ -43,11 +43,11 @@ defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool true
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerDrag -bool true
 defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool true
 
-# Keyboard - Remap Caps Lock to Control
-# Note: This requires manual configuration in System Preferences > Keyboard > Modifier Keys
-echo "  ${YELLOW}⚠ Manual action required:${NC}"
-echo "    Go to System Settings > Keyboard > Keyboard Shortcuts > Modifier Keys"
-echo "    and set Caps Lock to Control"
+# Keyboard - Caps Lock is remapped by Karabiner (escape on tap, control on hold)
+# Important: Do NOT remap Caps Lock in System Settings > Modifier Keys — leave it as default
+echo "  ${YELLOW}⚠ Important:${NC}"
+echo "    Ensure Caps Lock is set to default in System Settings > Keyboard > Keyboard Shortcuts > Modifier Keys"
+echo "    Karabiner handles the remap to escape on tap, control on hold"
 
 # Disable Ctrl+Space input source switching (conflicts with terminal leader keys)
 # Key 60 = "Select the previous input source", Key 61 = "Select next source in Input menu"
@@ -120,7 +120,7 @@ echo "  To install Netbird VPN, run: brew install --cask netbird-ui"
 echo "\n${GREEN}✅ macOS setup complete!${NC}"
 echo "\n${YELLOW}Post-setup actions:${NC}"
 echo "  1. Restart your Mac to apply all system settings"
-echo "  2. Manually set Caps Lock → Control in System Settings"
+echo "  2. Ensure Caps Lock is set to default (not remapped) in System Settings > Modifier Keys"
 echo "  3. Run 'brew cleanup' to remove old versions"
 echo "  4. Configure Netbird VPN if needed"
 echo "\n${YELLOW}Maintenance commands:${NC}"
