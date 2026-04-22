@@ -15,5 +15,6 @@
         "repo": "anthropics/claude-plugins-official"
       }
     }
-  }
+  },
+  "effortLevel": "high"
 }
