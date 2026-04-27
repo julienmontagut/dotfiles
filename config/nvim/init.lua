@@ -21,6 +21,7 @@ vim.opt.splitright = true
 vim.opt.splitbelow = true
 vim.opt.swapfile = false
 vim.opt.undofile = true
+vim.opt.completeopt = "menuone,noselect,popup"
 
 -- Leader
 vim.g.mapleader = " "
@@ -39,7 +40,6 @@ vim.pack.add {
     "https://github.com/folke/trouble.nvim",
     "https://github.com/neovim/nvim-lspconfig",
     "https://github.com/nvim-mini/mini.icons",
-    { src = "https://github.com/saghen/blink.cmp", version = "v1" },
     "https://github.com/stevearc/oil.nvim",
     "https://github.com/nvim-treesitter/nvim-treesitter",
     "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
@@ -55,9 +55,6 @@ vim.keymap.set("n", "<C-w>k", "<cmd>TmuxNavigateUp<cr>", { desc = "Navigate up (
 vim.keymap.set("n", "<C-w>l", "<cmd>TmuxNavigateRight<cr>", { desc = "Navigate right (vim/tmux)" })
 
 -- Plugin setup
-require("blink.cmp").setup {
-    fuzzy = { implementation = "prefer_rust" },
-}
 require("flash").setup{}
 require("mini.icons").setup{}
 require("trouble").setup{}
@@ -87,18 +84,15 @@ require("snacks").setup {
     statuscolumn = { enabled = true },
 }
 
-vim.keymap.set("n", "<leader>e", function() Snacks.picker.files() end, { desc = "Find files" })
+vim.keymap.set("n", "<leader>e", function() Snacks.picker.explorer() end, { desc = "Toggle explorer" })
 vim.keymap.set("n", "<leader>sf", function() Snacks.picker.files() end, { desc = "Find files" })
 vim.keymap.set("n", "<leader>sg", function() Snacks.picker.grep() end, { desc = "Grep" })
-vim.keymap.set("n", "<leader>sb", function() Snacks.picker.buffers() end, { desc = "Buffers" })
-vim.keymap.set("n", "<leader>sh", function() Snacks.picker.help() end, { desc = "Help pages" })
 vim.keymap.set("n", "<leader>sr", function() Snacks.picker.recent() end, { desc = "Recent files" })
+vim.keymap.set("n", "<leader>sb", function() Snacks.picker.buffers() end, { desc = "Buffers" })
+vim.keymap.set("n", "<leader>sj", function() Snacks.picker.jumps() end, { desc = "Recent files" })
 vim.keymap.set("n", "<leader>sd", function() Snacks.picker.diagnostics() end, { desc = "Diagnostics" })
-vim.keymap.set("n", "<leader>ss", function() Snacks.picker.lsp_symbols() end, { desc = "LSP symbols" })
-vim.keymap.set("n", "<leader>sw", function() Snacks.picker.grep_word() end, { desc = "Grep word" })
 vim.keymap.set("n", "<leader>sc", function() Snacks.picker.commands() end, { desc = "Commands" })
-vim.keymap.set("n", "<leader>sk", function() Snacks.picker.keymaps() end, { desc = "Keymaps" })
-vim.keymap.set("n", "<leader>s/", function() Snacks.picker.grep_buffers() end, { desc = "Grep open buffers" })
+vim.keymap.set("n", "<leader>sh", function() Snacks.picker.help() end, { desc = "Help pages" })
 
 -- Treesitter: highlighting is native in neovim 0.12.
 -- Bundled parsers: c, lua, markdown, vim, vimdoc.
@@ -194,6 +188,18 @@ vim.lsp.enable({
     "cssls",
     "sourcekit",
     "nickel_ls",
+})
+
+-- Built-in LSP completion
+vim.api.nvim_create_autocmd("LspAttach", {
+    callback = function(args)
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+        if client and client:supports_method("textDocument/completion") then
+            vim.lsp.completion.enable(true, client.id, args.buf, {
+                autotrigger = true,
+            })
+        end
+    end,
 })
 
 -- Roslyn (C#) - uses roslyn.nvim for the latest Roslyn LSP
