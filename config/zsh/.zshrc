@@ -107,6 +107,7 @@ fi
 # =============================================================================
 
 source "$ZDOTDIR/aliases.zsh"
+source "$ZDOTDIR/upgrade-notice.zsh"
 
 # =============================================================================
 # Local overrides (not tracked in git)
