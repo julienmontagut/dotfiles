@@ -11,7 +11,10 @@ export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
 # Add local bin to PATH
-export PATH="$HOME/.local/bin:$PATH"
+[[ -d "$HOME/.bin" ]] && export PATH="$HOME/.bin:$PATH"
+
+# Add local bin to PATH
+[[ -d "$HOME/.local/bin" ]] && export PATH="$HOME/.local/bin:$PATH"
 
 # Homebrew setup (platform-specific)
 if [[ -f /opt/homebrew/bin/brew ]]; then

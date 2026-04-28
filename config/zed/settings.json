@@ -1,4 +1,13 @@
 {
+  "outline_panel": {
+    "dock": "left"
+  },
+  "collaboration_panel": {
+    "dock": "left"
+  },
+  "git_panel": {
+    "dock": "left"
+  },
   "session": {
     "trust_all_worktrees": true
   },
@@ -8,6 +17,7 @@
   },
   "agent": {
     // "always_allow_tool_actions": false,
+    "dock": "right",
     "default_model": {
       "provider": "copilot_chat",
       "model": "oswe-vscode-prime",
@@ -90,6 +100,7 @@
   "load_direnv": "shell_hook",
   "preferred_line_length": 100,
   "project_panel": {
+    "dock": "left",
     "auto_reveal_entries": true,
     "git_status": false,
     "hide_gitignore": true,

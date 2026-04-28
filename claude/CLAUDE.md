@@ -40,6 +40,16 @@ Write tests that catch real bugs. Skip tests that just prove the compiler works.
 - Default branch: `main`.
 - Small, focused commits. One logical change per commit.
 
+## Scope & PR sizing
+
+Slice every task into chunks equivalent to **1–2 days of human dev effort**. Every PR must be reviewable in **under 1 hour** and stay concise.
+
+- Before non-trivial work, propose a slicing plan (PR 1, PR 2, …) and confirm before coding.
+- If a task naturally exceeds ~2 days, split it — even if the split forces stub interfaces, follow-up tickets, or temporary `NotImplementedException`s. Open a follow-up ticket for the deferred piece.
+- One concern per PR. No drive-by cleanups, no opportunistic refactors, no formatting churn outside the touched area.
+- If a PR creeps past the 1h review budget mid-flight, stop and split rather than push through.
+- Prefer narrow vertical slices (end-to-end on a small surface) over wide horizontal layers (one layer across everything).
+
 ## Communication
 
 - Be direct and concise. Skip preamble and summaries.
