@@ -16,7 +16,6 @@
       }
     }
   },
-  "effortLevel": "high",
   "theme": "dark-ansi",
   "remoteControlAtStartup": true,
   "agentPushNotifEnabled": true,
@@ -31,7 +30,6 @@
       "Bash(gh repo view*)",
       "Bash(gh release list*)",
       "Bash(gh release view*)",
-      "Bash(gh api*)",
       "Bash(gcloud config get-value*)",
       "Bash(gcloud projects list*)",
       "Bash(gcloud projects describe*)",
