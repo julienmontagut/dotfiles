@@ -1,9 +1,10 @@
 -- General user interface
 vim.opt.number = true
-vim.opt.colorcolumn = "80,100"
+vim.opt.colorcolumn = "100"
 vim.opt.cursorline = true
 vim.opt.signcolumn = "yes"
 vim.opt.termguicolors = true
+vim.opt.wrap = false
 
 -- Tabs and indentation
 vim.opt.tabstop = 4
