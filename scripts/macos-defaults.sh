@@ -16,6 +16,9 @@ defaults write -g InitialKeyRepeat -int 15
 
 echo "Configuring Dock..."
 
+# Hide menu bar when using sketchybar
+#defaults write NSGlobalDomain _HIHideMenuBar -bool true
+
 defaults write com.apple.dock autohide -bool true
 defaults write com.apple.dock autohide-delay -float 0
 defaults write com.apple.dock autohide-time-modifier -float 0.3
@@ -48,7 +51,7 @@ defaults write com.apple.dock persistent-apps -array
 
 add_dock_app "/Applications/Google Chrome.app"
 add_dock_app "/Applications/Claude.app"
-add_dock_app "/Applications/WezTerm.app"
+add_dock_app "/Applications/Ghostty.app"
 add_dock_app "/Applications/DevPod.app"
 add_dock_app "/Applications/OrbStack.app"
 add_dock_app "$HOME/Applications/Rider.app"
