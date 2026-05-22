@@ -11,7 +11,7 @@ background-opacity = 0.95
 
 # Font
 font-family = Lilex
-font-size = 14
+font-size = 16
 
 # Shell
 # initial-command = /bin/zsh -l -c "exec sesh picker -itzHd"
