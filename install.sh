@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Top-level installer.
+#   macOS: Xcode CLT → Homebrew → dotter → deploy → Brewfile → rustup.
+#   Linux: delegate to hosts/$(hostname).sh — cloud-init has done the base
+#          bootstrap; layer-2 handles per-host provisioning.
 set -euo pipefail
 
 DOTS_DIR="${DOTS_DIR:-$HOME/.local/share/dots}"
@@ -11,80 +15,52 @@ for arg in "$@"; do
   esac
 done
 
-# Detect operating system
-
 OS="$(uname -s)"
 
-if [[ "$OS" != "Darwin" && "$OS" != "Linux" ]]; then
+# --- Linux: hand off to layer-2 ---
+if [[ "$OS" == "Linux" ]]; then
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-}")" 2>/dev/null && pwd || echo "")"
+  [[ -n "$SCRIPT_DIR" ]] || { echo "run install.sh from a cloned checkout (cloud-init does this)" >&2; exit 1; }
+  HOST="$(hostname -s)"
+  exec "$SCRIPT_DIR/hosts/$HOST.sh"
+fi
+
+# --- macOS ---
+if [[ "$OS" != "Darwin" ]]; then
   echo "Unsupported OS: $OS" >&2
   exit 1
 fi
 
-if [[ "$OS" == "Linux" ]] && ! command -v apt &>/dev/null; then
-  echo "Unsupported Linux distro — please install git manually." >&2
-  exit 1
-fi
-
-# Ensure git is installed
-
 if ! command -v git &>/dev/null; then
-  if [[ "$OS" == "Darwin" ]]; then
-    echo "Installing Xcode Command Line Tools..."
-    xcode-select --install
-    until xcode-select -p &>/dev/null; do
-      sleep 5
-    done
-    echo "CLT installed."
-  else
-    echo "Installing git..."
-    sudo apt update -qq
-    sudo apt install -y git
-  fi
+  echo "Installing Xcode Command Line Tools..."
+  xcode-select --install
+  until xcode-select -p &>/dev/null; do sleep 5; done
 fi
 
-# Bootstrap the repository
-
+# Bootstrap the repository when invoked via curl|bash.
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-}")" 2>/dev/null && pwd || echo "")"
-
 if [[ -z "$SCRIPT_DIR" ]] || [[ ! -f "$SCRIPT_DIR/.git/HEAD" ]]; then
   if [[ -d "$DOTS_DIR/.git" ]]; then
-    echo "Updating existing repo at $DOTS_DIR..."
     git -C "$DOTS_DIR" pull --ff-only
   else
-    echo "Cloning dotfiles to $DOTS_DIR..."
     git clone --depth 1 "$REPO_URL" "$DOTS_DIR"
   fi
-  exec bash "$DOTS_DIR/install.sh"
-  exit 
+  exec bash "$DOTS_DIR/install.sh" "$@"
 fi
-
 DOTS_DIR="$SCRIPT_DIR"
-echo "Running from cloned repo at $DOTS_DIR"
 
-# Installing system packages
-
-# Installing homebrew
 if ! command -v brew &>/dev/null; then
   bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  echo >> "$HOME/.zprofile"
   echo 'eval "$(/opt/homebrew/bin/brew shellenv zsh)"' >> "$HOME/.zprofile"
   eval "$(/opt/homebrew/bin/brew shellenv zsh)"
 fi
 
-# Installing dotter
 if ! command -v dotter &>/dev/null; then
   brew install dotter
 fi
 
-# Applying dotter config
-if [[ "$OS" == "Darwin" ]]; then
-  DOTTER_PACKAGES='packages = ["macos"]'
-else
-  DOTTER_PACKAGES='packages = ["linux"]'
-fi
-
-cat > "$DOTS_DIR/.dotter/local.toml" <<EOF
-$DOTTER_PACKAGES
+cat > "$DOTS_DIR/.dotter/local.toml" <<'EOF'
+packages = ["default", "macos"]
 EOF
 
 if [[ "$FORCE" == true ]]; then
@@ -93,17 +69,10 @@ else
   (cd "$DOTS_DIR" && dotter deploy)
 fi
 
-# Installing packages
 brew bundle --global
 
-# Creating the directory for source code
-if [[ "$OS" == "Darwin" ]]; then
-  mkdir -p "$HOME/Developer"
-else
-  mkdir -p "$HOME/Sources"
+mkdir -p "$HOME/Developer"
+
+if ! command -v rustup &>/dev/null; then
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 fi
-
-# Installing rust
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-
-# TODO: Think about a minimal VIM config with system packages

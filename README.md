@@ -4,13 +4,27 @@ Dotfiles managed with [dotter](https://github.com/SuperCuber/dotter) and bash sc
 
 ## Quick Start
 
-### Fresh Install
+### Fresh Linux install (apollo / gaia / hermes)
+
+Two layers. **Cloud-init** brings the box to a known baseline at first
+boot: user `julien` with my SSH key (locked password), common apt packages,
+`doas` (initially `permit nopass`), hardened sshd drop-in, and the dotfiles
+repo cloned to `~julien/sources/dotfiles`. See `cloud-init/README.md` for
+delivery (Pi boot partition, NoCloud seed ISO, Scaleway paste).
+
+**Layer 2** runs as julien after first boot and is idempotent:
 
 ```bash
-# Linux
-./scripts/install-linux.sh
+ssh julien@<host>
+~/sources/dotfiles/hosts/<host>.sh        # dotter deploy + host-specific extras
+~/sources/dotfiles/hosts/harden-doas.sh   # one-time: switch doas to persist
+```
 
-# macOS
+`hosts/<host>.sh` is safe to re-run anytime to refresh provisioning.
+
+### Fresh macOS install
+
+```bash
 ./scripts/install-macos.sh
 ./scripts/bootstrap-macos.sh
 ```
@@ -77,15 +91,22 @@ config/
 bin/
   dots                # Dotfiles management script
   tvim                # Testable Neovim launcher
+cloud-init/
+  apollo.yaml         # First-boot user-data per host
+  gaia.yaml
+  hermes.yaml
+  README.md           # Delivery: Pi boot, NoCloud ISO, Scaleway paste
+hosts/                # Layer 2 — idempotent, runs as julien post-boot
+  install.sh          # Shared helpers: install_dotter, deploy_dotfiles
+  apollo.sh           # Headless dev box: brew bundle + rustup + claude-code + aspire
+  gaia.sh             # Home LAN server: unbound
+  hermes.sh           # RPi3: wakeonlan + etherwake
+  harden-doas.sh      # One-time: switch doas from nopass to persist
 scripts/
-  install-linux.sh    # Linux setup (apt packages, dotter, apps)
   install-macos.sh    # macOS setup (Homebrew, dotter, apps)
   bootstrap-macos.sh  # macOS system defaults, TouchID sudo
   macos-defaults.sh   # macOS system preferences
   macos-services.sh   # macOS service configuration
-  install-apps.sh     # App installation helpers
-  install-toolkits.sh # Development toolkit setup
-  linux-packages.sh   # Linux APT packages
 ```
 
 ## What's Included
@@ -111,7 +132,9 @@ scripts/
 ### Window Management
 
 - **macOS**: AeroSpace + Karabiner + JankyBorders + Sketchybar
-- **Linux**: Sway + Waybar + Fuzzel + Kanshi
+- **Linux**: headless — ssh + tmux + neovim. Sway/Waybar/Fuzzel/Kanshi configs
+  exist under `config/` but aren't deployed by default (the `[linux]` dotter
+  package is opt-in for a future wlroots session).
 
 ### Terminal
 

@@ -1,0 +1,65 @@
+#cloud-config
+# hermes — headless aarch64 Raspberry Pi 3 (wake-on-LAN trigger).
+# Layer-2 (wakeonlan + dotter) lives in dotfiles/hosts/hermes.sh and is run
+# as julien after first boot.
+
+hostname: hermes
+manage_etc_hosts: true
+locale: en_US.UTF-8
+timezone: Europe/Paris
+
+users:
+  - name: julien
+    groups: [sudo, netdev]
+    shell: /bin/bash
+    # Account stays locked (lock_passwd defaults to true). doas works via
+    # `permit nopass` initially; run hosts/<host>.sh after first login to
+    # transition to a password-protected `persist` rule.
+    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+    ssh_authorized_keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIsILdVONEDZEVJjfImXSTExxZ0lkArF5xY/CIy4ULNK julien@mac
+
+package_update: true
+package_upgrade: true
+packages:
+  - git
+  - curl
+  - wget
+  - ca-certificates
+  - zsh
+  - build-essential
+  - pkg-config
+  - libssl-dev
+  - unzip
+  - tmux
+  - neovim
+  - ripgrep
+  - fd-find
+  - bat
+  - fzf
+  - eza
+  - zoxide
+  - jq
+  - htop
+  - less
+  - rsync
+  - doas
+
+write_files:
+  - path: /etc/doas.conf
+    permissions: "0600"
+    content: |
+      permit nopass julien as root
+  - path: /etc/ssh/sshd_config.d/10-hardening.conf
+    permissions: "0644"
+    content: |
+      PermitRootLogin no
+      PasswordAuthentication no
+      KbdInteractiveAuthentication no
+
+runcmd:
+  - [systemctl, reload, ssh]
+  - [install, -d, -o, julien, -g, julien, /home/julien/sources]
+  - [runuser, -u, julien, --, git, clone, "https://github.com/julienmontagut/dotfiles.git", /home/julien/sources/dotfiles]
+
+final_message: "hermes ready. Next: ssh julien@hermes and run ~/sources/dotfiles/hosts/hermes.sh"
