@@ -22,7 +22,6 @@ vim.opt.splitright = true
 vim.opt.splitbelow = true
 vim.opt.swapfile = false
 vim.opt.undofile = true
-vim.opt.completeopt = "menuone,noselect,popup"
 
 -- Leader
 vim.g.mapleader = " "
@@ -39,6 +38,7 @@ vim.pack.add {
     "https://github.com/folke/flash.nvim",
     "https://github.com/folke/snacks.nvim",
     "https://github.com/folke/trouble.nvim",
+    "https://github.com/folke/which-key.nvim",
     "https://github.com/neovim/nvim-lspconfig",
     "https://github.com/nvim-mini/mini.icons",
     "https://github.com/stevearc/oil.nvim",
@@ -59,6 +59,7 @@ vim.keymap.set("n", "<C-w>l", "<cmd>TmuxNavigateRight<cr>", { desc = "Navigate r
 require("flash").setup{}
 require("mini.icons").setup{}
 require("trouble").setup{}
+require("which-key").setup{}
 
 -- Oil
 require("oil").setup {

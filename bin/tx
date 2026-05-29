@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# Terminal → tmux launcher.
+#   - No server                              → start `main` and attach.
+#   - `main` exists but detached             → attach.
+#   - `main` already attached, no others     → new anonymous session.
+#   - `main` attached, other detached exist  → fzf picker, "+ new session" to escape.
+# Falls back to a login shell if tmux isn't installed.
+set -eu
+
+MAIN="main"
+
+if ! command -v tmux >/dev/null 2>&1; then
+    exec "${SHELL:-/bin/sh}" -l
+fi
+
+if ! tmux has-session 2>/dev/null; then
+    exec tmux new-session -s "$MAIN"
+fi
+
+if ! tmux has-session -t "=$MAIN" 2>/dev/null; then
+    exec tmux new-session -s "$MAIN"
+fi
+
+sessions=$(tmux list-sessions -F '#{session_name} #{session_attached}')
+main_attached=$(awk -v m="$MAIN" '$1 == m { print $2; exit }' <<<"$sessions")
+
+if [ "$main_attached" = "0" ]; then
+    exec tmux attach-session -t "=$MAIN"
+fi
+
+mapfile -t others < <(awk -v m="$MAIN" '$1 != m && $2 == 0 { print $1 }' <<<"$sessions")
+
+if [ "${#others[@]}" -eq 0 ]; then
+    exec tmux new-session
+fi
+
+NEW_LABEL="+ new session"
+choice=$(printf '%s\n%s\n' "$NEW_LABEL" "${others[@]}" \
+    | fzf --prompt="tmux > " --height=40% --reverse --no-sort) || choice=""
+
+if [ -z "$choice" ] || [ "$choice" = "$NEW_LABEL" ]; then
+    exec tmux new-session
+else
+    exec tmux attach-session -t "=$choice"
+fi
