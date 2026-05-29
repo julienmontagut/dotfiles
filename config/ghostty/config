@@ -14,7 +14,7 @@ font-family = Lilex
 font-size = 16
 
 # Shell
-# initial-command = /bin/zsh -l -c "exec sesh picker -itzHd"
+command = sh -c "command -v tx >/dev/null 2>&1 && exec tx || exec ${SHELL:-/bin/sh} -l"
 
 # Keybindings
 # keybind = super+shift+n=new_window

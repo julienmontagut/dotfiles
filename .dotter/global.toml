@@ -10,6 +10,7 @@
 #
 [default.files]
 "Brewfile" = "~/.Brewfile"
+"bin/tx" = "~/.local/bin/tx"
 "claude/agents" = { target = "~/.claude/agents", type = "symbolic", recurse = false }
 "claude/CLAUDE.md" = "~/.claude/CLAUDE.md"
 "claude/settings.json" = "~/.claude/settings.json"
