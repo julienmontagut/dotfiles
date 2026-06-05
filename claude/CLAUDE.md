@@ -36,7 +36,7 @@ Write tests that catch real bugs. Skip tests that just prove the compiler works.
 
 - Rebase workflow. Pull with rebase, keep history linear.
 - Push with `--force-with-lease`, never `--force`.
-- Commit messages: imperative mood, concise, focused on *why* not *what*. The diff shows the what.
+- Commit messages: a single expressive one-liner, imperative mood, never a body. Put the *why* in the PR description, not the commit.
 - Default branch: `main`.
 - Small, focused commits. One logical change per commit.
 
