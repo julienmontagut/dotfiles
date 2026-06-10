@@ -3,6 +3,29 @@
     "commit": "",
     "pr": ""
   },
+  "permissions": {
+    "allow": [
+      "Bash(gh pr list*)",
+      "Bash(gh pr view*)",
+      "Bash(gh pr diff*)",
+      "Bash(gh pr checks*)",
+      "Bash(gh issue list*)",
+      "Bash(gh issue view*)",
+      "Bash(gh repo view*)",
+      "Bash(gh release list*)",
+      "Bash(gh release view*)",
+      "Bash(scw * list*)",
+      "Bash(scw * get*)",
+      "Bash(scw config*)",
+      "Bash(claude mcp *)",
+    ],
+    "deny": [],
+    "ask": [],
+    "defaultMode": "plan"
+  },
+  "worktree": {
+    "baseRef": "fresh"
+  },
   "enabledPlugins": {
     "rust-analyzer-lsp@claude-plugins-official": true,
     "lua-lsp@claude-plugins-official": true,
@@ -16,39 +39,10 @@
       }
     }
   },
+  "skipWorkflowUsageWarning": true,
   "theme": "dark-ansi",
-  "remoteControlAtStartup": true,
+  "editorMode": "vim",
+  "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
-  "permissions": {
-    "allow": [
-      "Bash(gh pr list*)",
-      "Bash(gh pr view*)",
-      "Bash(gh pr diff*)",
-      "Bash(gh pr checks*)",
-      "Bash(gh issue list*)",
-      "Bash(gh issue view*)",
-      "Bash(gh repo view*)",
-      "Bash(gh release list*)",
-      "Bash(gh release view*)",
-      "Bash(gcloud config get-value*)",
-      "Bash(gcloud projects list*)",
-      "Bash(gcloud projects describe*)",
-      "Bash(gcloud * list)",
-      "Bash(gcloud * describe*)",
-      "Bash(gsutil ls*)",
-      "Bash(bq ls*)",
-      "Bash(bq show*)",
-      "Bash(scw * list*)",
-      "Bash(scw * get*)",
-      "Bash(scw config*)",
-      "Bash(wrangler whoami)",
-      "Bash(wrangler pages project list)",
-      "Bash(wrangler pages deployment list*)",
-      "Bash(netbird status)",
-      "Bash(netbird routes list)",
-      "Bash(claude mcp list)",
-      "Bash(kubectl get*)",
-      "Bash(kubectl describe*)"
-    ]
-  }
+  "skipAutoPermissionPrompt": true
 }
