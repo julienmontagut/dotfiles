@@ -17,7 +17,7 @@
       "Bash(scw * list*)",
       "Bash(scw * get*)",
       "Bash(scw config*)",
-      "Bash(claude mcp *)",
+      "Bash(claude mcp *)"
     ],
     "deny": [],
     "ask": [],
