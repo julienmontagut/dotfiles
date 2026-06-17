@@ -52,6 +52,9 @@ if [[ -z "$SCRIPT_DIR" ]] || [[ ! -f "$SCRIPT_DIR/.git/HEAD" ]]; then
 fi
 DOTS_DIR="$SCRIPT_DIR"
 
+# shellcheck source=lib/github-token.sh
+source "$DOTS_DIR/lib/github-token.sh"
+
 if ! command -v brew &>/dev/null; then
   bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   echo 'eval "$(/opt/homebrew/bin/brew shellenv zsh)"' >> "$HOME/.zprofile"
@@ -64,6 +67,9 @@ if ! command -v mise &>/dev/null; then
 fi
 
 mkdir -p "$HOME/Developer"
+
+# Authenticate mise's GitHub API calls before bootstrap (gh isn't installed yet).
+ensure_github_token
 
 # mise bootstrap orchestrates the rest: dotfiles (symlinks the global mise config
 # + ~/.Brewfile), the mise-managed tools (rust, dotnet, aspire, claude-code, all
