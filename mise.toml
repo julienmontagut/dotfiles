@@ -3,6 +3,9 @@ experimental = true
 dotfiles.root = "{{ config_root }}"
 dotfiles.default_mode = "symlink"
 
+# Default is a whole-dir `symlink`; `symlink-each` (dir stays real, files linked
+# individually) is used only where the target also holds non-repo files: git
+# state, tmux plugins, Zed themes.
 [dotfiles]
 "~/.Brewfile"                = "Brewfile"
 "~/.local/bin/tx"            = "bin/tx"
@@ -10,16 +13,16 @@ dotfiles.default_mode = "symlink"
 "~/.claude/CLAUDE.md"        = "claude/CLAUDE.md"
 "~/.claude/settings.json"    = "claude/settings.json"
 "~/.claude/skills"           = "claude/skills"
-"~/.config/alacritty"        = { source = "config/alacritty", mode = "symlink-each" }
+"~/.config/alacritty"        = "config/alacritty"
 "~/.config/ghostty"          = "config/ghostty"
 "~/.config/git"              = { source = "config/git", mode = "symlink-each" }
-"~/.config/ideavim"          = { source = "config/ideavim", mode = "symlink-each" }
+"~/.config/ideavim"          = "config/ideavim"
 "~/.config/mise/config.toml" = "config/mise/config.toml"
 "~/.config/nvim"             = "config/nvim"
-"~/.config/sesh"             = { source = "config/sesh", mode = "symlink-each" }
+"~/.config/sesh"             = "config/sesh"
 "~/.config/starship.toml"    = "config/starship.toml"
 "~/.config/tmux"             = { source = "config/tmux", mode = "symlink-each" }
-"~/.config/wezterm"          = { source = "config/wezterm", mode = "symlink-each" }
+"~/.config/wezterm"          = "config/wezterm"
 "~/.config/zed"              = { source = "config/zed", mode = "symlink-each" }
 "~/.zshenv"                  = "config/zsh/.zshenv"
 "~/.config/zsh/.zshrc"       = "config/zsh/.zshrc"
