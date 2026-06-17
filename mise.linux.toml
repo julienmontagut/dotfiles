@@ -1,4 +1,3 @@
-# Linux-only dotfiles. Merged with mise.toml when MISE_ENV=linux.
 [dotfiles]
 "~/.config/fuzzel" = { source = "config/fuzzel", mode = "symlink-each" }
 "~/.config/kanshi" = { source = "config/kanshi", mode = "symlink-each" }
