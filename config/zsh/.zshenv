@@ -10,6 +10,10 @@ export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 # Set ZDOTDIR to use XDG config location
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
+# mise: pick the OS overlay (~/.config/mise/config.<env>.toml) so the global tool
+# environment resolves the same way in every shell.
+export MISE_ENV="${MISE_ENV:-$([ "$(uname)" = Darwin ] && echo macos || echo linux)}"
+
 # Add local bin to PATH
 [[ -d "$HOME/.bin" ]] && export PATH="$HOME/.bin:$PATH"
 

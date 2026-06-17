@@ -27,6 +27,8 @@ packages:
   - wget
   - ca-certificates
   - zsh
+  - zsh-autosuggestions
+  - zsh-syntax-highlighting
   - build-essential
   - pkg-config
   - libssl-dev
@@ -59,7 +61,7 @@ write_files:
 
 runcmd:
   - [systemctl, reload, ssh]
-  - [install, -d, -o, julien, -g, julien, /home/julien/sources]
-  - [runuser, -u, julien, --, git, clone, "https://github.com/julienmontagut/dotfiles.git", /home/julien/sources/dotfiles]
+  - [install, -d, -o, julien, -g, julien, /home/julien/.local/share]
+  - [runuser, -u, julien, --, git, clone, "https://github.com/julienmontagut/dotfiles.git", /home/julien/.local/share/dotfiles]
 
-final_message: "hermes ready. Next: ssh julien@hermes and run ~/sources/dotfiles/hosts/hermes.sh"
+final_message: "hermes ready. Next: ssh julien@hermes and run ~/.local/share/dotfiles/hosts/hermes.sh"
