@@ -1,0 +1,21 @@
+[tools]
+lua = "latest"
+node = "lts"
+
+# kubernetes tooling
+kubectl = "latest"
+helm = "latest"
+k9s = "latest"
+kind = "latest"
+kubectx = "latest"
+
+# LSPs / formatters
+lua-language-server = "latest"
+stylua = "latest"
+shfmt = "latest"
+taplo = "latest"
+rust-analyzer = "latest"
+helm-ls = "latest"
+"npm:yaml-language-server" = "latest"
+"npm:bash-language-server" = "latest"
+

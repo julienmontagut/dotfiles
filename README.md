@@ -1,6 +1,6 @@
 # Dotfiles
 
-Dotfiles managed with [dotter](https://github.com/SuperCuber/dotter) and bash scripts for macOS and Linux.
+Dotfiles managed with [mise](https://mise.jdx.dev) (`[dotfiles]`) and bash scripts for macOS and Linux.
 
 ## Quick Start
 
@@ -16,7 +16,7 @@ delivery (Pi boot partition, NoCloud seed ISO, Scaleway paste).
 
 ```bash
 ssh julien@<host>
-~/sources/dotfiles/hosts/<host>.sh        # dotter deploy + host-specific extras
+~/sources/dotfiles/hosts/<host>.sh        # mise dotfiles apply + host-specific extras
 ~/sources/dotfiles/hosts/harden-doas.sh   # one-time: switch doas to persist
 ```
 
@@ -29,39 +29,20 @@ ssh julien@<host>
 ./scripts/bootstrap-macos.sh
 ```
 
-### Configure Dotter (platform selection)
+### Apply dotfiles (platform selection)
 
-Dotter uses a local configuration file to determine which packages/profiles to deploy for each platform.
-Before running `dotter` directly, copy the example and enable the profile for your OS:
-
-```bash
-cp .dotter/local.toml.example .dotter/local.toml
-# Then edit .dotter/local.toml and enable the appropriate profiles for:
-# - macOS
-# - Linux
-```
-
-### Apply Changes
+The `[dotfiles]` mappings live in `mise.toml`; platform-specific entries live in
+`mise.macos.toml` / `mise.linux.toml` and merge in when `MISE_ENV` selects the OS.
+`dotfiles.root = "{{ config_root }}"` resolves to the repo wherever it is cloned.
+Run from inside the clone:
 
 ```bash
-# Using the dots helper (recommended)
-dots apply
-
-# Or directly with dotter (requires a configured .dotter/local.toml)
-dotter deploy
-```
-
-## The `dots` Command
-
-A helper script for managing dotfiles:
-
-```bash
-dots edit     # Open editor, apply changes, optionally push
-dots apply    # Apply configuration
-dots pull     # Pull from remote and apply
-dots push     # Commit and push changes
-dots sync     # Pull then push
-dots status   # Show git status
+export MISE_EXPERIMENTAL=1
+export MISE_ENV=macos            # or: linux
+mise trust --yes .               # first run only
+mise dotfiles status             # show drift (applied / missing / differs)
+mise dotfiles apply --dry-run    # preview
+mise dotfiles apply              # apply (add --force to replace existing files)
 ```
 
 ## Repository Structure
@@ -97,13 +78,13 @@ cloud-init/
   hermes.yaml
   README.md           # Delivery: Pi boot, NoCloud ISO, Scaleway paste
 hosts/                # Layer 2 — idempotent, runs as julien post-boot
-  install.sh          # Shared helpers: install_dotter, deploy_dotfiles
+  install.sh          # Shared helpers: install_mise, apply_dotfiles
   apollo.sh           # Headless dev box: brew bundle + rustup + claude-code + aspire
   gaia.sh             # Home LAN server: unbound
   hermes.sh           # RPi3: wakeonlan + etherwake
   harden-doas.sh      # One-time: switch doas from nopass to persist
 scripts/
-  install-macos.sh    # macOS setup (Homebrew, dotter, apps)
+  install-macos.sh    # macOS setup (Homebrew, mise, apps)
   bootstrap-macos.sh  # macOS system defaults, TouchID sudo
   macos-defaults.sh   # macOS system preferences
   macos-services.sh   # macOS service configuration
@@ -133,8 +114,8 @@ scripts/
 
 - **macOS**: AeroSpace + Karabiner + JankyBorders + Sketchybar
 - **Linux**: headless — ssh + tmux + neovim. Sway/Waybar/Fuzzel/Kanshi configs
-  exist under `config/` but aren't deployed by default (the `[linux]` dotter
-  package is opt-in for a future wlroots session).
+  exist under `config/` but are only applied when `MISE_ENV=linux` selects
+  `mise.linux.toml` — opt-in for a future wlroots session.
 
 ### Terminal
 

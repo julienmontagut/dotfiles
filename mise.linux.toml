@@ -1,0 +1,7 @@
+# Linux-only dotfiles. Merged with mise.toml when MISE_ENV=linux.
+[dotfiles]
+"~/.config/fuzzel" = { source = "config/fuzzel", mode = "symlink-each" }
+"~/.config/kanshi" = { source = "config/kanshi", mode = "symlink-each" }
+"~/.config/keyd"   = { source = "config/keyd", mode = "symlink-each" }
+"~/.config/sway"   = { source = "config/sway", mode = "symlink-each" }
+"~/.config/waybar" = { source = "config/waybar", mode = "symlink-each" }

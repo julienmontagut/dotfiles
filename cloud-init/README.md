@@ -10,7 +10,7 @@ After cloud-init finishes:
 
 ```
 ssh julien@<host>
-~/sources/dotfiles/hosts/<host>.sh        # layer 2: dotter + per-host extras
+~/sources/dotfiles/hosts/<host>.sh        # layer 2: mise dotfiles + per-host extras
 ~/sources/dotfiles/hosts/harden-doas.sh   # optional: switch doas to persist
 ```
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Top-level installer.
-#   macOS: Xcode CLT → Homebrew → dotter → deploy → Brewfile → rustup.
+#   macOS: Xcode CLT → Homebrew → mise → dotfiles → Brewfile → rustup.
 #   Linux: delegate to hosts/$(hostname).sh — cloud-init has done the base
 #          bootstrap; layer-2 handles per-host provisioning.
 set -euo pipefail
@@ -55,19 +55,20 @@ if ! command -v brew &>/dev/null; then
   eval "$(/opt/homebrew/bin/brew shellenv zsh)"
 fi
 
-if ! command -v dotter &>/dev/null; then
-  brew install dotter
+if ! command -v mise &>/dev/null; then
+  brew install mise
 fi
 
-cat > "$DOTS_DIR/.dotter/local.toml" <<'EOF'
-packages = ["default", "macos"]
-EOF
-
-if [[ "$FORCE" == true ]]; then
-  (cd "$DOTS_DIR" && dotter deploy --force)
-else
-  (cd "$DOTS_DIR" && dotter deploy)
-fi
+(
+  cd "$DOTS_DIR"
+  export MISE_EXPERIMENTAL=1 MISE_ENV=macos
+  mise trust --yes .
+  if [[ "$FORCE" == true ]]; then
+    mise dotfiles apply --yes --force
+  else
+    mise dotfiles apply --yes
+  fi
+)
 
 brew bundle --global
 

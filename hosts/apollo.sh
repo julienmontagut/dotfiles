@@ -8,8 +8,8 @@ dir="$(cd "$(dirname "$0")" && pwd)"
 . "$dir/install.sh"
 
 require_julien
-install_dotter
-deploy_dotfiles
+install_mise
+apply_dotfiles
 
 # --- dev tooling ---
 
@@ -19,6 +19,9 @@ if ! command -v brew >/dev/null; then
 fi
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 brew bundle --global
+
+# mise: runtimes, k8s tooling, and LSPs (config applied by apply_dotfiles above).
+mise install
 
 # rustup (no maintained brew formula on Linux).
 if ! command -v rustup >/dev/null; then

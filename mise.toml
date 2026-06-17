@@ -1,0 +1,31 @@
+# Dotfiles deployment manifest (replaces dotter).
+# Apply from inside the clone: `MISE_ENV=<os> mise dotfiles apply`.
+# `dotfiles.root = "{{ config_root }}"` resolves to this repo wherever it is cloned.
+[settings]
+experimental = true
+dotfiles.root = "{{ config_root }}"
+dotfiles.default_mode = "symlink"
+
+# Shared (all platforms). Whole-dir `symlink` where dotter used recurse = false;
+# `symlink-each` where dotter recursed (dir is real, files are individually symlinked).
+[dotfiles]
+"~/.Brewfile"                = "Brewfile"
+"~/.local/bin/tx"            = "bin/tx"
+"~/.claude/agents"           = "claude/agents"
+"~/.claude/CLAUDE.md"        = "claude/CLAUDE.md"
+"~/.claude/settings.json"    = "claude/settings.json"
+"~/.claude/skills"           = "claude/skills"
+"~/.config/alacritty"        = { source = "config/alacritty", mode = "symlink-each" }
+"~/.config/ghostty"          = "config/ghostty"
+"~/.config/git"              = { source = "config/git", mode = "symlink-each" }
+"~/.config/ideavim"          = { source = "config/ideavim", mode = "symlink-each" }
+"~/.config/mise/config.toml" = "config/mise/config.toml"
+"~/.config/nvim"             = "config/nvim"
+"~/.config/sesh"             = { source = "config/sesh", mode = "symlink-each" }
+"~/.config/starship.toml"    = "config/starship.toml"
+"~/.config/tmux"             = { source = "config/tmux", mode = "symlink-each" }
+"~/.config/wezterm"          = { source = "config/wezterm", mode = "symlink-each" }
+"~/.config/zed"              = { source = "config/zed", mode = "symlink-each" }
+"~/.zshenv"                  = "config/zsh/.zshenv"
+"~/.config/zsh/.zshrc"       = "config/zsh/.zshrc"
+"~/.config/zsh/aliases.zsh"  = "config/zsh/aliases.zsh"
