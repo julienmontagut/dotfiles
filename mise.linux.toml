@@ -1,6 +1,6 @@
 [dotfiles]
-"~/.config/fuzzel" = { source = "config/fuzzel", mode = "symlink-each" }
-"~/.config/kanshi" = { source = "config/kanshi", mode = "symlink-each" }
-"~/.config/keyd"   = { source = "config/keyd", mode = "symlink-each" }
-"~/.config/sway"   = { source = "config/sway", mode = "symlink-each" }
-"~/.config/waybar" = { source = "config/waybar", mode = "symlink-each" }
+"~/.config/fuzzel" = "config/fuzzel"
+"~/.config/kanshi" = "config/kanshi"
+"~/.config/keyd"   = "config/keyd"
+"~/.config/sway"   = "config/sway"
+"~/.config/waybar" = "config/waybar"
