@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-DOTFILES_DIR="${DOTFILES_DIR:-$HOME/sources/dotfiles}"
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.local/share/dotfiles}"
 
 log() { echo ">> $*"; }
 die() { echo "error: $*" >&2; exit 1; }

@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 # Top-level installer.
-#   macOS: Xcode CLT → Homebrew → mise → `mise bootstrap` (dotfiles, tools,
-#          Brewfile, rustup).
+#   macOS: Xcode CLT → Homebrew → mise → `mise bootstrap` (dotfiles, tools
+#          incl. rust/dotnet/aspire/claude-code, then the macOS Brewfile).
 #   Linux: delegate to hosts/$(hostname).sh — cloud-init has done the base
 #          bootstrap; layer-2 handles per-host provisioning.
+# Run from a checkout to bootstrap that checkout; via curl|bash it clones to
+# DOTS_DIR first.
 set -euo pipefail
 
-DOTS_DIR="${DOTS_DIR:-$HOME/.local/share/dots}"
+DOTS_DIR="${DOTS_DIR:-$HOME/.local/share/dotfiles}"
 REPO_URL="https://github.com/julienmontagut/dotfiles.git"
 FORCE=false
 
@@ -63,8 +65,9 @@ fi
 
 mkdir -p "$HOME/Developer"
 
-# mise bootstrap orchestrates the rest: dotfiles (symlinks ~/.Brewfile), the
-# mise-managed tools, then the bootstrap task (brew bundle + rustup).
+# mise bootstrap orchestrates the rest: dotfiles (symlinks the global mise config
+# + ~/.Brewfile), the mise-managed tools (rust, dotnet, aspire, claude-code, all
+# CLIs), then the bootstrap task (brew bundle for the macOS GUI apps).
 (
   cd "$DOTS_DIR"
   export MISE_EXPERIMENTAL=1 MISE_ENV=macos

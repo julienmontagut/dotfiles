@@ -1,7 +1,7 @@
 #cloud-config
 # apollo — headless x86_64 dev box. First-boot baseline only.
-# Layer-2 (brew, rustup, claude-code, aspire) lives in dotfiles/hosts/apollo.sh
-# and is run as julien after first boot.
+# Layer-2 (mise bootstrap: dotfiles + all tools, incl. rust/aspire/claude-code)
+# lives in dotfiles/hosts/apollo.sh and is run as julien after first boot.
 
 hostname: apollo
 manage_etc_hosts: true
@@ -27,6 +27,8 @@ packages:
   - wget
   - ca-certificates
   - zsh
+  - zsh-autosuggestions
+  - zsh-syntax-highlighting
   - build-essential
   - pkg-config
   - libssl-dev
@@ -59,7 +61,7 @@ write_files:
 
 runcmd:
   - [systemctl, reload, ssh]
-  - [install, -d, -o, julien, -g, julien, /home/julien/sources]
-  - [runuser, -u, julien, --, git, clone, "https://github.com/julienmontagut/dotfiles.git", /home/julien/sources/dotfiles]
+  - [install, -d, -o, julien, -g, julien, /home/julien/.local/share]
+  - [runuser, -u, julien, --, git, clone, "https://github.com/julienmontagut/dotfiles.git", /home/julien/.local/share/dotfiles]
 
-final_message: "apollo ready. Next: ssh julien@apollo and run ~/sources/dotfiles/hosts/apollo.sh"
+final_message: "apollo ready. Next: ssh julien@apollo and run ~/.local/share/dotfiles/hosts/apollo.sh"

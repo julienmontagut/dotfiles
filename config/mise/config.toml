@@ -1,8 +1,22 @@
-[tools]
-lua = "latest"
-node = "lts"
+# Global user environment — symlinked to ~/.config/mise/config.toml by the
+# dotfiles manifest (repo-root mise.toml), so these tools are active in every
+# directory. Provisioning (dotfiles, bootstrap task) lives in the repo mise.toml,
+# not here, to keep the global namespace clean.
+[settings]
+experimental = true   # enables `mise dotfiles` / `mise bootstrap`, system-wide
 
-# kubernetes tooling
+[tools]
+# runtimes
+node = "lts"
+lua = "latest"
+rust = "latest"
+dotnet = "latest"
+
+# formerly hand-rolled curl/script installs
+"aqua:anthropics/claude-code" = "latest"
+"dotnet:Aspire.Cli" = "latest"   # uses the dotnet runtime above
+
+# kubernetes
 kubectl = "latest"
 helm = "latest"
 k9s = "latest"
@@ -20,3 +34,32 @@ helm-ls = "latest"
 "npm:bash-language-server" = "latest"
 zellij = "latest"
 
+# CLI tools (migrated from the Brewfile; cross-platform via the mise registry)
+bat = "latest"
+delta = "latest"
+dua = "latest"
+eza = "latest"
+fd = "latest"
+fzf = "latest"
+gh = "latest"
+glow = "latest"
+hugo = "latest"
+jj = "latest"
+jq = "latest"
+just = "latest"
+lazygit = "latest"
+mprocs = "latest"
+neovim = "latest"
+ollama = "latest"
+ripgrep = "latest"
+starship = "latest"
+tmux = "latest"
+tree-sitter = "latest"
+xh = "latest"
+zoxide = "latest"
+
+# CLI tools not in the registry — built/fetched via cargo and ubi backends
+"cargo:bacon" = "latest"
+"cargo:nickel-lang-cli" = "latest"
+"ubi:joshmedeski/sesh" = "latest"
+"ubi:maaslalani/slides" = "latest"
