@@ -3,6 +3,9 @@ set -euo pipefail
 
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.local/share/dotfiles}"
 
+# shellcheck source=../lib/github-token.sh
+source "$DOTFILES_DIR/lib/github-token.sh"
+
 log() { echo ">> $*"; }
 die() { echo "error: $*" >&2; exit 1; }
 
@@ -45,6 +48,7 @@ apply_dotfiles() {
 main() {
     require_julien
     install_mise
+    ensure_github_token
     run_bootstrap
 }
 

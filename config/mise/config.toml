@@ -5,6 +5,9 @@
 [settings]
 experimental = true   # enables `mise dotfiles` / `mise bootstrap`, system-wide
 
+[settings.github]
+gh_cli_tokens = true   # reuse the authed gh token so mise stays under the 5000/hr API limit
+
 [tools]
 # runtimes
 node = "lts"
@@ -58,8 +61,8 @@ tree-sitter = "latest"
 xh = "latest"
 zoxide = "latest"
 
-# CLI tools not in the registry — built/fetched via cargo and ubi backends
+# CLI tools not in the registry — built/fetched via cargo and github backends
 "cargo:bacon" = "latest"
 "cargo:nickel-lang-cli" = "latest"
-"ubi:joshmedeski/sesh" = "latest"
-"ubi:maaslalani/slides" = "latest"
+"github:joshmedeski/sesh" = "latest"
+"github:maaslalani/slides" = "latest"
