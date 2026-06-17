@@ -1,6 +1,6 @@
 #cloud-config
 # gaia — headless aarch64 home LAN server (runs unbound).
-# Layer-2 (unbound + dotter) lives in dotfiles/hosts/gaia.sh and is run as
+# Layer-2 (unbound + mise dotfiles) lives in dotfiles/hosts/gaia.sh and is run as
 # julien after first boot.
 
 hostname: gaia

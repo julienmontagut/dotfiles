@@ -21,4 +21,7 @@ Icon
 # Direnv
 .direnv/
 
+# Temporary files and scratch directories
+*.tmp
+
 **/.claude/settings.local.json

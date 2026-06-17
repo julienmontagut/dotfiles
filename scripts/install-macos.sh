@@ -1,6 +1,6 @@
 #!/bin/bash
 # macOS installation script
-# Installs Homebrew packages, deploys configs via Dotter, and sets up the system
+# Installs Homebrew packages, applies dotfiles via mise, and sets up the system
 
 set -euo pipefail
 
@@ -103,48 +103,43 @@ install_packages() {
 }
 
 # =============================================================================
-# Setup Dotter
+# Apply dotfiles
 # =============================================================================
 
-setup_dotter() {
-    echo "Setting up Dotter..."
+apply_dotfiles() {
+    echo "Applying dotfiles via mise..."
 
     cd "$DOTFILES_DIR"
-
-    # Create local.toml if it doesn't exist
-    if [[ ! -f ".dotter/local.toml" ]]; then
-        echo "Creating .dotter/local.toml..."
-        cat > ".dotter/local.toml" << 'EOF'
-packages = ["macos"]
-EOF
-    fi
-
-    echo "Dotter configuration ready."
-}
-
-# =============================================================================
-# Deploy configs
-# =============================================================================
-
-deploy_configs() {
-    echo "Deploying configs via Dotter..."
-
-    cd "$DOTFILES_DIR"
+    export MISE_EXPERIMENTAL=1 MISE_ENV=macos
+    mise trust --yes .
 
     # Dry run first
     echo ""
     echo "Dry run:"
-    dotter deploy --dry-run || true
+    mise dotfiles apply --dry-run || true
 
     echo ""
-    read -p "Deploy configs? [y/N] " -n 1 -r
+    read -p "Apply dotfiles? [y/N] " -n 1 -r
     echo ""
 
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        dotter deploy --force
-        echo "Configs deployed."
+        mise dotfiles apply --yes --force
+        echo "Dotfiles applied."
     else
-        echo "Skipping config deployment."
+        echo "Skipping dotfiles."
+    fi
+}
+
+# =============================================================================
+# Install mise-managed tools
+# =============================================================================
+
+install_mise_tools() {
+    if command -v mise &>/dev/null; then
+        echo "Installing mise-managed tools (runtimes, k8s, LSPs)..."
+        mise install
+    else
+        echo "mise not found on PATH; skipping mise install."
     fi
 }
 
@@ -208,8 +203,8 @@ main() {
     install_xcode_cli
     install_homebrew
     install_packages
-    setup_dotter
-    deploy_configs
+    apply_dotfiles
+    install_mise_tools
     apply_defaults
     configure_services
     post_install

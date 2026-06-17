@@ -1,6 +1,6 @@
 #cloud-config
 # hermes — headless aarch64 Raspberry Pi 3 (wake-on-LAN trigger).
-# Layer-2 (wakeonlan + dotter) lives in dotfiles/hosts/hermes.sh and is run
+# Layer-2 (wakeonlan + mise dotfiles) lives in dotfiles/hosts/hermes.sh and is run
 # as julien after first boot.
 
 hostname: hermes

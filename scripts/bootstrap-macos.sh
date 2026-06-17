@@ -113,6 +113,14 @@ cd "$SCRIPT_DIR"
 brew bundle --file="$BREWFILE" || echo "  ${YELLOW}⚠ Some packages failed to install${NC}"
 echo "✓ Homebrew packages installed"
 
+# Install mise-managed tools (runtimes, k8s, LSPs). Requires the mise config
+# to be applied (~/.config/mise/config.toml) via `mise dotfiles`.
+if command -v mise >/dev/null 2>&1 && [ -f "$HOME/.config/mise/config.toml" ]; then
+  echo "\n${GREEN}Installing mise-managed tools...${NC}"
+  mise install || echo "  ${YELLOW}⚠ Some mise tools failed to install${NC}"
+  echo "✓ mise tools installed"
+fi
+
 # Check if netbird is needed
 echo "\n${YELLOW}Optional: Netbird VPN${NC}"
 echo "  To install Netbird VPN, run: brew install --cask netbird-ui"

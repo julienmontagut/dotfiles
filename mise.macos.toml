@@ -1,0 +1,5 @@
+# macOS-only dotfiles. Merged with mise.toml when MISE_ENV=macos.
+[dotfiles]
+"~/.config/aerospace" = { source = "config/aerospace", mode = "symlink-each" }
+"~/.config/borders"   = { source = "config/borders", mode = "symlink-each" }
+"~/.config/karabiner" = { source = "config/karabiner", mode = "symlink-each" }
