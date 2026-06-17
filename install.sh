@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Top-level installer.
-#   macOS: Xcode CLT → Homebrew → mise → dotfiles → Brewfile → rustup.
+#   macOS: Xcode CLT → Homebrew → mise → `mise bootstrap` (dotfiles, tools,
+#          Brewfile, rustup).
 #   Linux: delegate to hosts/$(hostname).sh — cloud-init has done the base
 #          bootstrap; layer-2 handles per-host provisioning.
 set -euo pipefail
@@ -56,24 +57,21 @@ if ! command -v brew &>/dev/null; then
 fi
 
 if ! command -v mise &>/dev/null; then
-  brew install mise
+  curl -fsSL https://mise.run | sh
+  export PATH="$HOME/.local/bin:$PATH"
 fi
 
+mkdir -p "$HOME/Developer"
+
+# mise bootstrap orchestrates the rest: dotfiles (symlinks ~/.Brewfile), the
+# mise-managed tools, then the bootstrap task (brew bundle + rustup).
 (
   cd "$DOTS_DIR"
   export MISE_EXPERIMENTAL=1 MISE_ENV=macos
   mise trust --yes .
   if [[ "$FORCE" == true ]]; then
-    mise dotfiles apply --yes --force
+    mise bootstrap --yes --force-dotfiles
   else
-    mise dotfiles apply --yes
+    mise bootstrap --yes
   fi
 )
-
-brew bundle --global
-
-mkdir -p "$HOME/Developer"
-
-if ! command -v rustup &>/dev/null; then
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-fi

@@ -9,24 +9,19 @@ dir="$(cd "$(dirname "$0")" && pwd)"
 
 require_julien
 install_mise
-apply_dotfiles
 
 # --- dev tooling ---
 
-# Linuxbrew (formulas only on Linux; casks in the Brewfile are silently skipped).
+# Linuxbrew (formulas only on Linux; casks in the Brewfile are silently
+# skipped). Must precede `mise bootstrap` so the bootstrap task's `brew bundle`
+# sees brew on PATH.
 if ! command -v brew >/dev/null; then
     bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-brew bundle --global
 
-# mise: runtimes, k8s tooling, and LSPs (config applied by apply_dotfiles above).
-mise install
-
-# rustup (no maintained brew formula on Linux).
-if ! command -v rustup >/dev/null; then
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
-fi
+# dotfiles + mise tools (runtimes, k8s, LSPs) + bootstrap task (brew bundle, rustup).
+run_bootstrap
 
 # claude-code (Linux installer script — brew cask is macOS-only).
 if ! command -v claude >/dev/null; then

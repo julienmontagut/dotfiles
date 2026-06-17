@@ -7,6 +7,7 @@ dir="$(cd "$(dirname "$0")" && pwd)"
 
 require_julien
 install_mise
+# Server: dotfiles only — no dev runtimes, no Homebrew.
 apply_dotfiles
 
 # doas wipes env, so DEBIAN_FRONTEND won't carry through — use `doas env`.
