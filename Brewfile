@@ -1,8 +1,6 @@
 tap "felixkratz/formulae"
 tap "netbirdio/tap"
 tap "nikitabobko/tap"
-# NOTE: runtimes, k8s tooling, and LSPs/formatters are managed by mise
-# (config/mise/config.toml), not brew. Run `mise install` to get them.
 brew "bacon"
 brew "bat"
 brew "dua-cli"
