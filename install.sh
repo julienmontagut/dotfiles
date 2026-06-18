@@ -52,9 +52,6 @@ if [[ -z "$SCRIPT_DIR" ]] || [[ ! -f "$SCRIPT_DIR/.git/HEAD" ]]; then
 fi
 DOTS_DIR="$SCRIPT_DIR"
 
-# shellcheck source=lib/github-token.sh
-source "$DOTS_DIR/lib/github-token.sh"
-
 if ! command -v brew &>/dev/null; then
   bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   echo 'eval "$(/opt/homebrew/bin/brew shellenv zsh)"' >> "$HOME/.zprofile"
@@ -68,8 +65,14 @@ fi
 
 mkdir -p "$HOME/Developer"
 
-# Authenticate mise's GitHub API calls before bootstrap (gh isn't installed yet).
-ensure_github_token
+# gh is a mise tool — install it, log in, and authenticate mise's GitHub API
+# calls so bootstrap resolving `latest` for the rest doesn't hit the rate limit.
+mise install gh@latest
+export GITHUB_TOKEN="$(mise exec gh -- gh auth token 2>/dev/null || true)"
+if [[ -z "$GITHUB_TOKEN" ]]; then
+  mise exec gh -- gh auth login
+  export GITHUB_TOKEN="$(mise exec gh -- gh auth token)"
+fi
 
 # mise bootstrap orchestrates the rest: dotfiles (symlinks the global mise config
 # + ~/.Brewfile), the mise-managed tools (rust, dotnet, aspire, claude-code, all

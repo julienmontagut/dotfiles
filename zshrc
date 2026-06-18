@@ -1,5 +1,6 @@
 # .zshrc - Interactive shell configuration
-# This file should be at $ZDOTDIR/.zshrc (~/.config/zsh/.zshrc)
+# Managed by mise as a marker-delimited block in ~/.zshrc; tools may append
+# their own lines below the block freely.
 
 # =============================================================================
 # History
@@ -29,11 +30,11 @@ setopt NO_BEEP
 # Completion
 # =============================================================================
 
-autoload -Uz compinit
-compinit -d "$XDG_CACHE_HOME/zsh/zcompdump"
-
 # Create cache directory if it doesn't exist
 [[ -d "$XDG_CACHE_HOME/zsh" ]] || mkdir -p "$XDG_CACHE_HOME/zsh"
+
+autoload -Uz compinit
+compinit -d "$XDG_CACHE_HOME/zsh/zcompdump"
 
 # Menu-style completion
 zstyle ':completion:*' menu select
@@ -46,26 +47,18 @@ bindkey -M menuselect '^y' accept-search
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 
 # =============================================================================
+# mise (activate before tool inits so mise-provided binaries are on PATH)
+# =============================================================================
+
+eval "$(mise activate zsh)"
+
+# =============================================================================
 # Emacs mode
 # =============================================================================
 
 bindkey -e
 
-# =============================================================================
-# Shell plugins (via Homebrew)
-# =============================================================================
-
-# Syntax highlighting
-if [[ -f "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
-    source "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-fi
-
-# Autosuggestions
-if [[ -f "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
-    source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-fi
-
-# History substring search (part of zsh-history-substring-search or built-in)
+# History substring search
 autoload -Uz history-search-end
 zle -N history-beginning-search-backward-end history-search-end
 zle -N history-beginning-search-forward-end history-search-end
@@ -103,20 +96,33 @@ if command -v fzf &>/dev/null; then
 fi
 
 # =============================================================================
-# Aliases
+# Aliases & local overrides
 # =============================================================================
 
-source "$ZDOTDIR/aliases.zsh"
-source "$ZDOTDIR/upgrade-notice.zsh"
+zsh_config="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
+source "$zsh_config/aliases.zsh"
+source "$zsh_config/upgrade-notice.zsh"
 
-# =============================================================================
 # Local overrides (not tracked in git)
+[[ -f "$zsh_config/local.zsh" ]] && source "$zsh_config/local.zsh"
+unset zsh_config
+
+# =============================================================================
+# Shell plugins (antidote — installed by `mise run antidote`)
+# Loaded last so zsh-syntax-highlighting wraps the final widgets/keybindings.
+# The plugin list is tracked in the repo; the generated bundle goes to the
+# cache dir (regenerated only when the list changes) so nothing is written
+# into the symlinked config dir.
 # =============================================================================
 
-[[ -f "$ZDOTDIR/local.zsh" ]] && source "$ZDOTDIR/local.zsh"
-eval "$(mise activate zsh)"
-
-# Conditionally prepend directories to PATH
-[[ -d /home/linuxbrew/.linuxbrew/bin ]] && path=(/home/linuxbrew/.linuxbrew/bin $path)
-[[ -d "$HOME/.aspire/bin" ]] && path=("$HOME/.aspire/bin" $path)
-[[ -d "$HOME/.dotnet/tools" ]] && path=("$HOME/.dotnet/tools" $path)
+antidote_dir="${XDG_DATA_HOME:-$HOME/.local/share}/antidote"
+if [[ -f "$antidote_dir/antidote.zsh" ]]; then
+    source "$antidote_dir/antidote.zsh"
+    plugins_txt="${XDG_CONFIG_HOME:-$HOME/.config}/zsh/.zsh_plugins.txt"
+    plugins_zsh="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/plugins.zsh"
+    [[ -d "${plugins_zsh:h}" ]] || mkdir -p "${plugins_zsh:h}"
+    [[ "$plugins_zsh" -nt "$plugins_txt" ]] || antidote bundle <"$plugins_txt" >| "$plugins_zsh"
+    source "$plugins_zsh"
+    unset plugins_txt plugins_zsh
+fi
+unset antidote_dir
