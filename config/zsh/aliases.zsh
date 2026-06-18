@@ -57,5 +57,5 @@ alias vim="nvim"
 # Misc
 # =============================================================================
 
-alias reload="source ~/.zshenv && source $ZDOTDIR/.zshrc"
+alias reload="source ~/.zshenv && source ~/.zshrc"
 alias dotfiles="cd ~/.local/share/dotfiles"

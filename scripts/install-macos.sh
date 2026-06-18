@@ -15,39 +15,6 @@ echo "Dotfiles directory: $DOTFILES_DIR"
 echo ""
 
 # =============================================================================
-# Backup existing configs
-# =============================================================================
-
-backup_configs() {
-    echo "Backing up existing configs to $BACKUP_DIR..."
-    mkdir -p "$BACKUP_DIR"
-
-    local configs=(
-        "$HOME/.config/git"
-        "$HOME/.config/zsh"
-        "$HOME/.config/nvim"
-        "$HOME/.config/wezterm"
-        "$HOME/.config/zed"
-        "$HOME/.config/karabiner"
-        "$HOME/.config/aerospace"
-        "$HOME/.config/starship.toml"
-        "$HOME/.zshrc"
-        "$HOME/.zshenv"
-        "$HOME/.gitconfig"
-    )
-
-    for config in "${configs[@]}"; do
-        if [[ -e "$config" ]]; then
-            echo "  Backing up: $config"
-            cp -R "$config" "$BACKUP_DIR/" 2>/dev/null || true
-        fi
-    done
-
-    echo "Backup complete."
-    echo ""
-}
-
-# =============================================================================
 # Install Xcode Command Line Tools
 # =============================================================================
 

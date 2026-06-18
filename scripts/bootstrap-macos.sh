@@ -76,18 +76,9 @@ else
 fi
 
 echo "\n${GREEN}[3/5]${NC} Configuring environment variables..."
-# Add Homebrew environment variables to shell profile
-if ! grep -q "HOMEBREW_NO_ANALYTICS" ~/.zshrc 2>/dev/null; then
-  cat >> ~/.zshrc <<'EOF'
-
-# Homebrew settings
-export HOMEBREW_NO_ANALYTICS=1
-export HOMEBREW_NO_ENV_HINTS=1
-EOF
-  echo "✓ Homebrew environment variables added to ~/.zshrc"
-else
-  echo "✓ Homebrew environment variables already configured"
-fi
+# HOMEBREW_NO_ANALYTICS / HOMEBREW_NO_ENV_HINTS are now set declaratively in
+# the mise-managed ./zshenv, so there is nothing to append to ~/.zshrc here.
+echo "✓ Homebrew environment variables handled by zshenv"
 
 echo "\n${GREEN}[4/5]${NC} Checking Homebrew installation..."
 if ! command -v brew >/dev/null 2>&1; then
