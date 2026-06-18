@@ -1,6 +1,6 @@
 [shell]
 program = "/usr/bin/env"
-args = ["zsh", "-l", "-c", "exec sesh picker -itzHd"]
+args = ["zsh", "-l", "-c", "command -v tx >/dev/null 2>&1 && exec tx || exec zsh -l"]
 
 [env]
 TERM = "xterm-256color"

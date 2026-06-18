@@ -1,18 +1,12 @@
-# Provisioning manifest — the dotfiles symlink map + bootstrap task, loaded only
-# from inside this clone (run `mise bootstrap` here). The global user environment
-# (settings + tools) lives in config/mise/config.toml, which the [dotfiles] entry
-# below symlinks to ~/.config/mise/config.toml so tools are active everywhere.
-# `dotfiles.root = "{{ config_root }}"` follows whichever clone you bootstrap from.
+# Provisioning manifest
+# from inside this clone run `mise bootstrap` 
 [settings]
 dotfiles.root = "{{ config_root }}"
 dotfiles.default_mode = "symlink"
 
-# Default is a whole-dir `symlink`; `symlink-each` (dir stays real, files linked
-# individually) is used only where the target also holds non-repo files: git
-# state, tmux plugins, Zed themes.
 [dotfiles]
 "~/.Brewfile"                = "Brewfile"
-"~/.local/bin/tx"            = "bin/tx"
+"~/.local/bin"               = { source = "bin", mode = "symlink-each" }
 "~/.claude/agents"           = "claude/agents"
 "~/.claude/CLAUDE.md"        = "claude/CLAUDE.md"
 "~/.claude/settings.json"    = "claude/settings.json"
@@ -23,19 +17,34 @@ dotfiles.default_mode = "symlink"
 "~/.config/ideavim"          = "config/ideavim"
 "~/.config/mise/config.toml" = "config/mise/config.toml"
 "~/.config/nvim"             = "config/nvim"
-"~/.config/sesh"             = "config/sesh"
 "~/.config/starship.toml"    = "config/starship.toml"
 "~/.config/tmux"             = { source = "config/tmux", mode = "symlink-each" }
 "~/.config/wezterm"          = "config/wezterm"
 "~/.config/zed"              = { source = "config/zed", mode = "symlink-each" }
-"~/.zshenv"                  = "config/zsh/.zshenv"
-"~/.config/zsh/.zshrc"       = "config/zsh/.zshrc"
-"~/.config/zsh/aliases.zsh"  = "config/zsh/aliases.zsh"
+"~/.zshenv"                  = "zshenv"
+"~/.zshrc/main"              = { source = "zshrc", template = "tera" }
+"~/.config/zsh"              = "config/zsh"
 
-# Imperative tail of `mise bootstrap`, run after the dotfiles and tools phases.
-# Only the macOS GUI Brewfile is left here — every CLI tool, runtime, rust, and
-# the aspire/claude-code CLIs are declarative mise [tools] now. Gated on `brew`,
-# so Linux (no Homebrew) no-ops.
+# Install antidote (the zsh plugin manager ~/.zshrc loads) and pre-fetch the
+# plugins listed in config/zsh/.zsh_plugins.txt so the first shell isn't slow.
+[tasks.antidote]
+description = "Install antidote (zsh plugin manager) and pre-fetch plugins"
+run = """
+set -e
+dir="${XDG_DATA_HOME:-$HOME/.local/share}/antidote"
+if [ -d "$dir/.git" ]; then
+  git -C "$dir" pull --ff-only --quiet
+else
+  git clone --depth 1 https://github.com/mattmc3/antidote.git "$dir"
+fi
+txt="${XDG_CONFIG_HOME:-$HOME/.config}/zsh/.zsh_plugins.txt"
+[ -f "$txt" ] && zsh -c 'source "'"$dir"'/antidote.zsh"; antidote bundle <"'"$txt"'" >/dev/null'
+"""
+
+# Run at the end of mise bootstrap
 [tasks.bootstrap]
 description = "Install macOS GUI apps from the Brewfile"
+depends = ["antidote"]
 run = 'if command -v brew >/dev/null; then brew bundle --global; fi'
+
+[bootstrap]

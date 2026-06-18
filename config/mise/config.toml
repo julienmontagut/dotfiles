@@ -1,29 +1,22 @@
-# Global user environment — symlinked to ~/.config/mise/config.toml by the
-# dotfiles manifest (repo-root mise.toml), so these tools are active in every
-# directory. Provisioning (dotfiles, bootstrap task) lives in the repo mise.toml,
-# not here, to keep the global namespace clean.
 [settings]
-experimental = true   # enables `mise dotfiles` / `mise bootstrap`, system-wide
+experimental = true
+lockfile = true
 
 [settings.github]
 use_git_credentials = true
 
 [tools]
-# runtimes
-node = "lts"
 lua = "latest"
 rust = "latest"
 dotnet = "latest"
 
-# formerly hand-rolled curl/script installs
-"aqua:anthropics/claude-code" = "latest"
-"dotnet:Aspire.Cli" = "latest"   # uses the dotnet runtime above
+claude-code = "latest"
 
 # kubernetes
-kubectl = "latest"
 helm = "latest"
 k9s = "latest"
 kind = "latest"
+kubectl = "latest"
 kubectx = "latest"
 
 # LSPs / formatters
@@ -37,7 +30,7 @@ helm-ls = "latest"
 "npm:bash-language-server" = "latest"
 zellij = "latest"
 
-# CLI tools (migrated from the Brewfile; cross-platform via the mise registry)
+# CLI tools 
 bat = "latest"
 delta = "latest"
 dua = "latest"
@@ -46,14 +39,12 @@ fd = "latest"
 fzf = "latest"
 gh = "latest"
 glow = "latest"
-hugo = "latest"
 jj = "latest"
 jq = "latest"
 just = "latest"
 lazygit = "latest"
 mprocs = "latest"
 neovim = "latest"
-ollama = "latest"
 ripgrep = "latest"
 starship = "latest"
 tmux = "latest"
@@ -61,8 +52,9 @@ tree-sitter = "latest"
 xh = "latest"
 zoxide = "latest"
 
-# CLI tools not in the registry — built/fetched via cargo and github backends
+# CLI tools not in the registry 
 "cargo:bacon" = "latest"
 "cargo:nickel-lang-cli" = "latest"
-"github:joshmedeski/sesh" = "latest"
-"github:maaslalani/slides" = "latest"
+opentofu = "latest"
+scaleway-cli = "latest"
+"aqua:maaslalani/slides" = "latest"
