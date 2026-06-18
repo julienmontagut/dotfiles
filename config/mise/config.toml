@@ -6,7 +6,7 @@
 experimental = true   # enables `mise dotfiles` / `mise bootstrap`, system-wide
 
 [settings.github]
-credential_command = "gh auth token"   # reuse the authed gh token (works with keyring-stored tokens) so mise stays under the 5000/hr API limit
+use_git_credentials = true
 
 [tools]
 # runtimes
