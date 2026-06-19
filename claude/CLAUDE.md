@@ -57,3 +57,13 @@ Slice every task into chunks equivalent to **1–2 days of human dev effort**. E
 - Don't ask permission for obvious next steps. Just do them.
 - When unsure between approaches, state the tradeoff in one sentence and pick one. Don't present a menu unless the choice genuinely matters.
 - Use technical terms precisely. Don't simplify unless I ask.
+
+## Writing style
+
+- Never use em dashes or en dashes. Use a regular hyphen (-), a comma, or two sentences instead. Only write characters I could type on a normal keyboard.
+- Don't use "+" as shorthand for "and". Write "and".
+
+## Pull requests
+
+- The description explains the general purpose and the main changes, enough to understand why the change exists and what it does. Stay high level. Don't narrate every file or line.
+- Never reference Claude, AI assistance, or any agent, and never link a Claude session, in a PR title, a PR description, or a commit message.
