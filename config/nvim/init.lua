@@ -22,6 +22,7 @@ vim.opt.splitright = true
 vim.opt.splitbelow = true
 vim.opt.swapfile = false
 vim.opt.undofile = true
+vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
 -- Leader
 vim.g.mapleader = " "
@@ -61,12 +62,21 @@ require("mini.icons").setup{}
 require("trouble").setup{}
 require("which-key").setup{}
 
--- Oil
+-- Oil file explorer
 require("oil").setup {
-    default_file_explorer = true,
-    show_hidden = true,
+  default_file_explorer = true,
+  view_options = {
+    show_hidden = false,
+    is_hidden_file = function(name, bufnr)
+      if name == ".git" then return true end
+      local dir = require("oil").get_current_dir(bufnr)
+      if not dir then return vim.startswith(name, ".") end
+      vim.fn.system { "git", "-C", dir, "check-ignore", "-q", "--", name }
+      return vim.v.shell_error == 0 -- exit 0 = ignored = hidden
+    end,
+  },
 }
-vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })-- Snacks
 
 -- Snacks
 require("snacks").setup {
