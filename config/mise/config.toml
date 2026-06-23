@@ -18,4 +18,5 @@ rust-analyzer = "latest"
 helm-ls = "latest"
 "npm:yaml-language-server" = "latest"
 "npm:bash-language-server" = "latest"
+zellij = "latest"
 
