@@ -13,7 +13,6 @@ export MISE_ENV="${MISE_ENV:-$([ "$(uname)" = Darwin ] && echo macos || echo lin
 # PATH
 [[ -d "$HOME/.local/bin" ]] && path=("$HOME/.local/bin" $path)
 [[ -d "$HOME/.dotnet/tools" ]] && path=("$HOME/.dotnet/tools" $path)
-[[ -d "$HOME/.aspire/bin" ]] && path=("$HOME/.aspire/bin" $path)
 export PATH
 
 # Homebrew: opt out of analytics and env hints (declarative, no ~/.zshrc edits)
