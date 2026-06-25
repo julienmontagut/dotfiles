@@ -27,6 +27,17 @@ setopt INTERACTIVE_COMMENTS
 setopt NO_BEEP
 
 # =============================================================================
+# Terminal fallback
+# =============================================================================
+
+# If the current $TERM has no terminfo entry on this host (e.g. xterm-ghostty
+# over SSH to a box without Ghostty's terminfo), fall back to a widely-supported
+# type so less/git pager don't degrade to dumb mode and warn.
+if [[ -n "$TERM" && "$TERM" != "dumb" ]] && ! infocmp "$TERM" &>/dev/null; then
+    export TERM=xterm-256color
+fi
+
+# =============================================================================
 # Completion
 # =============================================================================
 

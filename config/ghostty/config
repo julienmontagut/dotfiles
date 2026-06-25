@@ -16,6 +16,12 @@ font-size = 16
 # Shell
 command = sh -c "command -v tx >/dev/null 2>&1 && exec tx || exec ${SHELL:-/bin/sh} -l"
 
+# Shell integration
+# ssh-env propagates TERM/COLORTERM to the remote; ssh-terminfo auto-installs
+# Ghostty's terminfo (~/.terminfo) on remotes that lack it, so xterm-ghostty is
+# recognized and less/git pager work without the "not fully functional" warning.
+shell-integration-features = ssh-env,ssh-terminfo,cursor,sudo,title
+
 # Keybindings
 # keybind = super+shift+n=new_window
 keybind = ctrl+shift+c=copy_to_clipboard
