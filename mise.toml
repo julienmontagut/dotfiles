@@ -20,6 +20,7 @@ dotfiles.default_mode = "symlink"
 "~/.config/starship.toml"    = "config/starship.toml"
 "~/.config/tmux"             = { source = "config/tmux", mode = "symlink-each" }
 "~/.config/wezterm"          = "config/wezterm"
+"~/.config/zellij"           = "config/zellij"
 "~/.config/zed"              = { source = "config/zed", mode = "symlink-each" }
 "~/.zshenv"                  = "zshenv"
 "~/.zshrc/main"              = { source = "zshrc", template = "tera" }
