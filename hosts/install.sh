@@ -1,7 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 
-DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.local/share/dotfiles}"
+# Default to the checkout this script lives in (repo root = parent of hosts/),
+# so running a host script directly works from any clone location. An exported
+# DOTFILES_DIR (e.g. from the top-level install.sh) still takes precedence.
+_HOSTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_DIR="${DOTFILES_DIR:-$(dirname "$_HOSTS_DIR")}"
 
 log() { echo ">> $*"; }
 die() { echo "error: $*" >&2; exit 1; }
@@ -32,7 +36,13 @@ _in_clone() {
 # bootstrap task (Brewfile + rustup, gated on `brew`).
 run_bootstrap() {
     log "running mise bootstrap"
-    ( _in_clone; mise bootstrap --yes )
+    ( _in_clone
+      if [[ "${FORCE:-false}" == true ]]; then
+        mise bootstrap --yes --force-dotfiles
+      else
+        mise bootstrap --yes
+      fi
+    )
 }
 
 # Dotfiles only — for servers that must not pull the dev runtimes/LSPs from
