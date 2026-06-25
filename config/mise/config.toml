@@ -6,33 +6,14 @@ lockfile = true
 use_git_credentials = true
 
 [tools]
-lua = "latest"
+
+# Languages installed by default
 rust = "latest"
 dotnet = "latest"
 
-# Claude
-claude-code = "latest"
-
-# kubernetes
-helm = "latest"
-k9s = "latest"
-kind = "latest"
-kubectl = "latest"
-kubectx = "latest"
-
-# LSPs / formatters
-lua-language-server = "latest"
-stylua = "latest"
-shfmt = "latest"
-taplo = "latest"
-rust-analyzer = "latest"
-helm-ls = "latest"
-# "npm:yaml-language-server" = "latest"
-# "npm:bash-language-server" = "latest"
-zellij = "latest"
-
 # CLI tools 
 bat = "latest"
+claude-code = "latest"
 delta = "latest"
 dua = "latest"
 eza = "latest"
@@ -52,10 +33,8 @@ tmux = "latest"
 tree-sitter = "latest"
 xh = "latest"
 zoxide = "latest"
+zellij = "latest"
 
-# CLI tools not in the registry 
+# CLI tools out of the registry
 "cargo:bacon" = "latest"
-"cargo:nickel-lang-cli" = "latest"
-opentofu = "latest"
-scaleway-cli = "latest"
 "aqua:maaslalani/slides" = "latest"
