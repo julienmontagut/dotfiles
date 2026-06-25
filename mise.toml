@@ -1,8 +1,14 @@
-# Provisioning manifest
-# from inside this clone run `mise bootstrap` 
 [settings]
 dotfiles.root = "{{ config_root }}"
 dotfiles.default_mode = "symlink"
+
+[tools]
+lua                     = "latest"
+lua-language-server     = "latest"
+stylua                  = "latest"
+shfmt                   = "latest"
+taplo                   = "latest"
+"cargo:nickel-lang-cli" = "latest"
 
 [dotfiles]
 "~/.Brewfile"                = "Brewfile"
