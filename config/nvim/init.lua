@@ -183,9 +183,8 @@ vim.lsp.config("lua_ls", {
 vim.lsp.config("rust_analyzer", {
     settings = {
         ["rust-analyzer"] = {
-            checkOnSave = { command = "clippy" },
+            check = { command = "clippy" },
             cargo = { allFeatures = true },
-            procMacro = { enable = true },
         },
     },
 })
