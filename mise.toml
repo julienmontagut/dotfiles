@@ -13,10 +13,7 @@ taplo                   = "latest"
 [dotfiles]
 "~/.Brewfile"                = "Brewfile"
 "~/.local/bin"               = { source = "bin", mode = "symlink-each" }
-"~/.claude/agents"           = "claude/agents"
-"~/.claude/CLAUDE.md"        = "claude/CLAUDE.md"
-"~/.claude/settings.json"    = "claude/settings.json"
-"~/.claude/skills"           = "claude/skills"
+"~/.claude"                  = { source = "claude", mode = "symlink-each" }
 "~/.config/alacritty"        = "config/alacritty"
 "~/.config/ghostty"          = "config/ghostty"
 "~/.config/git"              = { source = "config/git", mode = "symlink-each" }
