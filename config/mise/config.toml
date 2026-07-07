@@ -8,7 +8,7 @@ use_git_credentials = true
 [tools]
 
 # Languages installed by default
-rust = "latest"
+rust = { version = "latest", components = "rust-analyzer,rust-src" }
 dotnet = "latest"
 
 # CLI tools 
@@ -28,7 +28,6 @@ lazygit = "latest"
 mprocs = "latest"
 neovim = "latest"
 ripgrep = "latest"
-starship = "latest"
 tmux = "latest"
 tree-sitter = "latest"
 xh = "latest"

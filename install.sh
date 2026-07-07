@@ -62,6 +62,7 @@ if [[ "$OS" == "Linux" ]]; then
   export FORCE
   HOST="$(hostname -s)"
   exec "$DOTFILES_DIR/hosts/$HOST.sh"
+  # TODO: Handle claude desktop install from official repo
 fi
 
 # --- macOS ------------------------------------------------------------------

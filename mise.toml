@@ -23,7 +23,6 @@ taplo                   = "latest"
 "~/.config/ideavim"          = "config/ideavim"
 "~/.config/mise/config.toml" = "config/mise/config.toml"
 "~/.config/nvim"             = "config/nvim"
-"~/.config/starship.toml"    = "config/starship.toml"
 "~/.config/tmux"             = { source = "config/tmux", mode = "symlink-each" }
 "~/.config/wezterm"          = "config/wezterm"
 "~/.config/zellij"           = "config/zellij"
@@ -32,26 +31,12 @@ taplo                   = "latest"
 "~/.zshrc/main"              = { source = "zshrc", template = "tera" }
 "~/.config/zsh"              = "config/zsh"
 
-# Install antidote (the zsh plugin manager ~/.zshrc loads) and pre-fetch the
-# plugins listed in config/zsh/.zsh_plugins.txt so the first shell isn't slow.
-[tasks.antidote]
-description = "Install antidote (zsh plugin manager) and pre-fetch plugins"
-run = """
-set -e
-dir="${XDG_DATA_HOME:-$HOME/.local/share}/antidote"
-if [ -d "$dir/.git" ]; then
-  git -C "$dir" pull --ff-only --quiet
-else
-  git clone --depth 1 https://github.com/mattmc3/antidote.git "$dir"
-fi
-txt="${XDG_CONFIG_HOME:-$HOME/.config}/zsh/.zsh_plugins.txt"
-[ -f "$txt" ] && zsh -c 'source "'"$dir"'/antidote.zsh"; antidote bundle <"'"$txt"'" >/dev/null'
-"""
+# The zsh plugin manager (zimfw) self-installs on the first interactive shell;
+# see the zim block in ./zshrc. No bootstrap task is needed for it.
 
 # Run at the end of mise bootstrap
 [tasks.bootstrap]
 description = "Install macOS GUI apps from the Brewfile"
-depends = ["antidote"]
 run = 'if command -v brew >/dev/null; then brew bundle --global; fi'
 
 [bootstrap]
