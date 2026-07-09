@@ -28,7 +28,7 @@ install_mise() {
 _in_clone() {
     [[ -d "$DOTFILES_DIR/.git" ]] || die "$DOTFILES_DIR not present — cloud-init should have cloned it"
     cd "$DOTFILES_DIR"
-    export MISE_EXPERIMENTAL=1 MISE_ENV=linux
+    export MISE_EXPERIMENTAL=1
     mise trust --yes .
 }
 

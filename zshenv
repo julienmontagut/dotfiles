@@ -6,10 +6,6 @@ export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 
-# Pick the mise environment (macos / linux) so config resolves the same way
-# in every shell, including before `mise activate` runs in .zshrc.
-export MISE_ENV="${MISE_ENV:-$([ "$(uname)" = Darwin ] && echo macos || echo linux)}"
-
 # PATH
 [[ -d "$HOME/.local/bin" ]] && path=("$HOME/.local/bin" $path)
 [[ -d "$HOME/.dotnet/tools" ]] && path=("$HOME/.dotnet/tools" $path)
