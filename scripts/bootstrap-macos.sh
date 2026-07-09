@@ -114,7 +114,8 @@ fi
 
 # Check if netbird is needed
 echo "\n${YELLOW}Optional: Netbird VPN${NC}"
-echo "  To install Netbird VPN, run: brew install --cask netbird-ui"
+echo "  To install Netbird VPN, run: curl -fsSL https://pkgs.netbird.io/install.sh | sh"
+echo "  (installs the tray app + CLI; the daemon auto-starts at boot)"
 
 echo "\n${GREEN}✅ macOS setup complete!${NC}"
 echo "\n${YELLOW}Post-setup actions:${NC}"

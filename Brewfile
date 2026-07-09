@@ -18,7 +18,6 @@ cask "google-drive"
 cask "jetbrains-toolbox"
 cask "karabiner-elements"
 cask "linear"
-cask "netbirdio/tap/netbird-ui", trusted: true
 cask "orbstack"
 cask "slite"
 cask "spotify"
