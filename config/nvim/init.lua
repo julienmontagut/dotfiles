@@ -1,3 +1,7 @@
+-- Leader
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
 -- General user interface
 vim.opt.number = true
 vim.opt.colorcolumn = "100"
@@ -24,10 +28,6 @@ vim.opt.swapfile = false
 vim.opt.undofile = true
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
--- Leader
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
-
 -- Disable unused providers
 vim.g.loaded_node_provider = 0
 vim.g.loaded_perl_provider = 0
@@ -42,19 +42,11 @@ vim.pack.add {
     "https://github.com/folke/which-key.nvim",
     "https://github.com/neovim/nvim-lspconfig",
     "https://github.com/nvim-mini/mini.icons",
-    "https://github.com/stevearc/oil.nvim",
     "https://github.com/nvim-treesitter/nvim-treesitter",
     "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
     "https://github.com/seblj/roslyn.nvim",
-    "https://github.com/christoomey/vim-tmux-navigator",
+    "https://github.com/stevearc/oil.nvim",
 }
-
--- Tmux navigation (seamless Ctrl+W h/j/k/l across neovim splits and tmux panes)
-vim.g.tmux_navigator_no_mappings = 1
-vim.keymap.set("n", "<C-w>h", "<cmd>TmuxNavigateLeft<cr>", { desc = "Navigate left (vim/tmux)" })
-vim.keymap.set("n", "<C-w>j", "<cmd>TmuxNavigateDown<cr>", { desc = "Navigate down (vim/tmux)" })
-vim.keymap.set("n", "<C-w>k", "<cmd>TmuxNavigateUp<cr>", { desc = "Navigate up (vim/tmux)" })
-vim.keymap.set("n", "<C-w>l", "<cmd>TmuxNavigateRight<cr>", { desc = "Navigate right (vim/tmux)" })
 
 -- Plugin setup
 require("flash").setup{}
@@ -70,7 +62,6 @@ require("oil").setup {
     is_hidden_file = function(name, bufnr)
       if name == ".git" then return true end
       local dir = require("oil").get_current_dir(bufnr)
-      if not dir then return vim.startswith(name, ".") end
       vim.fn.system { "git", "-C", dir, "check-ignore", "-q", "--", name }
       return vim.v.shell_error == 0 -- exit 0 = ignored = hidden
     end,

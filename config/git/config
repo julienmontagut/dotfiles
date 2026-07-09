@@ -15,16 +15,7 @@
 	recurse = true
 
 [core]
-	pager = delta
 	autocrlf = input
-
-[interactive]
-	diffFilter = delta --color-only
-
-[delta]
-	navigate = true
-	dark = true
-	syntax-theme = base16
 
 [merge]
 	conflictstyle = diff3

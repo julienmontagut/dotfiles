@@ -1,20 +1,24 @@
 [settings]
 experimental = true
 lockfile = true
+# Handling of idiomatic version files
+idiomatic_version_file_enable_tools = [
+    "dotnet",
+    "opentofu",
+    "rust"
+]
 
 [settings.github]
 use_git_credentials = true
 
 [tools]
 
-# Languages installed by default
-rust = { version = "latest", components = "rust-analyzer,rust-src" }
+# Languages installed by default (rust comes from each repo's rust-toolchain.toml)
 dotnet = "latest"
 
 # CLI tools 
 bat = "latest"
 claude-code = "latest"
-delta = "latest"
 dua = "latest"
 eza = "latest"
 fd = "latest"
