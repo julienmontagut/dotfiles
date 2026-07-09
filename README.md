@@ -25,14 +25,12 @@ The following process is deprecated
 
 ### Apply dotfiles (platform selection)
 
-The `[dotfiles]` mappings live in `mise.toml`; platform-specific entries live in
-`mise.macos.toml` / `mise.linux.toml` and merge in when `MISE_ENV` selects the OS.
+The `[dotfiles]` mappings live in `mise.toml`
 `dotfiles.root = "{{ config_root }}"` resolves to the repo wherever it is cloned.
 Run from inside the clone:
 
 ```bash
 export MISE_EXPERIMENTAL=1
-export MISE_ENV=macos            # or: linux
 mise trust --yes .               # first run only
 mise dotfiles status             # show drift (applied / missing / differs)
 mise dotfiles apply --dry-run    # preview

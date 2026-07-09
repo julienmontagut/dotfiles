@@ -1,16 +1,13 @@
-tap "felixkratz/formulae", trusted: true
-tap "jundot/omlx", "https://github.com/jundot/omlx"
-tap "netbirdio/tap", trusted: true
-tap "nikitabobko/tap", trusted: true
+# brew "openssl@3"
 brew "mas"
+brew "jundot/omlx/omlx", trusted: true
 cask "nikitabobko/tap/aerospace", trusted: true
 cask "appcleaner"
 cask "claude"
-cask "claude-code@latest"
-cask "craft"
+# cask "craft"
 cask "crossover"
 cask "devpod"
-cask "dotnet-sdk"
+# cask "dotnet-sdk"
 cask "font-inter"
 cask "font-lilex"
 cask "font-lilex-nerd-font"
@@ -21,14 +18,16 @@ cask "google-drive"
 cask "jetbrains-toolbox"
 cask "karabiner-elements"
 cask "linear"
-cask "netbirdio/tap/netbird-ui"
+cask "netbirdio/tap/netbird-ui", trusted: true
 cask "orbstack"
+cask "slite"
 cask "spotify"
 cask "steam"
 cask "zed"
-mas "AdGuard Mini", id: 1440147259
+# mas "AdGuard Mini", id: 1440147259
 mas "Bitwarden", id: 1352778147
 mas "Keynote", id: 361285480
+mas "Magnet", id: 441258766
 mas "Numbers", id: 361304891
 mas "Pages", id: 361309726
 mas "Xcode", id: 497799835

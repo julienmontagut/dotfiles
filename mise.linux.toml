@@ -1,6 +1,0 @@
-[dotfiles]
-"~/.config/fuzzel" = "config/fuzzel"
-"~/.config/kanshi" = "config/kanshi"
-"~/.config/keyd"   = "config/keyd"
-"~/.config/sway"   = "config/sway"
-"~/.config/waybar" = "config/waybar"

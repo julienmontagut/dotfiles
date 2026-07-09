@@ -22,11 +22,21 @@ taplo                   = "latest"
 "~/.config/nvim"             = "config/nvim"
 "~/.config/tmux"             = { source = "config/tmux", mode = "symlink-each" }
 "~/.config/wezterm"          = "config/wezterm"
-"~/.config/zellij"           = "config/zellij"
+"~/.config/zellij/config.kdl"= "config/zellij/config.kdl"
 "~/.config/zed"              = { source = "config/zed", mode = "symlink-each" }
 "~/.zshenv"                  = "zshenv"
 "~/.zshrc/main"              = { source = "zshrc", template = "tera" }
 "~/.config/zsh"              = "config/zsh"
+# macOS
+"~/.config/aerospace" = "config/aerospace"
+"~/.config/borders"   = "config/borders"
+"~/.config/karabiner" = { source = "config/karabiner", mode = "symlink-each" }
+# Linux only
+"~/.config/fuzzel" = "config/fuzzel"
+"~/.config/kanshi" = "config/kanshi"
+"~/.config/keyd"   = "config/keyd"
+"~/.config/sway"   = "config/sway"
+"~/.config/waybar" = "config/waybar"
 
 # The zsh plugin manager (zimfw) self-installs on the first interactive shell;
 # see the zim block in ./zshrc. No bootstrap task is needed for it.

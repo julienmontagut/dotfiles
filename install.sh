@@ -93,7 +93,7 @@ fi
 # CLIs), then the bootstrap task (brew bundle for the macOS GUI apps).
 (
   cd "$DOTFILES_DIR"
-  export MISE_EXPERIMENTAL=1 MISE_ENV=macos
+  export MISE_EXPERIMENTAL=1
   mise trust --yes .
   if [[ "$FORCE" == true ]]; then
     mise bootstrap --yes --force-dotfiles

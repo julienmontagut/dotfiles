@@ -1,4 +1,0 @@
-[dotfiles]
-"~/.config/aerospace" = "config/aerospace"
-"~/.config/borders"   = "config/borders"
-"~/.config/karabiner" = { source = "config/karabiner", mode = "symlink-each" }

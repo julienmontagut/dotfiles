@@ -77,7 +77,7 @@ apply_dotfiles() {
     echo "Applying dotfiles via mise..."
 
     cd "$DOTFILES_DIR"
-    export MISE_EXPERIMENTAL=1 MISE_ENV=macos
+    export MISE_EXPERIMENTAL=1
     mise trust --yes .
 
     # Dry run first
