@@ -79,6 +79,10 @@ fi
 
 mkdir -p "$HOME/Developer"
 
+# macOS-only: symlink the Brewfile so `brew bundle --global` (the mise bootstrap
+# task) finds it. Not a dotfiles mapping — mise applies those on every OS.
+ln -sfn "$DOTFILES_DIR/Brewfile" "$HOME/.Brewfile"
+
 # gh is a mise tool — install it, log in, and authenticate mise's GitHub API
 # calls so bootstrap resolving `latest` for the rest doesn't hit the rate limit.
 mise install gh@latest
@@ -88,9 +92,9 @@ if [[ -z "$GITHUB_TOKEN" ]]; then
   export GITHUB_TOKEN="$(mise exec gh -- gh auth token)"
 fi
 
-# mise bootstrap orchestrates the rest: dotfiles (symlinks the global mise config
-# + ~/.Brewfile), the mise-managed tools (rust, dotnet, aspire, claude-code, all
-# CLIs), then the bootstrap task (brew bundle for the macOS GUI apps).
+# mise bootstrap orchestrates the rest: dotfiles (symlinks the global mise
+# config), the mise-managed tools (rust, dotnet, aspire, claude-code, all CLIs),
+# then the bootstrap task (brew bundle for the macOS GUI apps, macOS only).
 (
   cd "$DOTFILES_DIR"
   export MISE_EXPERIMENTAL=1
@@ -101,3 +105,13 @@ fi
     mise bootstrap --yes
   fi
 )
+
+# System defaults + services (TouchID, borders, aerospace) are invasive and
+# opt-in. Skip the prompt when not attached to a terminal (curl | bash).
+if [[ -t 0 ]]; then
+  read -rp "Apply macOS system defaults & services? [y/N] " reply
+  if [[ $reply =~ ^[Yy]$ ]]; then
+    "$DOTFILES_DIR/scripts/macos-defaults.sh"
+    "$DOTFILES_DIR/scripts/macos-services.sh"
+  fi
+fi

@@ -11,8 +11,6 @@ taplo                   = "latest"
 "cargo:nickel-lang-cli" = "latest"
 
 [dotfiles]
-"~/.Brewfile"                = "Brewfile"
-"~/.local/bin"               = { source = "bin", mode = "symlink-each" }
 "~/.claude"                  = { source = "claude", mode = "symlink-each" }
 "~/.config/alacritty"        = "config/alacritty"
 "~/.config/ghostty"          = "config/ghostty"
@@ -22,11 +20,12 @@ taplo                   = "latest"
 "~/.config/nvim"             = "config/nvim"
 "~/.config/tmux"             = { source = "config/tmux", mode = "symlink-each" }
 "~/.config/wezterm"          = "config/wezterm"
-"~/.config/zellij/config.kdl"= "config/zellij/config.kdl"
 "~/.config/zed"              = { source = "config/zed", mode = "symlink-each" }
-"~/.zshenv"                  = "zshenv"
-"~/.zshrc/main"              = { source = "zshrc", template = "tera" }
+"~/.config/zellij/config.kdl"= "config/zellij/config.kdl"
 "~/.config/zsh"              = "config/zsh"
+"~/.local/bin"               = { source = "bin", mode = "symlink-each" }
+"~/.zshenv"                  = "zshenv"
+"~/.zshrc"              = "zshrc"
 # macOS
 "~/.config/aerospace" = "config/aerospace"
 "~/.config/borders"   = "config/borders"
@@ -41,9 +40,9 @@ taplo                   = "latest"
 # The zsh plugin manager (zimfw) self-installs on the first interactive shell;
 # see the zim block in ./zshrc. No bootstrap task is needed for it.
 
-# Run at the end of mise bootstrap
+# Run at the end of mise bootstrap. macOS-only: the Brewfile is casks + mas apps,
+# and Linuxbrew (if present) can't install them. Reads ~/.Brewfile, symlinked by
+# install.sh on macOS only.
 [tasks.bootstrap]
-description = "Install macOS GUI apps from the Brewfile"
-run = 'if command -v brew >/dev/null; then brew bundle --global; fi'
-
-[bootstrap]
+description = "Install macOS GUI apps from the Brewfile (macOS only)"
+run = 'if [ "$(uname)" = Darwin ] && command -v brew >/dev/null; then brew bundle --global; fi'
