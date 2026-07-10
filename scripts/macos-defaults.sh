@@ -5,6 +5,9 @@ echo "Configuring general settings..."
 
 defaults write -g AppleMetricUnits -bool true
 
+# Menu bar clock in 24 hour format
+defaults write com.apple.menuextra.clock Show24Hour -bool true
+
 echo "Configuring keyboard..."
 
 # Disable press-and-hold for keys in favor of key repeat
@@ -13,6 +16,12 @@ defaults write -g ApplePressAndHoldEnabled -bool false
 # Fast key repeat rate after a short initial delay
 defaults write -g KeyRepeat -int 1
 defaults write -g InitialKeyRepeat -int 15
+
+# Disable Ctrl+Space input source switching (conflicts with terminal leader keys)
+# Key 60 = "Select the previous input source", Key 61 = "Select next source in Input menu"
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 "<dict><key>enabled</key><false/></dict>"
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 61 "<dict><key>enabled</key><false/></dict>"
+/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
 
 echo "Configuring Dock..."
 
@@ -71,8 +80,9 @@ defaults write com.apple.finder _FXSortFoldersFirst -bool true
 
 echo "Configuring trackpad..."
 
-# Set tap to click and three finger drag
+# Set tap to click, right-click, and three finger drag
 defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
+defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool true
 defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool true
 
 echo "Restarting affected applications..."

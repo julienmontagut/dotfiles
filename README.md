@@ -4,23 +4,17 @@ Dotfiles managed with [mise](https://mise.jdx.dev) (`[dotfiles]`) and bash scrip
 
 ## Quick Start
 
-- [ ] TODO: Fix the install process now requiring only mise install and base dependencies
+`./install.sh` is the single entry point for both platforms. Run it from a checkout, or pipe it
+via `curl | bash` to clone and run.
 
-### Fresh install on Linux
-
-The following process is deprecated
-```bash
-~/sources/dotfiles/hosts/<host>.sh        # mise dotfiles apply + host-specific extras
-~/sources/dotfiles/hosts/harden-doas.sh   # one-time: switch doas to persist
-```
-
-`hosts/<host>.sh` is safe to re-run anytime to refresh provisioning.
-
-### Fresh macOS install
+- **macOS:** Xcode CLT -> Homebrew -> mise -> `mise bootstrap` (dotfiles, tools, then `brew bundle`
+  for the GUI apps) -> optional system defaults + services.
+- **Linux:** delegates to `hosts/$(hostname).sh` for per-host provisioning (dotfiles + mise tools;
+  no Homebrew). `hosts/<host>.sh` is safe to re-run anytime to refresh provisioning.
 
 ```bash
-./scripts/install-macos.sh
-./scripts/bootstrap-macos.sh
+./install.sh            # provision this machine
+./install.sh --force    # also overwrite existing dotfiles
 ```
 
 ### Apply dotfiles (platform selection)
@@ -43,7 +37,7 @@ mise dotfiles apply              # apply (add --force to replace existing files)
 bin/                  # Custom scripts and programs
 config/               # Programs and tools configurations
 scripts/              # Install scripts
-Brewfile              # Homebrew packages mainly for macOS
+Brewfile              # Homebrew packages (macOS GUI apps)
 ```
 
 ## What's Included
