@@ -47,5 +47,21 @@
   "base_keymap": "SublimeText",
   "load_direnv": "shell_hook",
   "preferred_line_length": 100,
+  "project_panel": {
+    "dock": "left",
+    "auto_reveal_entries": true,
+    "git_status": false,
+    "hide_gitignore": true,
+    "hide_root": true,
+    "show_diagnostics": "all",
+  },
+  "tab_bar": {
+    "show": false,
+  },
+  "scrollbar": {
+    "show": "never",
+  },
+  "ui_font_size": 18,
+  "buffer_font_size": 16,
   "vim_mode": true,
 }
