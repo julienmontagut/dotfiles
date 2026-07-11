@@ -56,7 +56,6 @@
   "use_system_prompts": false,
   "use_system_path_prompts": false,
   "always_treat_brackets_as_autoclosed": true,
-  "base_keymap": "SublimeText",
   "preferred_line_length": 100,
   "project_panel": {
     "dock": "left",
