@@ -35,18 +35,19 @@ vim.g.loaded_perl_provider = 0
 vim.keymap.set("i", "jk", "<Esc>", { noremap = true, silent = true })
 
 -- Plugins
-vim.pack.add {
+vim.pack.add({
     "https://github.com/folke/flash.nvim",
     "https://github.com/folke/snacks.nvim",
     "https://github.com/folke/trouble.nvim",
     "https://github.com/folke/which-key.nvim",
+    "https://github.com/kylechui/nvim-surround",
     "https://github.com/neovim/nvim-lspconfig",
     "https://github.com/nvim-mini/mini.nvim",
     "https://github.com/nvim-treesitter/nvim-treesitter",
     "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
     "https://github.com/seblj/roslyn.nvim",
     "https://github.com/stevearc/oil.nvim",
-}
+})
 
 -- Plugin setup
 require("mini.icons").setup{}
@@ -58,22 +59,24 @@ require("which-key").setup{}
 -- require("plugins")
 
 -- Oil file explorer
-require("oil").setup {
-  default_file_explorer = true,
-  view_options = {
-    show_hidden = false,
-    is_hidden_file = function(name, bufnr)
-      if name == ".git" then return true end
-      local dir = require("oil").get_current_dir(bufnr)
-      vim.fn.system { "git", "-C", dir, "check-ignore", "-q", "--", name }
-      return vim.v.shell_error == 0 -- exit 0 = ignored = hidden
-    end,
-  },
-}
-vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })-- Snacks
+require("oil").setup({
+    default_file_explorer = true,
+    view_options = {
+        show_hidden = false,
+        is_hidden_file = function(name, bufnr)
+            if name == ".git" then
+                return true
+            end
+            local dir = require("oil").get_current_dir(bufnr)
+            vim.fn.system({ "git", "-C", dir, "check-ignore", "-q", "--", name })
+            return vim.v.shell_error == 0 -- exit 0 = ignored = hidden
+        end,
+    },
+})
+vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" }) -- Snacks
 
 -- Snacks
-require("snacks").setup {
+require("snacks").setup({
     picker = {
         enabled = true,
         win = {
@@ -88,51 +91,96 @@ require("snacks").setup {
     notifier = { enabled = true },
     quickfile = { enabled = true },
     statuscolumn = { enabled = true },
-}
+})
 
-vim.keymap.set("n", "<leader>e", function() Snacks.picker.explorer() end, { desc = "Toggle explorer" })
-vim.keymap.set("n", "<leader>sf", function() Snacks.picker.files() end, { desc = "Find files" })
-vim.keymap.set("n", "<leader>sg", function() Snacks.picker.grep() end, { desc = "Grep" })
-vim.keymap.set("n", "<leader>sr", function() Snacks.picker.recent() end, { desc = "Recent files" })
-vim.keymap.set("n", "<leader>sb", function() Snacks.picker.buffers() end, { desc = "Buffers" })
-vim.keymap.set("n", "<leader>sj", function() Snacks.picker.jumps() end, { desc = "Recent files" })
-vim.keymap.set("n", "<leader>sd", function() Snacks.picker.diagnostics() end, { desc = "Diagnostics" })
-vim.keymap.set("n", "<leader>sc", function() Snacks.picker.commands() end, { desc = "Commands" })
-vim.keymap.set("n", "<leader>sh", function() Snacks.picker.help() end, { desc = "Help pages" })
+-- Unified leader scheme (letters match Zed + IdeaVim)
+vim.keymap.set("n", "<leader><space>", function()
+    Snacks.picker.smart()
+end, { desc = "Smart find" })
+vim.keymap.set("n", "<leader>f", function()
+    Snacks.picker.files()
+end, { desc = "Files" })
+vim.keymap.set("n", "<leader>/", function()
+    Snacks.picker.grep()
+end, { desc = "Grep" })
+vim.keymap.set("n", "<leader>b", function()
+    Snacks.picker.buffers()
+end, { desc = "Buffers" })
+vim.keymap.set("n", "<leader>e", function()
+    Snacks.explorer()
+end, { desc = "Explorer" })
+vim.keymap.set("n", "<leader>s", function()
+    Snacks.picker.lsp_workspace_symbols()
+end, { desc = "Workspace symbols" })
+vim.keymap.set("n", "<leader>g", function()
+    Snacks.picker.git_status()
+end, { desc = "Git status" })
+vim.keymap.set("n", "<leader>t", function()
+    Snacks.terminal.toggle()
+end, { desc = "Terminal" })
+vim.keymap.set("n", "<leader>x", function()
+    Snacks.picker.diagnostics()
+end, { desc = "Diagnostics" })
+
+-- LSP navigation Neovim lacks natively (grn/gra/grr/gri/grt/gO/K are 0.11 defaults)
+vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
+vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Go to declaration" })
+vim.keymap.set("n", "gs", vim.lsp.buf.document_symbol, { desc = "Document symbols" })
+vim.keymap.set("n", "gS", vim.lsp.buf.workspace_symbol, { desc = "Workspace symbols" })
+vim.keymap.set("n", "gh", vim.diagnostic.open_float, { desc = "Line diagnostics" })
+
+-- Bridge <C-w>hjkl out of terminal-mode
+for _, k in ipairs({ "h", "j", "k", "l" }) do
+    vim.keymap.set("t", "<C-w>" .. k, [[<C-\><C-n><C-w>]] .. k)
+end
 
 -- Treesitter: highlighting is native in neovim 0.12.
 -- Bundled parsers: c, lua, markdown, vim, vimdoc.
 -- Install others with :TSInstall (requires tree-sitter CLI).
 local ts_parsers = {
-    "c_sharp", "rust", "lua", "bash",
-    "swift", "json", "toml", "nickel",
-    "html", "css",
+    "c_sharp",
+    "rust",
+    "lua",
+    "bash",
+    "swift",
+    "json",
+    "toml",
+    "nickel",
+    "html",
+    "css",
 }
 local ts_installed = require("nvim-treesitter.config").get_installed()
 local ts_to_install = vim.iter(ts_parsers)
-    :filter(function(p) return not vim.tbl_contains(ts_installed, p) end)
+    :filter(function(p)
+        return not vim.tbl_contains(ts_installed, p)
+    end)
     :totable()
 if #ts_to_install > 0 then
     require("nvim-treesitter").install(ts_to_install)
 end
 
 -- Treesitter textobjects
-require("nvim-treesitter-textobjects").setup {
+require("nvim-treesitter-textobjects").setup({
     select = { lookahead = true },
     move = { set_jumps = true },
-}
+})
 
-local ts_select = require("nvim-treesitter-textobjects.select")
 local ts_move = require("nvim-treesitter-textobjects.move")
+local ts_select = require("nvim-treesitter-textobjects.select")
 local ts_swap = require("nvim-treesitter-textobjects.swap")
 
 -- Select
 for key, query in pairs({
-    ["af"] = "@function.outer", ["if"] = "@function.inner",
-    ["ac"] = "@class.outer",    ["ic"] = "@class.inner",
-    ["aa"] = "@parameter.outer", ["ia"] = "@parameter.inner",
-    ["ab"] = "@block.outer",    ["ib"] = "@block.inner",
-    ["al"] = "@loop.outer",     ["il"] = "@loop.inner",
+    ["af"] = "@function.outer",
+    ["if"] = "@function.inner",
+    ["ac"] = "@class.outer",
+    ["ic"] = "@class.inner",
+    ["aa"] = "@parameter.outer",
+    ["ia"] = "@parameter.inner",
+    ["ab"] = "@block.outer",
+    ["ib"] = "@block.inner",
+    ["al"] = "@loop.outer",
+    ["il"] = "@loop.inner",
 }) do
     vim.keymap.set({ "x", "o" }, key, function()
         ts_select.select_textobject(query, "textobjects")
@@ -141,8 +189,10 @@ end
 
 -- Move (next/prev start and end)
 for key, query in pairs({
-    ["]f"] = "@function.outer", ["]c"] = "@class.outer",
-    ["]a"] = "@parameter.inner", ["]b"] = "@block.outer",
+    ["]f"] = "@function.outer",
+    ["]c"] = "@class.outer",
+    ["]a"] = "@parameter.inner",
+    ["]b"] = "@block.outer",
 }) do
     vim.keymap.set({ "n", "x", "o" }, key, function()
         ts_move.goto_next_start(query, "textobjects")
@@ -160,8 +210,12 @@ for key, query in pairs({
 end
 
 -- Swap
-vim.keymap.set("n", "<leader>]a", function() ts_swap.swap_next("@parameter.inner") end, { desc = "Swap next parameter" })
-vim.keymap.set("n", "<leader>[a", function() ts_swap.swap_previous("@parameter.inner") end, { desc = "Swap prev parameter" })
+vim.keymap.set("n", "<leader>]a", function()
+    ts_swap.swap_next("@parameter.inner")
+end, { desc = "Swap next parameter" })
+vim.keymap.set("n", "<leader>[a", function()
+    ts_swap.swap_previous("@parameter.inner")
+end, { desc = "Swap prev parameter" })
 
 -- LSP Configuration
 vim.lsp.config("lua_ls", {
@@ -208,24 +262,27 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 -- Roslyn (C#) - uses roslyn.nvim for the latest Roslyn LSP
-require("roslyn").setup {
+require("roslyn").setup({
     filewatching = true,
-}
+})
 
 -- Project root detection (best match first, git fallback)
 vim.api.nvim_create_autocmd("BufEnter", {
     callback = function(args)
         -- Skip non-file buffers (including oil.nvim)
-        if vim.bo[args.buf].buftype ~= "" then return end
+        if vim.bo[args.buf].buftype ~= "" then
+            return
+        end
 
         local root = vim.fs.root(args.buf, function(name)
             return name:match("%.sln$") ~= nil
-        end)
-        or vim.fs.root(args.buf, { "Cargo.toml" })
-        or vim.fs.root(args.buf, { "package.json" })
-        or vim.fs.root(args.buf, { "go.mod" })
-        or vim.fs.root(args.buf, { "pyproject.toml", "setup.py" })
-        or vim.fs.root(args.buf, { ".git" })
+        end) or vim.fs.root(args.buf, { "Cargo.toml" }) or vim.fs.root(
+            args.buf,
+            { "package.json" }
+        ) or vim.fs.root(args.buf, { "go.mod" }) or vim.fs.root(
+            args.buf,
+            { "pyproject.toml", "setup.py" }
+        ) or vim.fs.root(args.buf, { ".git" })
 
         if root then
             vim.fn.chdir(root)
