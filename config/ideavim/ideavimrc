@@ -26,6 +26,7 @@ set ignorecase
 set smartcase
 set incsearch
 set hlsearch
+set notimeout
 
 " IdeaVim plugins
 set commentary
@@ -66,75 +67,42 @@ map <leader>l <Action>(GotoLine)
 map <leader>x <Action>(ActivateProblemsViewToolWindow)
 nmap <leader>vr <Action>(IdeaVim.ReloadVimRc.reload)
 
-" Search (matching neovim <leader>s* bindings)
-map <leader>sf <Action>(GotoFile)
-map <leader>sg <Action>(FindInPath)
-map <leader>sw <Action>(FindWordAtCaret)
-map <leader>sb <Action>(Switcher)
-map <leader>sh <Action>(HelpTopics)
-map <leader>sr <Action>(FindUsages)
-map <leader>ss <Action>(FileStructurePopup)
-map <leader>sa <Action>(GotoSymbol)
-map <leader>si <Action>(GotoImplementation)
-map <leader>st <Action>(GotoTypeDeclaration)
-map <leader>sp <Action>(ActivateProblemsViewToolWindow)
-map <leader>sc <Action>(GotoAction)
-map <leader>sk <Action>(ShowSettings)
-map <leader>sl <Action>(Find)
-map <leader>sm <Action>(ShowBookmarks)
-map <leader>sj <Action>(ShowRecentLocations)
+" Let vim own Ctrl-W (splits), not Extend Selection
+sethandler <C-W> a:vim
 
-" Git (matching neovim <leader>g* bindings)
-map <leader>gg <Action>(ActivateVersionControlToolWindow)
-map <leader>gl <Action>(Vcs.ShowTabbedFileHistory)
-map <leader>gf <Action>(Git.Fetch)
-map <leader>gs <Action>(Vcs.Show.Local.Changes)
-map <leader>gb <Action>(Git.Branches)
-map <leader>gc <Action>(Vcs.Show.Log)
+" g-family (matches Neovim + Zed)
+nmap gd  <Action>(GotoDeclaration)
+nmap gD  <Action>(GotoDeclaration)
+nmap grn <Action>(RenameElement)
+map  gra <Action>(ShowIntentionActions)
+nmap grr <Action>(FindUsages)
+nmap gri <Action>(GotoImplementation)
+nmap grt <Action>(GotoTypeDeclaration)
+nmap gs  <Action>(FileStructurePopup)
+nmap gS  <Action>(GotoSymbol)
+nmap gh  <Action>(ShowErrorDescription)
+nmap K   <Action>(ShowHoverInfo)
+imap <C-s> <Action>(ParameterInfo)
+nmap ]d  <Action>(GotoNextError)
+nmap [d  <Action>(GotoPreviousError)
+nmap <C-w>d <Action>(ShowErrorDescription)
 
-" Problems (matching neovim <leader>p* bindings)
-map <leader>pp <Action>(ActivateProblemsViewToolWindow)
-map <leader>pb <Action>(ShowErrorsInProject)
-map <leader>ps <Action>(FileStructurePopup)
-map <leader>pq <Action>(ActivateFindToolWindow)
-map <leader>pl <Action>(ActivateFindToolWindow)
+" space leader (editor scope)
+map <leader>f <Action>(GotoFile)
+map <leader>/ <Action>(FindInPath)
+map <leader>b <Action>(RecentFiles)
+map <leader>e <Action>(SelectInProjectView)
+map <leader>s <Action>(GotoSymbol)
+map <leader>g <Action>(ActivateVersionControlToolWindow)
+map <leader>t <Action>(ActivateTerminalToolWindow)
+map <leader>l <Action>(GotoLine)
+map <leader>x <Action>(ActivateProblemsViewToolWindow)
+nmap <leader>vr <Action>(IdeaVim.ReloadVimRc.reload)
 
-" Quickfix navigation
-map <leader>qo <Action>(ActivateFindToolWindow)
-map <leader>qc <Action>(HideActiveWindow)
-map [q <Action>(PreviousOccurence)
-map ]q <Action>(NextOccurence)
-
-" Tools (matching neovim bindings)
-map <leader>e :NERDTreeToggle<CR>
-map <leader>tt <Action>(ActivateTerminalToolWindow)
-
-" LSP/Code navigation (g* bindings - gD and K are standard vim uppercase)
-map gd <Action>(GotoDeclaration)
-map gD <Action>(GotoTypeDeclaration)
-map gi <Action>(GotoImplementation)
-map gr <Action>(FindUsages)
-map K <Action>(QuickJavaDoc)
-
-" Code actions (matching neovim <leader>c* and <leader>r* bindings)
-map <leader>rn <Action>(RenameElement)
-map <leader>ca <Action>(ShowIntentionActions)
-map <leader>cf <Action>(ReformatCode)
-
-" Diagnostics navigation
-map [d <Action>(GotoPreviousError)
-map ]d <Action>(GotoNextError)
-
-" Let IDE handle ctrl+n/p/y for popup navigation (code actions, completions)
+" Let the IDE handle ctrl+n/p/y for popup navigation (code actions, completions)
 sethandler <C-n> n:vim i:ide v:ide
 sethandler <C-p> n:vim i:ide v:ide
 sethandler <C-y> n:vim i:ide v:ide
 
 " Paste in visual mode without yanking replaced text
 xmap p "_dP
-
-" Window navigation (Ctrl-w bindings)
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
