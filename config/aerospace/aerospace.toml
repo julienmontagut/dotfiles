@@ -1,5 +1,6 @@
 # AeroSpace tiling window manager configuration
 # See: https://nikitabobko.github.io/AeroSpace/guide
+config-version = 2
 
 # Start at login
 start-at-login = true
