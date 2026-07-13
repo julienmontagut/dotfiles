@@ -4,23 +4,20 @@ Dotfiles managed with [mise](https://mise.jdx.dev) (`[dotfiles]`) and bash scrip
 
 ## Quick Start
 
-`./install.sh` is the single entry point for both platforms. Run it from a checkout, or pipe it
-via `curl | bash` to clone and run.
-
-- **macOS:** Xcode CLT -> Homebrew -> mise -> `mise bootstrap` (dotfiles, tools, then `brew bundle`
-  for the GUI apps) -> optional system defaults + services.
-- **Linux:** delegates to `hosts/$(hostname).sh` for per-host provisioning (dotfiles + mise tools;
-  no Homebrew). `hosts/<host>.sh` is safe to re-run anytime to refresh provisioning.
+`./install.sh` is a cross-platform dotfiles install script that runs on `linux` and on `macos`. 
+Run it from a repository clone or via `curl https://raw.github.../install.sh | sh`.
 
 ```bash
 ./install.sh            # provision this machine
 ./install.sh --force    # also overwrite existing dotfiles
 ```
 
-### Apply dotfiles (platform selection)
+The install script supports `linux` and `macos`
+
+### Apply dotfiles
 
 The `[dotfiles]` mappings live in `mise.toml`
-`dotfiles.root = "{{ config_root }}"` resolves to the repo wherever it is cloned.
+`dotfiles.root = ""` resolves to the repo wherever it is cloned.
 Run from inside the clone:
 
 ```bash

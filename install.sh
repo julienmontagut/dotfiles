@@ -1,15 +1,21 @@
 #!/usr/bin/env bash
-# Top-level installer.
-#   macOS: Xcode CLT → Homebrew → mise → `mise bootstrap` (dotfiles, tools
-#          incl. rust/dotnet/aspire/claude-code, then the macOS Brewfile).
-#   Linux: delegate to hosts/$(hostname).sh — cloud-init has done the base
-#          bootstrap; layer-2 handles per-host provisioning.
-# Run from a checkout to bootstrap that checkout (it becomes DOTFILES_DIR); via
-# curl|bash it clones to DOTFILES_DIR (~/.local/share/dotfiles) and runs there.
+# Dev-machine installer. Same flow on macOS and Linux:
+#   1. Intall system packages and dev dependencies so it runs first and bootstraps a bare box.
+#   2. Locate or clone the repo
+#   3. Install mise
+#   4. Run `mise bootstrap` 
+#
+# This install is idempotent, and can be run: 
+#  - as a copy/pasted standalone local script
+#  - as a remote `curl … | sh` script
+#  - run from a cloned git repo
+#
+# When the script is not run from a git repository, the dotfiles repository is cloned
+# to DOTFILES_DIR (~/.local/share/dotfiles) and `install.sh` is executed again from there.
 set -euo pipefail
 
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.local/share/dotfiles}"
-REPO_URL="https://github.com/julienmontagut/dotfiles.git"
+REPO_URL="${REPO_URL:-https://github.com/julienmontagut/dotfiles.git}"
 FORCE=false
 
 for arg in "$@"; do
@@ -24,24 +30,32 @@ if [[ "$OS" != "Darwin" && "$OS" != "Linux" ]]; then
   exit 1
 fi
 
-# git is required to locate/clone the repo. macOS ships it with the Xcode CLT;
-# Linux is expected to have it already (cloud-init installs it).
-if ! command -v git &>/dev/null; then
-  if [[ "$OS" == "Darwin" ]]; then
+# ================================================================================================
+# System package manager setup and dev dependencies
+# ================================================================================================
+if [[ "$OS" == "Darwin" ]]; then
+  if ! xcode-select -p &>/dev/null; then
     echo "Installing Xcode Command Line Tools..."
     xcode-select --install
     until xcode-select -p &>/dev/null; do sleep 5; done
-  else
-    echo "git is required but not installed" >&2
-    exit 1
   fi
+  if ! command -v brew &>/dev/null; then
+    bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv zsh)"' >> "$HOME/.zprofile"
+    eval "$(/opt/homebrew/bin/brew shellenv zsh)"
+  fi
+else
+  sudo apt update
+  sudo apt install -y \
+    build-essential \
+    ca-certificates \
+    curl \
+    git
 fi
 
-# --- Locate the repo and pin DOTFILES_DIR -----------------------------------
-# Run from a checkout (the common case for a working copy): that checkout wins,
-# regardless of where it lives on disk. Piped via curl|bash (no resolvable
-# script dir / no .git): clone the canonical location and re-exec from there.
-# Either way DOTFILES_DIR is exported so layer-2 scripts locate the repo.
+# ================================================================================================
+# Locate the dotfiles repository or clone it
+# ================================================================================================
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-}")" 2>/dev/null && pwd || echo "")"
 if [[ -n "$SCRIPT_DIR" && -f "$SCRIPT_DIR/.git/HEAD" ]]; then
   DOTFILES_DIR="$SCRIPT_DIR"
@@ -56,20 +70,12 @@ else
 fi
 export DOTFILES_DIR
 
-# --- Linux: hand off to layer-2 (per-host) ----------------------------------
-# Export FORCE so the host script's `mise bootstrap` adds --force-dotfiles too.
-if [[ "$OS" == "Linux" ]]; then
-  export FORCE
-  HOST="$(hostname -s)"
-  exec "$DOTFILES_DIR/hosts/$HOST.sh"
-  # TODO: Handle claude desktop install from official repo
-fi
-
-# --- macOS ------------------------------------------------------------------
-if ! command -v brew &>/dev/null; then
-  bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  echo 'eval "$(/opt/homebrew/bin/brew shellenv zsh)"' >> "$HOME/.zprofile"
-  eval "$(/opt/homebrew/bin/brew shellenv zsh)"
+# ================================================================================================
+# On macOS, symlink the Brewfile so `brew bundle --global` can be run
+# ================================================================================================
+if [[ "$OS" == "Darwin" ]]; then
+  mkdir -p "$HOME/Developer"
+  ln -sfn "$DOTFILES_DIR/Brewfile" "$HOME/.Brewfile"
 fi
 
 if ! command -v mise &>/dev/null; then
@@ -77,24 +83,19 @@ if ! command -v mise &>/dev/null; then
   export PATH="$HOME/.local/bin:$PATH"
 fi
 
-mkdir -p "$HOME/Developer"
-
-# macOS-only: symlink the Brewfile so `brew bundle --global` (the mise bootstrap
-# task) finds it. Not a dotfiles mapping — mise applies those on every OS.
-ln -sfn "$DOTFILES_DIR/Brewfile" "$HOME/.Brewfile"
-
-# gh is a mise tool — install it, log in, and authenticate mise's GitHub API
-# calls so bootstrap resolving `latest` for the rest doesn't hit the rate limit.
-mise install gh@latest
-export GITHUB_TOKEN="$(mise exec gh -- gh auth token 2>/dev/null || true)"
-if [[ -z "$GITHUB_TOKEN" ]]; then
-  mise exec gh -- gh auth login
-  export GITHUB_TOKEN="$(mise exec gh -- gh auth token)"
+# Try to authenticate into github so that mise's doesn't hit the rate limit of github. 
+# Use a GITHUB_TOKEN from the environment, else borrow an existing gh login if one is around, else 
+# continue unauthenticated. 
+if [[ -z "${GITHUB_TOKEN:-}" ]] && command -v gh &>/dev/null; then
+  GITHUB_TOKEN="$(gh auth token 2>/dev/null || true)"
+fi
+if [[ -n "${GITHUB_TOKEN:-}" ]]; then
+  export GITHUB_TOKEN
 fi
 
-# mise bootstrap orchestrates the rest: dotfiles (symlinks the global mise
-# config), the mise-managed tools (rust, dotnet, aspire, claude-code, all CLIs),
-# then the bootstrap task (brew bundle for the macOS GUI apps, macOS only).
+# ================================================================================================
+# Mise bootstraps installing dotfiles, tools and running `brew bundle` on macOS
+# ================================================================================================
 (
   cd "$DOTFILES_DIR"
   export MISE_EXPERIMENTAL=1
@@ -106,9 +107,11 @@ fi
   fi
 )
 
-# System defaults + services (TouchID, borders, aerospace) are invasive and
-# opt-in. Skip the prompt when not attached to a terminal (curl | bash).
-if [[ -t 0 ]]; then
+# ================================================================================================
+# Apply platform specific scripts like macOS defaults
+# ================================================================================================
+# TODO: Change this to be simpler. A script by platform
+if [[ "$OS" == "Darwin" && -t 0 ]]; then
   read -rp "Apply macOS system defaults & services? [y/N] " reply
   if [[ $reply =~ ^[Yy]$ ]]; then
     "$DOTFILES_DIR/scripts/macos-defaults.sh"
