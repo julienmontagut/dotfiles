@@ -1,23 +1,70 @@
 " Leader key
 let mapleader = " "
+let maplocalleader = " "
+
+
+" NOT enabled: easymotion, anyobject — external plugins, and both are
+" redundant now (sneak covers easymotion; mini-ai covers anyobject).
+
+" ── Surround: keep vim-surround keys (ys/cs/ds) ────────────────────────
+" No config needed — defaults already match Zed native + mini.surround
+" (which you're configuring with vim-surround mappings). `s` stays free
+" for sneak, exactly as `s` stays free for flash in Neovim.
+
+" let mapleader = " "
+sethandler <C-W> a:vim     " vim owns Ctrl-W, not 'Extend Selection'
 
 " General settings
+set clipboard+=unnamedplus
+set notimeout
 set number
+set scrolloff=5
+set sidescrolloff=5
+
+" Search settings
 set ignorecase
 set smartcase
-set scrolloff=8
-set sidescrolloff=8
-set clipboard+=unnamedplus
 set incsearch
 set hlsearch
 
 " IdeaVim plugins
-set surround
 set commentary
 set highlightedyank
 set nerdtree
-set which-key
-set notimeout
+set mini-ai
+set sneak
+set easymotion
+set surround
+set VimEverywhere
+
+" ── LSP g-family (identical in Neovim + Zed) ───────────────────────────
+nmap gd  <Action>(GotoDeclaration)
+nmap gD  <Action>(GotoDeclaration)
+nmap grn <Action>(RenameElement)
+map  gra <Action>(ShowIntentionActions)
+nmap grr <Action>(FindUsages)
+nmap gri <Action>(GotoImplementation)
+nmap grt <Action>(GotoTypeDeclaration)
+nmap gs  <Action>(FileStructurePopup)
+nmap gS  <Action>(GotoSymbol)
+nmap gh  <Action>(ShowErrorDescription)
+nmap K   <Action>(ShowHoverInfo)
+imap <C-s> <Action>(ParameterInfo)
+nmap ]d  <Action>(GotoNextError)
+nmap [d  <Action>(GotoPreviousError)
+nmap <C-w>d <Action>(ShowErrorDescription)
+
+" ── Space leader ───────────────────────────────────────────────────────
+map <leader>f <Action>(GotoFile)
+map <leader>/ <Action>(FindInPath)
+map <leader>b <Action>(RecentFiles)
+map <leader>e <Action>(SelectInProjectView)
+map <leader>s <Action>(GotoSymbol)
+map <leader>g <Action>(ActivateVersionControlToolWindow)
+map <leader>t <Action>(ActivateTerminalToolWindow)
+map <leader>l <Action>(GotoLine)
+map <leader>x <Action>(ActivateProblemsViewToolWindow)
+nmap <leader>vr <Action>(IdeaVim.ReloadVimRc.reload)
 
 " Search (matching neovim <leader>s* bindings)
 map <leader>sf <Action>(GotoFile)
