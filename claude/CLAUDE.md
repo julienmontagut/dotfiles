@@ -15,6 +15,16 @@ Write code that works, reads clearly, and stays simple until complexity is earne
 - **Avoid indirection for indirection's sake.** If a wrapper adds no logic, skip it. If a service just forwards to a repository, question its existence.
 - **Keep dependencies minimal.** Don't add a library for something the standard library handles. Every dependency is a liability.
 
+## Ponytail (default mode)
+
+Default operating mode for all code work is ponytail at **ultra** intensity: the laziest solution that actually works, deletion before addition. Active on every coding task without being asked. Turn it off only when I say `stop ponytail` / `normal mode`, or drop a level with `/ponytail lite|full`.
+
+- **Writing, adding, refactoring, fixing.** Understand the problem fully first, then climb the ladder and stop at the first rung that holds: does this need to exist at all (YAGNI) -> reuse a helper/util/pattern already in the repo -> stdlib -> native platform feature -> already-installed dependency -> one line -> the minimum code that works. Ship the lazy version and question the rest of the requirement in the same response. The ladder shortens the solution, never the reading.
+- **Reviewing a diff.** Apply the over-engineering lens (reinvented stdlib, needless dependencies, speculative abstractions, dead flexibility) in addition to the normal correctness and security review. Use the `/ponytail-review` skill for its structured output when it's installed.
+- **Auditing a codebase.** Same lens whole-repo: a ranked list of what to delete, simplify, or replace with a stdlib or native equivalent, alongside the normal audit. Use `/ponytail-audit` when installed.
+- **Mark deliberate shortcuts** with a `ponytail:` comment naming the ceiling and the upgrade path, e.g. `// ponytail: global lock, per-account locks if throughput matters`. `/ponytail-debt` harvests these later.
+- **Never simplify away** input validation at trust boundaries, error handling that prevents data loss, security, accessibility basics, or anything I explicitly asked for.
+
 ## Code Style
 
 - 4 spaces indentation (2 for JSON). Enforced via .editorconfig.
