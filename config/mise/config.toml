@@ -1,7 +1,6 @@
 [settings]
 experimental = true
 lockfile = true
-# Handling of idiomatic version files
 idiomatic_version_file_enable_tools = [
     "dotnet",
     "opentofu",
@@ -12,12 +11,8 @@ idiomatic_version_file_enable_tools = [
 use_git_credentials = true
 
 [tools]
-
-# Languages installed by default (rust comes from each repo's rust-toolchain.toml)
-dotnet = "latest"
-
-# CLI tools 
 bat = "latest"
+bitwarden = "latest"
 claude-code = "latest"
 dua = "latest"
 eza = "latest"
@@ -37,10 +32,9 @@ starship = "latest"
 tmux = "latest"
 tree-sitter = "latest"
 xh = "latest"
-zoxide = "latest"
 zellij = "latest"
+zoxide = "latest"
 
 # CLI tools out of the registry
 "cargo:bacon" = "latest"
 "aqua:maaslalani/slides" = "latest"
-bitwarden = "latest"
