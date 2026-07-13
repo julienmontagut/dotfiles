@@ -45,12 +45,15 @@ if [[ "$OS" == "Darwin" ]]; then
     eval "$(/opt/homebrew/bin/brew shellenv zsh)"
   fi
 else
-  sudo apt update
-  sudo apt install -y \
-    build-essential \
-    ca-certificates \
-    curl \
-    git
+  pkgs=(build-essential ca-certificates curl git)
+  missing=()
+  for pkg in "${pkgs[@]}"; do
+    dpkg -s "$pkg" &>/dev/null || missing+=("$pkg")
+  done
+  if (( ${#missing[@]} )); then
+    sudo apt update
+    sudo apt install -y "${missing[@]}"
+  fi
 fi
 
 # ================================================================================================
