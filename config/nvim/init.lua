@@ -1,6 +1,6 @@
 -- Leader
 vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+-- vim.g.maplocalleader = " "
 
 -- General user interface
 vim.opt.number = true
@@ -41,7 +41,7 @@ vim.pack.add {
     "https://github.com/folke/trouble.nvim",
     "https://github.com/folke/which-key.nvim",
     "https://github.com/neovim/nvim-lspconfig",
-    "https://github.com/nvim-mini/mini.icons",
+    "https://github.com/nvim-mini/mini.nvim",
     "https://github.com/nvim-treesitter/nvim-treesitter",
     "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
     "https://github.com/seblj/roslyn.nvim",
@@ -49,10 +49,13 @@ vim.pack.add {
 }
 
 -- Plugin setup
-require("flash").setup{}
 require("mini.icons").setup{}
+require("flash").setup{}
+-- require("nvim-surround").setup{}
 require("trouble").setup{}
 require("which-key").setup{}
+
+-- require("plugins")
 
 -- Oil file explorer
 require("oil").setup {
