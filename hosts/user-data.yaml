@@ -1,0 +1,73 @@
+## template: jinja
+#cloud-config
+# Single cloud-init user-data for all hosts. Per-host meta-data sets
+# local-hostname; this template branches on it for FQDN + host-specific
+# packages. Escalation is password sudo via the sudo group. Dotfiles are
+# installed manually after first login, not by cloud-init.
+{% if v1.local_hostname == "hermes" %}{% set domain = "upcast.internal" %}{% else %}{% set domain = "montagut.internal" %}{% endif %}
+hostname: {{ v1.local_hostname }}
+fqdn: {{ v1.local_hostname }}.{{ domain }}
+manage_etc_hosts: true
+locale: en_US.UTF-8
+timezone: Europe/Paris
+
+users:
+  - name: julien
+    groups: [sudo, netdev]        # sudo group → distro default: password-required sudo
+    shell: /bin/bash
+    # Account stays locked (no password). SSH key still logs in; you set the
+    # sudo password on first login via the scoped rule below. Nothing stored.
+    ssh_authorized_keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIsILdVONEDZEVJjfImXSTExxZ0lkArF5xY/CIy4ULNK julien@mac
+
+package_update: true
+package_upgrade: true
+packages:
+  # Bootstrap essentials only — enough to log in and run the dotfiles install
+  # yourself. No dev/CLI tooling here; that comes from your manual install.
+  - sudo
+  - ca-certificates
+  - git
+  - curl
+{% if v1.local_hostname == "gaia" %}
+  # gaia — private home LAN DNS
+  - unbound
+{% elif v1.local_hostname == "hermes" %}
+  # hermes — upcast wake-on-LAN trigger
+  - wakeonlan
+  - etherwake
+{% endif %}
+
+write_files:
+  - path: /etc/ssh/sshd_config.d/10-hardening.conf
+    permissions: "0644"
+    content: |
+      PermitRootLogin no
+      PasswordAuthentication no
+      KbdInteractiveAuthentication no
+  - path: /etc/sudoers.d/10-julien-setpw
+    permissions: "0440"
+    content: |
+      # First-login bootstrap: julien may set his OWN sudo password without one.
+      # After `sudo passwd julien`, delete this file — every other sudo then
+      # requires the password you just chose.
+      julien ALL=(root) NOPASSWD: /usr/bin/passwd julien
+  - path: /etc/update-motd.d/99-firstboot
+    permissions: "0755"
+    content: |
+      #!/bin/sh
+      # Login notice, self-clears once the bootstrap sudoers rule is removed.
+      [ -f /etc/sudoers.d/10-julien-setpw ] || exit 0
+      cat <<'EOF'
+
+        First-login setup still pending:
+          1. sudo passwd julien                      # set your sudo password
+          2. sudo rm /etc/sudoers.d/10-julien-setpw  # clears this notice + the bootstrap rule
+          3. install dotfiles yourself (optional)
+
+      EOF
+
+runcmd:
+  - [systemctl, reload, ssh]
+
+final_message: "{{ v1.local_hostname }} ready. ssh julien@{{ v1.local_hostname }} — the login notice lists the first-boot steps."
