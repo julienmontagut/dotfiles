@@ -5,40 +5,47 @@ config-version = 2
 # Start at login
 start-at-login = true
 
-# Normalization settings
-enable-normalization-flatten-containers = true
-enable-normalization-opposite-orientation-for-nested-containers = true
+# Default layout: fullscreen (accordion with no peek padding)
+default-root-container-layout = 'accordion'
+accordion-padding = 16
 
 # Keyboard layout preset for Dvorak
 key-mapping.preset = "dvorak"
 
+# Mouse / focus coupling: focus follows the mouse, and the mouse lazily
+# follows keyboard focus (window/workspace and monitor changes).
+focus-follows-mouse.enabled = true
+on-focus-changed = ['move-mouse window-lazy-center']
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
 # Gaps configuration
 [gaps]
-outer.top = 4
-outer.bottom = 4
-outer.left = 4
-outer.right = 4
-inner.vertical = 4
-inner.horizontal = 4
+outer.top = 8
+outer.bottom = 8
+outer.left = 8
+outer.right = 8
+inner.vertical = 8
+inner.horizontal = 8
 
 # =============================================================================
 # Main mode bindings
 # =============================================================================
 
 [mode.main.binding]
-# Workspace switching
-cmd-ctrl-alt-1 = "workspace 1"
-cmd-ctrl-alt-2 = "workspace 2"
-cmd-ctrl-alt-3 = "workspace 3"
-cmd-ctrl-alt-4 = "workspace 4"
-cmd-ctrl-alt-5 = "workspace 5"
+# Workspace switching (number keys switch positionally; workspaces are named
+# by usage: g general, c comms, r reference/web/dev-secondary, d dev, m misc)
+cmd-ctrl-alt-1 = "workspace g"   # general / default
+cmd-ctrl-alt-2 = "workspace c"   # communications
+cmd-ctrl-alt-3 = "workspace r"   # reference, web, dev secondary
+cmd-ctrl-alt-4 = "workspace d"   # dev primary
+cmd-ctrl-alt-5 = "workspace m"   # misc, quick space
 
 # Move window to workspace
-cmd-ctrl-alt-shift-1 = "move-node-to-workspace 1"
-cmd-ctrl-alt-shift-2 = "move-node-to-workspace 2"
-cmd-ctrl-alt-shift-3 = "move-node-to-workspace 3"
-cmd-ctrl-alt-shift-4 = "move-node-to-workspace 4"
-cmd-ctrl-alt-shift-5 = "move-node-to-workspace 5"
+cmd-ctrl-alt-shift-1 = "move-node-to-workspace g"
+cmd-ctrl-alt-shift-2 = "move-node-to-workspace c"
+cmd-ctrl-alt-shift-3 = "move-node-to-workspace r"
+cmd-ctrl-alt-shift-4 = "move-node-to-workspace d"
+cmd-ctrl-alt-shift-5 = "move-node-to-workspace m"
 
 # Focus navigation (vim-style)
 cmd-ctrl-alt-h = "focus left"
@@ -46,43 +53,60 @@ cmd-ctrl-alt-j = "focus down"
 cmd-ctrl-alt-k = "focus up"
 cmd-ctrl-alt-l = "focus right"
 
-# Layout control
-cmd-ctrl-alt-shift-a = "layout h_accordion"
-cmd-ctrl-alt-shift-o = "layout tiles"
-cmd-ctrl-alt-shift-u = "layout floating tiling"
+# Move window (vim-style)
+cmd-ctrl-alt-shift-h = "move left"
+cmd-ctrl-alt-shift-j = "move down"
+cmd-ctrl-alt-shift-k = "move up"
+cmd-ctrl-alt-shift-l = "move right"
+
+# Layout: set split direction, toggle, tabbed, floating, fullscreen.
+# A pane can't be spawned empty - set the direction, then open a window.
+cmd-ctrl-alt-s = "layout tiles horizontal"          # split horizontal (sway splith)
+cmd-ctrl-alt-v = "layout tiles vertical"            # split vertical (sway splitv)
+cmd-ctrl-alt-e = "layout tiles horizontal vertical" # toggle split orientation
+cmd-ctrl-alt-t = "layout accordion horizontal"      # tabbed
+cmd-ctrl-alt-w = "layout floating tiling"           # floating toggle
+cmd-ctrl-alt-f = "fullscreen"                       # fullscreen
+
+# Modes
+cmd-ctrl-alt-r = "mode resize"
+cmd-ctrl-alt-o = "mode open"
 
 # Window management
-cmd-ctrl-alt-q = "close"
-cmd-ctrl-alt-shift-m = "mode layout"
+cmd-ctrl-alt-shift-q = "close"
+cmd-ctrl-alt-shift-c = "reload-config"
 
-# Applications
-cmd-ctrl-alt-enter = "exec-and-forget open -na WezTerm"
-cmd-ctrl-alt-shift-f = "exec-and-forget open -a Firefox"
+# Terminal (new ghostty window in the existing process) and launcher (Spotlight)
+cmd-ctrl-alt-enter = "exec-and-forget open -na Ghostty"
+cmd-ctrl-alt-space = "exec-and-forget osascript -e 'tell application \"System Events\" to key code 49 using command down'"
 
 # =============================================================================
-# Layout mode bindings
+# Resize mode bindings
 # =============================================================================
 
-[mode.layout.binding]
-# Move window to workspace and follow
-1 = ["move-node-to-workspace 1", "workspace 1"]
-2 = ["move-node-to-workspace 2", "workspace 2"]
-3 = ["move-node-to-workspace 3", "workspace 3"]
-4 = ["move-node-to-workspace 4", "workspace 4"]
-5 = ["move-node-to-workspace 5", "workspace 5"]
+[mode.resize.binding]
+# resize smart picks the axis from the container orientation; 100px steps
+h = "resize smart -100"
+j = "resize smart -100"
+k = "resize smart +100"
+l = "resize smart +100"
+0 = "balance-sizes"
 
-# Resize windows (shift + hjkl)
-shift-h = "resize width -50"
-shift-j = "resize height +50"
-shift-k = "resize height -50"
-shift-l = "resize width +50"
-
-# Move windows
-h = "move left"
-j = "move down"
-k = "move up"
-l = "move right"
-
-# Exit layout mode
 esc = "mode main"
-cmd-ctrl-alt-c = "mode main"
+enter = "mode main"
+
+# =============================================================================
+# Open mode bindings (app launchers)
+# =============================================================================
+
+[mode.open.binding]
+b = ["exec-and-forget open -a 'Google Chrome'", "mode main"]   # browser
+t = ["exec-and-forget open -na Ghostty", "mode main"]          # terminal
+z = ["exec-and-forget open -a Zed", "mode main"]
+l = ["exec-and-forget open -a Linear", "mode main"]
+s = ["exec-and-forget open -a Slite", "mode main"]
+x = ["exec-and-forget open -a Xcode", "mode main"]
+m = ["exec-and-forget open -a Mail", "mode main"]
+comma = ["exec-and-forget open -a 'System Settings'", "mode main"]
+
+esc = "mode main"
