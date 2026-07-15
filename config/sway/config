@@ -8,6 +8,7 @@
 set $mod Mod4
 set $term ghostty
 set $menu fuzzel
+set $browser firefox
 
 # =============================================================================
 # Output configuration
@@ -34,6 +35,11 @@ input "type:touchpad" {
 input "type:pointer" {
     natural_scroll enabled
 }
+
+# Focus follows the mouse, and the cursor warps to the focused container
+# (mouse follows focus).
+focus_follows_mouse yes
+mouse_warping container
 
 # =============================================================================
 # Appearance
@@ -67,6 +73,9 @@ bindsym $mod+space exec $menu
 # Reload config
 bindsym $mod+Shift+c reload
 
+# App-launch mode
+bindsym $mod+o mode "open"
+
 # Exit sway
 bindsym $mod+Shift+e exec swaynag -t warning -m 'Exit sway?' -B 'Yes' 'swaymsg exit'
 
@@ -90,38 +99,38 @@ bindsym $mod+Shift+l move right
 # Key bindings - Workspaces
 # =============================================================================
 
-# Switch workspace
-bindsym $mod+1 workspace number 1
-bindsym $mod+2 workspace number 2
-bindsym $mod+3 workspace number 3
-bindsym $mod+4 workspace number 4
-bindsym $mod+5 workspace number 5
+# Switch workspace (number keys switch positionally; workspaces are named by
+# usage: g general, c comms, r reference/web/dev-secondary, d dev, m misc)
+bindsym $mod+1 workspace g
+bindsym $mod+2 workspace c
+bindsym $mod+3 workspace r
+bindsym $mod+4 workspace d
+bindsym $mod+5 workspace m
 
 # Move to workspace
-bindsym $mod+Shift+1 move container to workspace number 1
-bindsym $mod+Shift+2 move container to workspace number 2
-bindsym $mod+Shift+3 move container to workspace number 3
-bindsym $mod+Shift+4 move container to workspace number 4
-bindsym $mod+Shift+5 move container to workspace number 5
+bindsym $mod+Shift+1 move container to workspace g
+bindsym $mod+Shift+2 move container to workspace c
+bindsym $mod+Shift+3 move container to workspace r
+bindsym $mod+Shift+4 move container to workspace d
+bindsym $mod+Shift+5 move container to workspace m
 
 # =============================================================================
 # Key bindings - Layout
 # =============================================================================
 
-# Split direction
-bindsym $mod+b splith
+# Split direction (home-row keys; b is awkward on dvorak)
+bindsym $mod+s splith
 bindsym $mod+v splitv
 
 # Layout mode
-bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
+bindsym $mod+t layout tabbed
 bindsym $mod+e layout toggle split
 
 # Fullscreen
 bindsym $mod+f fullscreen
 
 # Floating
-bindsym $mod+Shift+space floating toggle
+bindsym $mod+w floating toggle
 bindsym $mod+d focus mode_toggle
 
 # =============================================================================
@@ -129,16 +138,34 @@ bindsym $mod+d focus mode_toggle
 # =============================================================================
 
 mode "resize" {
-    bindsym h resize shrink width 50 px
-    bindsym j resize grow height 50 px
-    bindsym k resize shrink height 50 px
-    bindsym l resize grow width 50 px
+    bindsym h resize shrink width 100 px
+    bindsym j resize grow height 100 px
+    bindsym k resize shrink height 100 px
+    bindsym l resize grow width 100 px
 
     bindsym Escape mode "default"
     bindsym Return mode "default"
 }
 
 bindsym $mod+r mode "resize"
+
+# =============================================================================
+# Key bindings - Open mode (app launchers)
+# =============================================================================
+
+# Cross-platform launchers mirror the AeroSpace open mode. The rest of the
+# letters (x Xcode, m Mail, comma System Settings, l Linear, s Slite) are
+# macOS-specific; fill in Linux equivalents as needed.
+mode "open" {
+    # exec must come last: sway's exec greedily takes the rest of the line,
+    # so the mode reset has to precede it.
+    bindsym b mode "default"; exec $browser
+    bindsym t mode "default"; exec $term
+    bindsym z mode "default"; exec zed
+
+    bindsym Escape mode "default"
+    bindsym Return mode "default"
+}
 
 # =============================================================================
 # Status bar
