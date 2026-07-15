@@ -19,6 +19,8 @@
       "g r r": "editor::FindAllReferences",
       "g r i": "editor::GoToImplementation",
       "g r t": "editor::GoToTypeDefinition",
+      "g O": "outline::Toggle",
+      "g S": "project_symbols::Toggle",
       "g D": "editor::GoToDeclaration",
       "] d": "editor::GoToDiagnostic",
       "[ d": "editor::GoToPreviousDiagnostic",
@@ -28,15 +30,15 @@
   {
     "context": "Editor && (vim_mode == normal || vim_mode == visual) && !VimWaiting && !menu",
     "bindings": {
+      "space space": "file_finder::Toggle",
       "space f": "file_finder::Toggle",
-      "space /": "pane::DeploySearch",
+      "space g": "pane::DeploySearch",
       "space b": "tab_switcher::ToggleAll",
       "space e": "project_panel::ToggleFocus",
       "space s": "project_symbols::Toggle",
-      "space g": "git_panel::ToggleFocus",
+      "space v": "git_panel::ToggleFocus",
       "space t": "terminal_panel::Toggle",
-      "space l": "go_to_line::Toggle",
-      "space x": "diagnostics::Deploy",
+      "space d": "diagnostics::Deploy",
     },
   },
   // window verbs (hjkl nav is native in editor)

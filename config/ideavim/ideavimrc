@@ -2,17 +2,8 @@
 let mapleader = " "
 let maplocalleader = " "
 
-
-" NOT enabled: easymotion, anyobject — external plugins, and both are
-" redundant now (sneak covers easymotion; mini-ai covers anyobject).
-
-" ── Surround: keep vim-surround keys (ys/cs/ds) ────────────────────────
-" No config needed — defaults already match Zed native + mini.surround
-" (which you're configuring with vim-surround mappings). `s` stays free
-" for sneak, exactly as `s` stays free for flash in Neovim.
-
-" let mapleader = " "
-sethandler <C-W> a:vim     " vim owns Ctrl-W, not 'Extend Selection'
+" easymotion/anyobject not enabled: sneak covers easymotion, mini-ai covers anyobject.
+" surround: vim-surround keys (ys/cs/ds) match Zed native + mini.surround; `s` stays free for sneak.
 
 " General settings
 set clipboard+=unnamedplus
@@ -26,7 +17,6 @@ set ignorecase
 set smartcase
 set incsearch
 set hlsearch
-set notimeout
 
 " IdeaVim plugins
 set commentary
@@ -38,7 +28,7 @@ set easymotion
 set surround
 set VimEverywhere
 
-" ── LSP g-family (identical in Neovim + Zed) ───────────────────────────
+" ── LSP g-family (matches Neovim 0.12 + Zed) ───────────────────────────
 nmap gd  <Action>(GotoDeclaration)
 nmap gD  <Action>(GotoDeclaration)
 nmap grn <Action>(RenameElement)
@@ -46,9 +36,8 @@ map  gra <Action>(ShowIntentionActions)
 nmap grr <Action>(FindUsages)
 nmap gri <Action>(GotoImplementation)
 nmap grt <Action>(GotoTypeDeclaration)
-nmap gs  <Action>(FileStructurePopup)
+nmap gO  <Action>(FileStructurePopup)
 nmap gS  <Action>(GotoSymbol)
-nmap gh  <Action>(ShowErrorDescription)
 nmap K   <Action>(ShowHoverInfo)
 imap <C-s> <Action>(ParameterInfo)
 nmap ]d  <Action>(GotoNextError)
@@ -56,48 +45,19 @@ nmap [d  <Action>(GotoPreviousError)
 nmap <C-w>d <Action>(ShowErrorDescription)
 
 " ── Space leader ───────────────────────────────────────────────────────
+map <leader><space> <Action>(SearchEverywhere)
 map <leader>f <Action>(GotoFile)
-map <leader>/ <Action>(FindInPath)
+map <leader>g <Action>(FindInPath)
 map <leader>b <Action>(RecentFiles)
 map <leader>e <Action>(SelectInProjectView)
 map <leader>s <Action>(GotoSymbol)
-map <leader>g <Action>(ActivateVersionControlToolWindow)
+map <leader>v <Action>(ActivateVersionControlToolWindow)
 map <leader>t <Action>(ActivateTerminalToolWindow)
-map <leader>l <Action>(GotoLine)
-map <leader>x <Action>(ActivateProblemsViewToolWindow)
-nmap <leader>vr <Action>(IdeaVim.ReloadVimRc.reload)
+map <leader>d <Action>(ActivateProblemsViewToolWindow)
+nmap <leader>R <Action>(IdeaVim.ReloadVimRc.reload)
 
 " Let vim own Ctrl-W (splits), not Extend Selection
 sethandler <C-W> a:vim
-
-" g-family (matches Neovim + Zed)
-nmap gd  <Action>(GotoDeclaration)
-nmap gD  <Action>(GotoDeclaration)
-nmap grn <Action>(RenameElement)
-map  gra <Action>(ShowIntentionActions)
-nmap grr <Action>(FindUsages)
-nmap gri <Action>(GotoImplementation)
-nmap grt <Action>(GotoTypeDeclaration)
-nmap gs  <Action>(FileStructurePopup)
-nmap gS  <Action>(GotoSymbol)
-nmap gh  <Action>(ShowErrorDescription)
-nmap K   <Action>(ShowHoverInfo)
-imap <C-s> <Action>(ParameterInfo)
-nmap ]d  <Action>(GotoNextError)
-nmap [d  <Action>(GotoPreviousError)
-nmap <C-w>d <Action>(ShowErrorDescription)
-
-" space leader (editor scope)
-map <leader>f <Action>(GotoFile)
-map <leader>/ <Action>(FindInPath)
-map <leader>b <Action>(RecentFiles)
-map <leader>e <Action>(SelectInProjectView)
-map <leader>s <Action>(GotoSymbol)
-map <leader>g <Action>(ActivateVersionControlToolWindow)
-map <leader>t <Action>(ActivateTerminalToolWindow)
-map <leader>l <Action>(GotoLine)
-map <leader>x <Action>(ActivateProblemsViewToolWindow)
-nmap <leader>vr <Action>(IdeaVim.ReloadVimRc.reload)
 
 " Let the IDE handle ctrl+n/p/y for popup navigation (code actions, completions)
 sethandler <C-n> n:vim i:ide v:ide
