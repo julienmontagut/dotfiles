@@ -4,14 +4,33 @@
 # Git
 # =============================================================================
 
-alias gcm="git commit -m"
-alias gca="git commit --amend --no-edit"
-alias gpf="git push --force-with-lease"
-alias gs="git status"
-alias gd="git diff"
-alias gl="git log --oneline -20"
-alias gco="git checkout"
-alias gb="git branch"
+alias gia="git add"
+alias gic="git commit"
+alias gicm="git commit -m"
+alias gica="git commit --amend --no-edit"
+alias gip="git push"
+alias gipf="git push --force-with-lease"
+alias giu="git pull"
+alias gif="git fetch"
+alias gipr="git remote prune origin"
+alias gis="git status"
+alias gid="git diff"
+alias gids="git diff --staged"
+alias gil="git log --oneline -20"
+alias gigr="git log --graph --all"
+alias gico="git checkout"
+alias gire="git restore"
+alias girs="git restore --staged"
+alias giwo="git worktree"
+
+# bare `gib` lists all branches; anything else passes through to git branch
+gib() {
+    if [ $# -eq 0 ]; then
+        git branch -a
+    else
+        git branch "$@"
+    fi
+}
 
 # =============================================================================
 # Navigation
