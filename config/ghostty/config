@@ -17,6 +17,9 @@ font-size = 16
 shell-integration = zsh
 shell-integration-features = ssh-env,ssh-terminfo,cursor,sudo,title
 
+# Launch zellij's welcome screen; fall back to a plain shell if it's missing.
+command = command -v zellij >/dev/null 2>&1 && exec zellij -l welcome || exec zsh
+
 # Keybindings
 # keybind = super+shift+n=new_window
 keybind = ctrl+shift+c=copy_to_clipboard
