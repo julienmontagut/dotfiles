@@ -59,8 +59,8 @@ sketchybar --default updates=when_shown \
 # Events
 sketchybar --add event aerospace_workspace_change
 
-# Workspace indicators (always show 1-4)
-for sid in 1 2 3 4; do
+# Workspace indicators (named aerospace workspaces)
+for sid in dev gen work mgmt spin; do
 sketchybar --add item space.$sid left \
            --subscribe space.$sid aerospace_workspace_change \
            --set space.$sid \

@@ -28,24 +28,155 @@ inner.vertical = 8
 inner.horizontal = 8
 
 # =============================================================================
+# Persistent app-to-workspace assignment
+# Apps land in their home workspace on launch (matched by app-id).
+# Anything without a rule falls through to the gen catch-all at the bottom.
+# =============================================================================
+
+# --- dev: editors, IDEs, terminals, dev tooling ---
+[[on-window-detected]]
+if.app-id = 'dev.zed.Zed'
+run = 'move-node-to-workspace dev'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.dt.Xcode'
+run = 'move-node-to-workspace dev'
+
+[[on-window-detected]]
+if.app-id = 'com.jetbrains.rider'
+run = 'move-node-to-workspace dev'
+
+[[on-window-detected]]
+if.app-id = 'com.jetbrains.rustrover'
+run = 'move-node-to-workspace dev'
+
+[[on-window-detected]]
+if.app-id = 'com.jetbrains.toolbox'
+run = 'move-node-to-workspace dev'
+
+[[on-window-detected]]
+if.app-id = 'com.jetbrains.dotmemory'
+run = 'move-node-to-workspace dev'
+
+[[on-window-detected]]
+if.app-id = 'com.jetbrains.dottrace'
+run = 'move-node-to-workspace dev'
+
+[[on-window-detected]]
+if.app-id = 'com.mitchellh.ghostty'
+run = 'move-node-to-workspace dev'
+
+[[on-window-detected]]
+if.app-id = 'dev.kdrag0n.MacVirt'
+run = 'move-node-to-workspace dev'
+
+[[on-window-detected]]
+if.app-id = 'sh.loft.devpod'
+run = 'move-node-to-workspace dev'
+
+# --- spin: run / preview / iOS simulator (otherwise placed manually) ---
+[[on-window-detected]]
+if.app-id = 'com.apple.iphonesimulator'
+run = 'move-node-to-workspace spin'
+
+# --- work: web apps, research, docs (Chrome, Claude, Slite, Craft) ---
+[[on-window-detected]]
+if.app-id = 'com.google.Chrome'
+run = 'move-node-to-workspace work'
+
+[[on-window-detected]]
+if.app-id = 'com.anthropic.claudefordesktop'
+run = 'move-node-to-workspace work'
+
+[[on-window-detected]]
+if.app-id = 'com.slite.desktop'
+run = 'move-node-to-workspace work'
+
+[[on-window-detected]]
+if.app-id = 'com.lukilabs.lukiapp'
+run = 'move-node-to-workspace work'
+
+# --- mgmt: mail, calendar, reminders, notes, contacts, comms, tracking ---
+[[on-window-detected]]
+if.app-id = 'com.apple.mail'
+run = 'move-node-to-workspace mgmt'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Notes'
+run = 'move-node-to-workspace mgmt'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.iCal'
+run = 'move-node-to-workspace mgmt'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.reminders'
+run = 'move-node-to-workspace mgmt'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.AddressBook'
+run = 'move-node-to-workspace mgmt'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.MobileSMS'
+run = 'move-node-to-workspace mgmt'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.FaceTime'
+run = 'move-node-to-workspace mgmt'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.mobilephone'
+run = 'move-node-to-workspace mgmt'
+
+[[on-window-detected]]
+if.app-id = 'com.linear'
+run = 'move-node-to-workspace mgmt'
+
+# --- games: float so they stay out of the tiled categories ---
+[[on-window-detected]]
+if.app-id = 'com.valvesoftware.steam'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.codeweavers.CrossOver'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Chess'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Civilization'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Cities Skylines'
+run = 'layout floating'
+
+# --- everything else falls through to gen (keep last) ---
+[[on-window-detected]]
+if = 'true'
+run = 'move-node-to-workspace gen'
+
+# =============================================================================
 # Main mode bindings
 # =============================================================================
 
 [mode.main.binding]
-# Workspace switching (number keys switch positionally; workspaces are named
-# by usage: g general, c comms, r reference/web/dev-secondary, d dev, m misc)
-cmd-ctrl-alt-1 = "workspace g"   # general / default
-cmd-ctrl-alt-2 = "workspace c"   # communications
-cmd-ctrl-alt-3 = "workspace r"   # reference, web, dev secondary
-cmd-ctrl-alt-4 = "workspace d"   # dev primary
-cmd-ctrl-alt-5 = "workspace m"   # misc, quick space
+# Workspace switching (hyper + first letter of the workspace name)
+cmd-ctrl-alt-d = "workspace dev"      # dev: editors, IDEs, Ghostty, Xcode
+cmd-ctrl-alt-g = "workspace gen"      # gen: default catch-all
+cmd-ctrl-alt-w = "workspace work"     # work: Chrome web apps, Claude, Slite, Craft
+cmd-ctrl-alt-m = "workspace mgmt"     # mgmt: Mail, Calendar, Reminders, comms
+cmd-ctrl-alt-s = "workspace spin"     # spin: secondary dev - run/preview/simulator
 
-# Move window to workspace
-cmd-ctrl-alt-shift-1 = "move-node-to-workspace g"
-cmd-ctrl-alt-shift-2 = "move-node-to-workspace c"
-cmd-ctrl-alt-shift-3 = "move-node-to-workspace r"
-cmd-ctrl-alt-shift-4 = "move-node-to-workspace d"
-cmd-ctrl-alt-shift-5 = "move-node-to-workspace m"
+# Move focused window to workspace (hyper + shift + first letter)
+cmd-ctrl-alt-shift-d = "move-node-to-workspace dev"
+cmd-ctrl-alt-shift-g = "move-node-to-workspace gen"
+cmd-ctrl-alt-shift-w = "move-node-to-workspace work"
+cmd-ctrl-alt-shift-m = "move-node-to-workspace mgmt"
+cmd-ctrl-alt-shift-s = "move-node-to-workspace spin"
 
 # Focus navigation (vim-style)
 cmd-ctrl-alt-h = "focus left"
@@ -59,33 +190,32 @@ cmd-ctrl-alt-shift-j = "move down"
 cmd-ctrl-alt-shift-k = "move up"
 cmd-ctrl-alt-shift-l = "move right"
 
-# Layout: set split direction, toggle, tabbed, floating, fullscreen.
-# A pane can't be spawned empty - set the direction, then open a window.
-cmd-ctrl-alt-s = "layout tiles horizontal"          # split horizontal (sway splith)
-cmd-ctrl-alt-v = "layout tiles vertical"            # split vertical (sway splitv)
-cmd-ctrl-alt-e = "layout tiles horizontal vertical" # toggle split orientation
-cmd-ctrl-alt-t = "layout accordion horizontal"      # tabbed
-cmd-ctrl-alt-w = "layout floating tiling"           # floating toggle
-cmd-ctrl-alt-f = "fullscreen"                       # fullscreen
-
-# Modes
-cmd-ctrl-alt-r = "mode resize"
+# Modes: layout (split / tabbed / float / fullscreen / resize) and open (launchers)
+cmd-ctrl-alt-minus = "mode layout"   # layout + resize (moved off w, now the work workspace)
 cmd-ctrl-alt-o = "mode open"
 
 # Window management
 cmd-ctrl-alt-shift-q = "close"
-cmd-ctrl-alt-shift-c = "reload-config"
+cmd-ctrl-alt-period = "reload-config"
 
 # Terminal (new ghostty window in the existing process) and launcher (Spotlight)
 cmd-ctrl-alt-enter = "exec-and-forget open -na Ghostty"
 cmd-ctrl-alt-space = "exec-and-forget osascript -e 'tell application \"System Events\" to key code 49 using command down'"
 
 # =============================================================================
-# Resize mode bindings
+# Layout mode bindings (arrange + resize)
 # =============================================================================
 
-[mode.resize.binding]
-# resize smart picks the axis from the container orientation; 100px steps
+[mode.layout.binding]
+# Arrange (one-shot, returns to main)
+s = ["layout tiles horizontal", "mode main"]          # split horizontal
+v = ["layout tiles vertical", "mode main"]            # split vertical
+e = ["layout tiles horizontal vertical", "mode main"] # toggle split orientation
+t = ["layout accordion horizontal", "mode main"]      # tabbed
+f = ["fullscreen", "mode main"]                       # fullscreen
+space = ["layout floating tiling", "mode main"]       # floating toggle
+
+# Resize (stays in mode; smart picks axis from orientation, 100px steps)
 h = "resize smart -100"
 j = "resize smart -100"
 k = "resize smart +100"
