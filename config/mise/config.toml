@@ -35,6 +35,11 @@ xh = "latest"
 zellij = "latest"
 zoxide = "latest"
 
+# Install dependencies
+rust = "latest"
+cargo-binstall = "latest"
+
 # CLI tools out of the registry
 "cargo:bacon" = "latest"
+"cargo:forgejo-cli" = "latest"
 "aqua:maaslalani/slides" = "latest"
