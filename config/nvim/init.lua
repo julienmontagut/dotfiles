@@ -27,6 +27,8 @@ vim.opt.splitbelow = true
 vim.opt.swapfile = false
 vim.opt.undofile = true
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
+-- "o" adds 'omnifunc' (the LSP) as a <C-n> source, alongside the keyword sources.
+vim.opt.complete:append("o")
 
 -- Disable unused providers
 vim.g.loaded_node_provider = 0
@@ -236,7 +238,12 @@ vim.lsp.config("rust_analyzer", {
     },
 })
 
-vim.lsp.enable({
+-- Only register servers whose binary is on PATH, so :checkhealth stays quiet.
+-- Servers still start lazily, on filetype + root marker match.
+vim.lsp.enable(vim.tbl_filter(function(server)
+    local cmd = vim.lsp.config[server].cmd
+    return type(cmd) == "table" and vim.fn.executable(cmd[1]) == 1
+end, {
     "lua_ls",
     "rust_analyzer",
     "taplo",
@@ -246,19 +253,7 @@ vim.lsp.enable({
     "cssls",
     "sourcekit",
     "nickel_ls",
-})
-
--- Built-in LSP completion
-vim.api.nvim_create_autocmd("LspAttach", {
-    callback = function(args)
-        local client = vim.lsp.get_client_by_id(args.data.client_id)
-        if client and client:supports_method("textDocument/completion") then
-            vim.lsp.completion.enable(true, client.id, args.buf, {
-                autotrigger = true,
-            })
-        end
-    end,
-})
+}))
 
 -- Roslyn (C#) - uses roslyn.nvim for the latest Roslyn LSP
 require("roslyn").setup({
