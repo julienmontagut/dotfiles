@@ -1,0 +1,10 @@
+# Linux machine config, symlinked to ~/.config/mise/config.linux.toml. Loaded only on Linux
+# (auto_env). Build/runtime deps that mise can't provide as tools. curl/git/ca-certificates stay
+# in install.sh (needed before mise exists); the Wayland desktop stack is in config.desktop.toml.
+[bootstrap.packages]
+"apt:build-essential" = "latest"
+"apt:fontconfig" = "latest"     # fc-cache/fc-list for the Nerd Font installed via mise
+# "apt:libssl-dev" = "latest"
+# "apt:pkg-config" = "latest"     # cargo:bacon and cargo:forgejo-cli build deps
+"apt:xclip" = "latest"          # nvim unnamedplus clipboard, tmux-yank
+"apt:zsh" = "latest"            # login shell (see config.toml [bootstrap.user])

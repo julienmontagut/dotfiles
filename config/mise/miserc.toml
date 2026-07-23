@@ -1,0 +1,2 @@
+# Global early-init settings, symlinked to ~/.config/mise/miserc
+auto_env = true

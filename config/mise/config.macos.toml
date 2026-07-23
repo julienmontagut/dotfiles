@@ -1,0 +1,60 @@
+# macOS machine config, symlinked to ~/.config/mise/config.macos.toml. Loaded only on macOS
+# (auto_env), so `mise bootstrap` on any other OS never sees these. Third-party-tap / `trusted:`
+# formulae + casks and the Mac App Store apps stay in the repo Brewfile (run by the macOS
+# [tasks.bootstrap] in mise.toml): mas apps need the `mas` CLI first, and brew bundle handles the
+# tap trust/order.
+[bootstrap.packages]
+"brew:FelixKratz/formulae/borders" = "latest"  # window-border daemon (launchd agent below)
+"brew-cask:appcleaner" = "latest"
+"brew-cask:claude" = "latest"
+"brew-cask:crossover" = "latest"
+"brew-cask:devpod" = "latest"
+"brew-cask:font-inter" = "latest"
+"brew-cask:font-lilex" = "latest"
+"brew-cask:font-lilex-nerd-font" = "latest"
+"brew-cask:font-literata" = "latest"
+"brew-cask:ghostty" = "latest"
+"brew-cask:google-chrome" = "latest"
+"brew-cask:google-drive" = "latest"
+"brew-cask:jetbrains-toolbox" = "latest"
+"brew-cask:karabiner-elements" = "latest"
+"brew-cask:linear" = "latest"
+"brew-cask:orbstack" = "latest"
+"brew-cask:slite" = "latest"
+"brew-cask:spotify" = "latest"
+"brew-cask:steam" = "latest"
+"brew-cask:zed" = "latest"
+
+# System preferences. Friendly sections where mise has them; the raw [bootstrap.macos.defaults]
+# block holds the keys with no friendly equivalent. The structured leftovers (Dock app list,
+# disabled Ctrl+Space hotkeys) run in the mise.toml [tasks.bootstrap] script.
+[bootstrap.macos.keyboard]
+press_and_hold = false
+key_repeat = 1
+initial_key_repeat = 15
+
+[bootstrap.macos.dock]
+autohide = true
+orientation = "left"
+show_recents = false
+
+[bootstrap.macos.finder]
+show_extensions_warning = false
+
+[bootstrap.macos.trackpad]
+tap_to_click = true
+three_finger_drag = true
+
+[bootstrap.macos.defaults]
+"NSGlobalDomain" = { AppleMetricUnits = true }
+"com.apple.menuextra.clock" = { Show24Hour = true }
+"com.apple.dock" = { "autohide-delay" = 0.0, "autohide-time-modifier" = 0.3 }
+"com.apple.finder" = { _FXSortFoldersFirst = true }
+"com.apple.AppleMultitouchTrackpad" = { TrackpadRightClick = true }
+
+# Defines a daemon for jankyborders
+# [bootstrap.macos.launchd.agents.com-felixkratz-borders]
+# program = "/opt/homebrew/bin/borders"
+# args = ["active_color=0xff7aa2f7", "inactive_color=0xff565f89", "width=5.0", "style=round"]
+# run_at_load = true
+# keep_alive = true

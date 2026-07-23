@@ -16,7 +16,7 @@ taplo                   = "latest"
 "~/.config/ghostty"          = "config/ghostty"
 "~/.config/git"              = { source = "config/git", mode = "symlink-each" }
 "~/.config/ideavim"          = "config/ideavim"
-"~/.config/mise/config.toml" = "config/mise/config.toml"
+"~/.config/mise"             = { source = "config/mise", mode = "symlink-each" }
 "~/.config/nvim"             = "config/nvim"
 "~/.config/tmux"             = { source = "config/tmux", mode = "symlink-each" }
 "~/.config/wezterm"          = "config/wezterm"
@@ -31,6 +31,7 @@ taplo                   = "latest"
 "~/.config/borders"   = "config/borders"
 "~/.config/karabiner" = { source = "config/karabiner", mode = "symlink-each" }
 # Linux only
+"~/.config/fontconfig" = { source = "config/fontconfig", mode = "symlink-each" }
 "~/.config/fuzzel" = "config/fuzzel"
 "~/.config/kanshi" = "config/kanshi"
 "~/.config/keyd"   = "config/keyd"
@@ -40,9 +41,20 @@ taplo                   = "latest"
 # The zsh plugin manager (zimfw) self-installs on the first interactive shell;
 # see the zim block in ./zshrc. No bootstrap task is needed for it.
 
-# Run at the end of mise bootstrap. macOS-only: the Brewfile is casks + mas apps,
-# and Linuxbrew (if present) can't install them. Reads ~/.Brewfile, symlinked by
-# install.sh on macOS only.
+# Machine packages, per-OS defaults, tools and the login shell live in the global user config
+# (config/mise/config.toml + config.macos.toml + config.linux.toml), so `mise bootstrap` converges
+# them from any directory. This repo config only carries what is inherently repo-bound: the
+# dotfiles above and the macOS-only task below (it runs this repo's scripts and Brewfile).
+
+# Runs at the end of `mise bootstrap`, from the repo. macOS only (this file also loads on Linux):
+# the Brewfile (trusted-tap formulae/casks + Mac App Store apps) and the defaults/services that
+# aren't declarative - the Dock app list, disabled Ctrl+Space hotkeys, and TouchID-for-sudo.
 [tasks.bootstrap]
-description = "Install macOS GUI apps from the Brewfile (macOS only)"
-run = 'if [ "$(uname)" = Darwin ] && command -v brew >/dev/null; then brew bundle --global; fi'
+description = "macOS-only: Brewfile, non-declarative defaults, and services"
+run = '''
+if [ "$(uname)" = Darwin ]; then
+  brew bundle --file "{{ config_root }}/Brewfile"
+  "{{ config_root }}/scripts/macos-defaults.sh"
+  "{{ config_root }}/scripts/macos-services.sh"
+fi
+'''
