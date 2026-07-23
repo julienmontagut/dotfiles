@@ -1,5 +1,4 @@
 [settings]
-experimental = true
 lockfile = true
 idiomatic_version_file_enable_tools = [
     "dotnet",
@@ -9,6 +8,9 @@ idiomatic_version_file_enable_tools = [
 
 [settings.github]
 use_git_credentials = true
+
+[bootstrap.user]
+login_shell = "/bin/zsh"
 
 [tools]
 bat = "latest"
@@ -43,3 +45,9 @@ cargo-binstall = "latest"
 "cargo:bacon" = "latest"
 "cargo:forgejo-cli" = "latest"
 "aqua:maaslalani/slides" = "latest"
+
+# Lilex Nerd Font, named by the ghostty/alacritty/wezterm/fuzzel configs. No apt package
+# exists. Pinned: a font has no reason to chase releases, and each bump re-downloads ~30MB.
+# config/fontconfig points fontconfig at the install dir, which it doesn't scan by default.
+"github:ryanoasis/nerd-fonts" = { version = "3.4.0", asset_pattern = "Lilex.zip" }
+herdr = "latest"

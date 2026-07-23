@@ -11,7 +11,8 @@ export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 [[ -d "$HOME/.dotnet/tools" ]] && path=("$HOME/.dotnet/tools" $path)
 export PATH
 
-# Homebrew: opt out of analytics and env hints (declarative, no ~/.zshrc edits)
+# Homebrew: PATH on macOS (Apple Silicon), plus opt out of analytics and env hints.
+[[ -x /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
 export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_ENV_HINTS=1
 

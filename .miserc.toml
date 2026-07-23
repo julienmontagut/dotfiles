@@ -1,0 +1,5 @@
+# Early-init settings, read before config discovery (so this can't live in mise.toml).
+# auto_env loads the platform-specific configs (config.macos.toml / config.linux.toml) by OS.
+# This repo-root copy covers the first bootstrap and any mise run from the repo; the global
+# ~/.config/mise/miserc.toml (symlinked from config/mise/miserc.toml) covers runs elsewhere.
+auto_env = true

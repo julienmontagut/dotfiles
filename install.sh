@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Dev-machine installer. Same flow on macOS and Linux:
-#   1. Intall system packages and dev dependencies so it runs first and bootstraps a bare box.
+#   1. Install the prerequisites mise needs to exist (curl, git; on macOS Xcode CLT + Homebrew).
 #   2. Locate or clone the repo
 #   3. Install mise
-#   4. Run `mise bootstrap` 
+#   4. Run `mise bootstrap` - it installs everything else (packages, dotfiles, tools, macOS setup).
 #
 # This install is idempotent, and can be run: 
 #  - as a copy/pasted standalone local script
@@ -41,11 +41,15 @@ if [[ "$OS" == "Darwin" ]]; then
   fi
   if ! command -v brew &>/dev/null; then
     bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    echo 'eval "$(/opt/homebrew/bin/brew shellenv zsh)"' >> "$HOME/.zprofile"
-    eval "$(/opt/homebrew/bin/brew shellenv zsh)"
   fi
+  # Put brew on PATH for the rest of this run (the mise bootstrap task runs `brew bundle`).
+  # Future shells get it from the managed zshenv, not a stray ~/.zprofile edit.
+  [[ -x /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
 else
-  pkgs=(build-essential ca-certificates curl git)
+  # Only the prerequisites needed before mise exists: git to clone, curl to fetch mise.
+  # Everything else (build deps, zsh, xclip, fontconfig, …) is in [bootstrap.packages] in
+  # mise.toml and gets installed by `mise bootstrap`. The desktop stack lives in bin/install-sway.
+  pkgs=(ca-certificates curl git)
   missing=()
   for pkg in "${pkgs[@]}"; do
     dpkg -s "$pkg" &>/dev/null || missing+=("$pkg")
@@ -73,14 +77,6 @@ else
 fi
 export DOTFILES_DIR
 
-# ================================================================================================
-# On macOS, symlink the Brewfile so `brew bundle --global` can be run
-# ================================================================================================
-if [[ "$OS" == "Darwin" ]]; then
-  mkdir -p "$HOME/Developer"
-  ln -sfn "$DOTFILES_DIR/Brewfile" "$HOME/.Brewfile"
-fi
-
 if ! command -v mise &>/dev/null; then
   curl -fsSL https://mise.run | sh
   export PATH="$HOME/.local/bin:$PATH"
@@ -97,27 +93,16 @@ if [[ -n "${GITHUB_TOKEN:-}" ]]; then
 fi
 
 # ================================================================================================
-# Mise bootstraps installing dotfiles, tools and running `brew bundle` on macOS
+# mise bootstrap installs system packages, dotfiles, tools, the login shell, macOS defaults
+# and (via [tasks.bootstrap]) the macOS Dock/hotkeys/TouchID setup - all from mise.toml.
 # ================================================================================================
 (
   cd "$DOTFILES_DIR"
-  export MISE_EXPERIMENTAL=1
   mise trust --yes .
-  if [[ "$FORCE" == true ]]; then
-    mise bootstrap --yes --force-dotfiles
-  else
-    mise bootstrap --yes
-  fi
+  force_flag=""
+  [[ "$FORCE" == true ]] && force_flag="--force-dotfiles"
+  # Apply dotfiles first so the global ~/.config/mise/config.{macos,linux}.toml and miserc.toml
+  # exist before the packages step of the full bootstrap (on a fresh box they aren't linked yet).
+  mise bootstrap --only dotfiles --yes $force_flag
+  mise bootstrap --yes $force_flag
 )
-
-# ================================================================================================
-# Apply platform specific scripts like macOS defaults
-# ================================================================================================
-# TODO: Change this to be simpler. A script by platform
-if [[ "$OS" == "Darwin" && -t 0 ]]; then
-  read -rp "Apply macOS system defaults & services? [y/N] " reply
-  if [[ $reply =~ ^[Yy]$ ]]; then
-    "$DOTFILES_DIR/scripts/macos-defaults.sh"
-    "$DOTFILES_DIR/scripts/macos-services.sh"
-  fi
-fi

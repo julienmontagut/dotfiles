@@ -1,42 +1,16 @@
 #!/bin/bash
+# The macOS defaults that don't fit mise's [bootstrap.macos.defaults] (scalar) section:
+# a disabled hotkey pair and the Dock's app list. The plain scalar preferences live in
+# mise.toml. Run by [tasks.bootstrap] during `mise bootstrap` (macOS only).
 set -euo pipefail
 
-echo "Configuring general settings..."
-
-defaults write -g AppleMetricUnits -bool true
-
-# Menu bar clock in 24 hour format
-defaults write com.apple.menuextra.clock Show24Hour -bool true
-
-echo "Configuring keyboard..."
-
-# Disable press-and-hold for keys in favor of key repeat
-defaults write -g ApplePressAndHoldEnabled -bool false
-
-# Fast key repeat rate after a short initial delay
-defaults write -g KeyRepeat -int 1
-defaults write -g InitialKeyRepeat -int 15
-
-# Disable Ctrl+Space input source switching (conflicts with terminal leader keys)
-# Key 60 = "Select the previous input source", Key 61 = "Select next source in Input menu"
+# Disable Ctrl+Space input source switching (conflicts with terminal leader keys).
+# Key 60 = "Select the previous input source", Key 61 = "Select next source in Input menu".
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 "<dict><key>enabled</key><false/></dict>"
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 61 "<dict><key>enabled</key><false/></dict>"
 /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
 
-echo "Configuring Dock..."
-
-# Hide menu bar when using sketchybar
-#defaults write NSGlobalDomain _HIHideMenuBar -bool true
-
-defaults write com.apple.dock autohide -bool true
-defaults write com.apple.dock autohide-delay -float 0
-defaults write com.apple.dock autohide-time-modifier -float 0.3
-
-defaults write com.apple.dock orientation -string "left"
-
-defaults write com.apple.dock show-recents -bool false
-
-# Set up Dock apps
+# Dock apps: reset the list, then add the ones that exist.
 add_dock_app() {
   if [ -d "$1" ]; then
     defaults write com.apple.dock persistent-apps -array-add \
@@ -67,29 +41,8 @@ add_dock_app "$HOME/Applications/Rider.app"
 add_dock_app "$HOME/Applications/RustRover.app"
 add_dock_app "/Applications/Xcode.app"
 
-echo "Configuring Finder..."
-
-# Disable warning when changing file extension
-defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
-
-# TODO: Configure the default view in the finder 
-# defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
-
-# Keep folders on top when sorting by name
-defaults write com.apple.finder _FXSortFoldersFirst -bool true
-
-echo "Configuring trackpad..."
-
-# Set tap to click, right-click, and three finger drag
-defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
-defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool true
-defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool true
-
-echo "Restarting affected applications..."
-
 for app in "Dock" "Finder" "SystemUIServer"; do
     killall "$app" &>/dev/null || true
 done
 
 echo "Done! Some changes may require a logout/restart to take effect."
-
