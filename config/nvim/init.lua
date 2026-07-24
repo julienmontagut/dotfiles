@@ -53,6 +53,11 @@ vim.pack.add({
 
 -- Plugin setup
 require("mini.icons").setup{}
+require("mini.diff").setup{}
+-- mini.diff signs use MiniDiffSign*; borrow the theme's git palette.
+vim.api.nvim_set_hl(0, "MiniDiffSignAdd", { link = "GitSignsAdd" })
+vim.api.nvim_set_hl(0, "MiniDiffSignChange", { link = "GitSignsChange" })
+vim.api.nvim_set_hl(0, "MiniDiffSignDelete", { link = "GitSignsDelete" })
 require("flash").setup{}
 -- require("nvim-surround").setup{}
 require("trouble").setup{}
@@ -117,6 +122,9 @@ end, { desc = "Workspace symbols" })
 vim.keymap.set("n", "<leader>v", function()
     Snacks.picker.git_status()
 end, { desc = "Git status" })
+vim.keymap.set("n", "<leader>o", function()
+    require("mini.diff").toggle_overlay(0)
+end, { desc = "Toggle git diff overlay" })
 vim.keymap.set("n", "<leader>t", function()
     Snacks.terminal.toggle()
 end, { desc = "Terminal" })
