@@ -110,6 +110,9 @@ unset zsh_config
 # Zim framework for ZSH
 # =============================================================================
 
+# Use the systemd-managed user ssh-agent (one shared agent, no per-shell leaks).
+export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/openssh_agent"
+
 export ZIM_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/zim"
 export ZIM_CONFIG_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/zsh/zimrc"
 # p10k writes/reads its config here (XDG); the wizard honors this on first run.
