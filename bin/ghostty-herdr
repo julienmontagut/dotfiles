@@ -1,0 +1,14 @@
+#!/bin/sh
+# Ghostty's default command. Run herdr, but survive it: if the shim is missing or
+# herdr exits non-zero (e.g. a broken update), fall back to a login shell so the
+# window stays open - herdr's own error is already on screen, we just add the code.
+# Ghostty runs this via /bin/sh with no mise on PATH, hence the absolute shim path.
+# ponytail: honors MISE_DATA_DIR, else the default mise data dir.
+shim="${MISE_DATA_DIR:-$HOME/.local/share/mise}/shims/herdr"
+if [ -x "$shim" ]; then
+    "$shim" "$@"
+    status=$?
+    [ "$status" -eq 0 ] && exit 0
+    printf '\nherdr exited with status %d. Falling back to your shell.\n' "$status" >&2
+fi
+exec "${SHELL:-/bin/sh}" -l
