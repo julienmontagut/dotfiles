@@ -9,6 +9,9 @@ theme = basalt-dark
 # Opacity
 background-opacity = 0.95
 
+# Don't prompt to close while a multiplexer (herdr) is running.
+confirm-close-surface = false
+
 # Font
 font-family = Lilex
 font-size = 16
@@ -17,8 +20,8 @@ font-size = 16
 shell-integration = zsh
 shell-integration-features = ssh-env,ssh-terminfo,cursor,sudo,title
 
-# Launch zellij's welcome screen; fall back to a plain shell if it's missing.
-command = command -v zellij >/dev/null 2>&1 && exec zellij -l welcome || exec zsh
+# Launch herdr; fall back to the default login shell if it's missing.
+command = command -v herdr >/dev/null 2>&1 && exec herdr || exec "${SHELL:-/bin/sh}" -l
 
 # Keybindings
 # keybind = super+shift+n=new_window
