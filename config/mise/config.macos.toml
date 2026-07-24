@@ -4,7 +4,7 @@
 # [tasks.bootstrap] in mise.toml): mas apps need the `mas` CLI first, and brew bundle handles the
 # tap trust/order.
 [bootstrap.packages]
-"brew:FelixKratz/formulae/borders" = "latest"  # window-border daemon (launchd agent below)
+"brew:FelixKratz/formulae/borders" = "latest" # window-border daemon (launchd agent below)
 "brew-cask:appcleaner" = "latest"
 "brew-cask:claude" = "latest"
 "brew-cask:crossover" = "latest"

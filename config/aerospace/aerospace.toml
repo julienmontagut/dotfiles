@@ -165,11 +165,11 @@ run = 'move-node-to-workspace gen'
 
 [mode.main.binding]
 # Workspace switching (hyper + first letter of the workspace name)
-cmd-ctrl-alt-d = "workspace dev"      # dev: editors, IDEs, Ghostty, Xcode
-cmd-ctrl-alt-g = "workspace gen"      # gen: default catch-all
-cmd-ctrl-alt-w = "workspace work"     # work: Chrome web apps, Claude, Slite, Craft
-cmd-ctrl-alt-m = "workspace mgmt"     # mgmt: Mail, Calendar, Reminders, comms
-cmd-ctrl-alt-s = "workspace spin"     # spin: secondary dev - run/preview/simulator
+cmd-ctrl-alt-d = "workspace dev"  # dev: editors, IDEs, Ghostty, Xcode
+cmd-ctrl-alt-g = "workspace gen"  # gen: default catch-all
+cmd-ctrl-alt-w = "workspace work" # work: Chrome web apps, Claude, Slite, Craft
+cmd-ctrl-alt-m = "workspace mgmt" # mgmt: Mail, Calendar, Reminders, comms
+cmd-ctrl-alt-s = "workspace spin" # spin: secondary dev - run/preview/simulator
 
 # Move focused window to workspace (hyper + shift + first letter)
 cmd-ctrl-alt-shift-d = "move-node-to-workspace dev"
@@ -191,7 +191,7 @@ cmd-ctrl-alt-shift-k = "move up"
 cmd-ctrl-alt-shift-l = "move right"
 
 # Modes: layout (split / tabbed / float / fullscreen / resize) and open (launchers)
-cmd-ctrl-alt-minus = "mode layout"   # layout + resize (moved off w, now the work workspace)
+cmd-ctrl-alt-minus = "mode layout" # layout + resize (moved off w, now the work workspace)
 cmd-ctrl-alt-o = "mode open"
 
 # Window management
@@ -230,8 +230,8 @@ enter = "mode main"
 # =============================================================================
 
 [mode.open.binding]
-b = ["exec-and-forget open -a 'Google Chrome'", "mode main"]   # browser
-t = ["exec-and-forget open -na Ghostty", "mode main"]          # terminal
+b = ["exec-and-forget open -a 'Google Chrome'", "mode main"]       # browser
+t = ["exec-and-forget open -na Ghostty", "mode main"]              # terminal
 z = ["exec-and-forget open -a Zed", "mode main"]
 l = ["exec-and-forget open -a Linear", "mode main"]
 s = ["exec-and-forget open -a Slite", "mode main"]
