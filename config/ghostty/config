@@ -21,8 +21,8 @@ shell-integration = zsh
 shell-integration-features = ssh-env,ssh-terminfo,cursor,sudo,title
 
 # Launch herdr via a wrapper that falls back to the login shell when herdr is
-# missing or crashes. See bin/ghostty-herdr.
-command = exec "$HOME/.local/bin/ghostty-herdr"
+# missing or crashes. See bin/launch-herdr.
+command = exec "$HOME/.local/bin/launch-herdr"
 
 # Keybindings
 # keybind = super+shift+n=new_window
