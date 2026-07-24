@@ -1,8 +1,46 @@
 {
+  "agentPushNotifEnabled": true,
   "attribution": {
     "commit": "",
     "pr": ""
   },
+  "editorMode": "vim",
+  "enabledPlugins": {
+    "csharp-lsp@claude-plugins-official": true,
+    "lua-lsp@claude-plugins-official": true,
+    "ponytail@ponytail": true,
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "swift-lsp@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-plugins-official": {
+      "source": {
+        "repo": "anthropics/claude-plugins-official",
+        "source": "github"
+      }
+    },
+    "ponytail": {
+      "source": {
+        "repo": "DietrichGebert/ponytail",
+        "source": "github"
+      }
+    }
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "command": "bash '/home/julien.montagut@CDBDX.BIZ/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ]
+  },
+  "inputNeededNotifEnabled": true,
   "permissions": {
     "allow": [
       "Bash(gh pr list*)",
@@ -19,39 +57,15 @@
       "Bash(scw config*)",
       "Bash(claude mcp *)"
     ],
-    "deny": [],
     "ask": [],
-    "defaultMode": "plan"
+    "defaultMode": "plan",
+    "deny": []
   },
-  "worktree": {
-    "baseRef": "fresh"
-  },
-  "enabledPlugins": {
-    "rust-analyzer-lsp@claude-plugins-official": true,
-    "lua-lsp@claude-plugins-official": true,
-    "csharp-lsp@claude-plugins-official": true,
-    "swift-lsp@claude-plugins-official": true,
-    "ponytail@ponytail": true
-  },
-  "extraKnownMarketplaces": {
-    "claude-plugins-official": {
-      "source": {
-        "source": "github",
-        "repo": "anthropics/claude-plugins-official"
-      }
-    },
-    "ponytail": {
-      "source": {
-        "source": "github",
-        "repo": "DietrichGebert/ponytail"
-      }
-    }
-  },
-  "tui": "fullscreen",
+  "skipAutoPermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
   "theme": "dark-ansi",
-  "editorMode": "vim",
-  "inputNeededNotifEnabled": true,
-  "agentPushNotifEnabled": true,
-  "skipAutoPermissionPrompt": true
+  "tui": "fullscreen",
+  "worktree": {
+    "baseRef": "fresh"
+  }
 }

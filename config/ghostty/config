@@ -20,8 +20,11 @@ font-size = 16
 shell-integration = zsh
 shell-integration-features = ssh-env,ssh-terminfo,cursor,sudo,title
 
-# Launch herdr; fall back to the default login shell if it's missing.
-command = command -v herdr >/dev/null 2>&1 && exec herdr || exec "${SHELL:-/bin/sh}" -l
+# Launch herdr via its mise shim (works without shell activation, unlike a bare
+# `herdr` which Ghostty runs through /bin/sh with no mise on PATH); fall back to
+# the default login shell if it's missing.
+# ponytail: hardcoded default mise data dir, adjust if MISE_DATA_DIR is set.
+command = [ -x "$HOME/.local/share/mise/shims/herdr" ] && exec "$HOME/.local/share/mise/shims/herdr" || exec "${SHELL:-/bin/sh}" -l
 
 # Keybindings
 # keybind = super+shift+n=new_window
