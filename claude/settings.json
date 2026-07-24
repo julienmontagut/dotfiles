@@ -1,5 +1,4 @@
 {
-  "agentPushNotifEnabled": true,
   "attribution": {
     "commit": "",
     "pr": ""
@@ -57,15 +56,64 @@
       "Bash(scw config*)",
       "Bash(claude mcp *)"
     ],
+    "deny": [],
     "ask": [],
-    "defaultMode": "plan",
-    "deny": []
+    "defaultMode": "plan"
   },
-  "skipAutoPermissionPrompt": true,
-  "skipWorkflowUsageWarning": true,
-  "theme": "dark-ansi",
-  "tui": "fullscreen",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '/home/julien.montagut@CDBDX.BIZ/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '/home/julien/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
   "worktree": {
     "baseRef": "fresh"
-  }
+  },
+  "enabledPlugins": {
+    "csharp-lsp@claude-plugins-official": true,
+    "lua-lsp@claude-plugins-official": true,
+    "ponytail@ponytail": true,
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "swift-lsp@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
+    },
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
+      }
+    }
+  },
+  "tui": "fullscreen",
+  "skipWorkflowUsageWarning": true,
+  "theme": "dark-ansi",
+  "editorMode": "vim",
+  "inputNeededNotifEnabled": true,
+  "agentPushNotifEnabled": true,
+  "skipAutoPermissionPrompt": true,
+  "remoteControlAtStartup": true
 }
