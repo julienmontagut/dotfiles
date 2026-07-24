@@ -3,39 +3,38 @@ dotfiles.root = "{{ config_root }}"
 dotfiles.default_mode = "symlink"
 
 [tools]
-lua                     = "latest"
-lua-language-server     = "latest"
-stylua                  = "latest"
-shfmt                   = "latest"
-taplo                   = "latest"
+lua = "latest"
+lua-language-server = "latest"
+stylua = "latest"
+shfmt = "latest"
+taplo = "latest"
 "cargo:nickel-lang-cli" = "latest"
 
 [dotfiles]
-"~/.claude"                  = { source = "claude", mode = "symlink-each" }
-"~/.config/alacritty"        = "config/alacritty"
-"~/.config/ghostty"          = "config/ghostty"
-"~/.config/git"              = { source = "config/git", mode = "symlink-each" }
-"~/.config/ideavim"          = "config/ideavim"
-"~/.config/mise"             = { source = "config/mise", mode = "symlink-each" }
-"~/.config/nvim"             = "config/nvim"
-"~/.config/tmux"             = { source = "config/tmux", mode = "symlink-each" }
-"~/.config/wezterm"          = "config/wezterm"
-"~/.config/zed"              = { source = "config/zed", mode = "symlink-each" }
-"~/.config/zellij/config.kdl"= "config/zellij/config.kdl"
-"~/.config/zsh"              = "config/zsh"
-"~/.local/bin"               = { source = "bin", mode = "symlink-each" }
-"~/.zshenv"                  = "zshenv"
-"~/.zshrc"              = "zshrc"
+"~/.claude" = { source = "claude", mode = "symlink-each" }
+"~/.config/alacritty" = "config/alacritty"
+"~/.config/ghostty" = "config/ghostty"
+"~/.config/git" = { source = "config/git", mode = "symlink-each" }
+"~/.config/ideavim" = "config/ideavim"
+"~/.config/mise" = { source = "config/mise", mode = "symlink-each" }
+"~/.config/nvim" = "config/nvim"
+"~/.config/tmux" = { source = "config/tmux", mode = "symlink-each" }
+"~/.config/wezterm" = "config/wezterm"
+"~/.config/zed" = { source = "config/zed", mode = "symlink-each" }
+"~/.config/zellij/config.kdl" = "config/zellij/config.kdl"
+"~/.config/zsh" = "config/zsh"
+"~/.local/bin" = { source = "bin", mode = "symlink-each" }
+"~/.zshenv" = "zshenv"
+"~/.zshrc" = "zshrc"
 # macOS
 "~/.config/aerospace" = "config/aerospace"
-"~/.config/borders"   = "config/borders"
+"~/.config/borders" = "config/borders"
 "~/.config/karabiner" = { source = "config/karabiner", mode = "symlink-each" }
 # Linux only
-"~/.config/fontconfig" = { source = "config/fontconfig", mode = "symlink-each" }
 "~/.config/fuzzel" = "config/fuzzel"
 "~/.config/kanshi" = "config/kanshi"
-"~/.config/keyd"   = "config/keyd"
-"~/.config/sway"   = "config/sway"
+"~/.config/keyd" = "config/keyd"
+"~/.config/sway" = "config/sway"
 "~/.config/waybar" = "config/waybar"
 
 # The zsh plugin manager (zimfw) self-installs on the first interactive shell;
@@ -49,6 +48,7 @@ taplo                   = "latest"
 # Runs at the end of `mise bootstrap`, from the repo. macOS only (this file also loads on Linux):
 # the Brewfile (trusted-tap formulae/casks + Mac App Store apps) and the defaults/services that
 # aren't declarative - the Dock app list, disabled Ctrl+Space hotkeys, and TouchID-for-sudo.
+
 [tasks.bootstrap]
 description = "macOS-only: Brewfile, non-declarative defaults, and services"
 run = '''

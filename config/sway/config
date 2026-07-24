@@ -8,7 +8,6 @@
 set $mod Mod4
 set $term ghostty
 set $menu fuzzel
-set $browser firefox
 
 # =============================================================================
 # Output configuration
@@ -159,7 +158,6 @@ bindsym $mod+r mode "resize"
 mode "open" {
     # exec must come last: sway's exec greedily takes the rest of the line,
     # so the mode reset has to precede it.
-    bindsym b mode "default"; exec $browser
     bindsym t mode "default"; exec $term
     bindsym z mode "default"; exec zed
 

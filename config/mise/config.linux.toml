@@ -1,10 +1,16 @@
 # Linux machine config, symlinked to ~/.config/mise/config.linux.toml. Loaded only on Linux
 # (auto_env). Build/runtime deps that mise can't provide as tools. curl/git/ca-certificates stay
-# in install.sh (needed before mise exists); the Wayland desktop stack is in config.desktop.toml.
+# in install.sh (needed before mise exists); the Wayland desktop stack is in bin/install-sway.
 [bootstrap.packages]
 "apt:build-essential" = "latest"
-"apt:fontconfig" = "latest"     # fc-cache/fc-list for the Nerd Font installed via mise
+"apt:fontconfig" = "latest"      # fc-cache/fc-list for the Nerd Font installed via mise
 # "apt:libssl-dev" = "latest"
 # "apt:pkg-config" = "latest"     # cargo:bacon and cargo:forgejo-cli build deps
-"apt:xclip" = "latest"          # nvim unnamedplus clipboard, tmux-yank
-"apt:zsh" = "latest"            # login shell (see config.toml [bootstrap.user])
+"apt:xclip" = "latest" # nvim unnamedplus clipboard, tmux-yank
+"apt:zsh" = "latest"   # login shell (see config.toml [bootstrap.user])
+
+[tools]
+# Lilex Nerd Font, my default. No apt package exists. Copy the extracted ttf into
+# ~/.local/share/fonts, which fontconfig scans by default - so no custom fontconfig is needed.
+# macOS gets Lilex from brew casks in config.macos.toml instead.
+"github:ryanoasis/nerd-fonts" = { version = "3.4.0", asset_pattern = "Lilex.zip", postinstall = "mkdir -p ~/.local/share/fonts && cp \"$MISE_TOOL_INSTALL_PATH\"/*.ttf ~/.local/share/fonts/ && fc-cache -f ~/.local/share/fonts" }
