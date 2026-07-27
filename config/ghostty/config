@@ -7,7 +7,8 @@ macos-icon-screen-color = #7ca2d8
 theme = basalt-dark
 
 # Opacity
-background-opacity = 0.95
+background-blur = true
+# background-opacity = 0.95
 
 # Don't prompt to close while a multiplexer (herdr) is running.
 confirm-close-surface = false
