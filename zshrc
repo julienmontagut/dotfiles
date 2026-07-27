@@ -131,15 +131,3 @@ source "$ZIM_HOME/init.zsh"
 
 # Powerlevel10k config (run `p10k configure` to (re)generate it).
 [[ -f "$POWERLEVEL9K_CONFIG_FILE" ]] && source "$POWERLEVEL9K_CONFIG_FILE"
-
-# =============================================================================
-# herdr auto-launch on SSH login
-# =============================================================================
-
-# Fresh interactive SSH login: hand off to the herdr launcher (same one Ghostty
-# uses). It runs herdr and, if herdr is missing or crashes, falls back to a login
-# shell, so an SSH session is never lost. Skip inside herdr's own panes
-# (HERDR_ENV) and inside a fallback shell from a failed launch (HERDR_LAUNCH_TRIED).
-if [[ -o interactive && -n "$SSH_CONNECTION" && -z "$HERDR_ENV" && -z "$HERDR_LAUNCH_TRIED" ]]; then
-    exec "$HOME/.local/bin/launch-herdr"
-fi

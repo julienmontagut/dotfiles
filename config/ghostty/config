@@ -21,8 +21,9 @@ shell-integration = zsh
 shell-integration-features = ssh-env,ssh-terminfo,cursor,sudo,title
 
 # Launch herdr via a wrapper that falls back to the login shell when herdr is
-# missing or crashes. See bin/launch-herdr.
-command = exec "$HOME/.local/bin/launch-herdr"
+# missing or crashes. If the wrapper itself is absent (dotfiles not installed
+# yet), still open a login shell. See bin/launch-herdr.
+command = [ -x "$HOME/.local/bin/launch-herdr" ] && exec "$HOME/.local/bin/launch-herdr" || exec "${SHELL:-/bin/sh}" -l
 
 # Keybindings
 # keybind = super+shift+n=new_window
