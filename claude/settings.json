@@ -3,43 +3,6 @@
     "commit": "",
     "pr": ""
   },
-  "editorMode": "vim",
-  "enabledPlugins": {
-    "csharp-lsp@claude-plugins-official": true,
-    "lua-lsp@claude-plugins-official": true,
-    "ponytail@ponytail": true,
-    "rust-analyzer-lsp@claude-plugins-official": true,
-    "swift-lsp@claude-plugins-official": true
-  },
-  "extraKnownMarketplaces": {
-    "claude-plugins-official": {
-      "source": {
-        "repo": "anthropics/claude-plugins-official",
-        "source": "github"
-      }
-    },
-    "ponytail": {
-      "source": {
-        "repo": "DietrichGebert/ponytail",
-        "source": "github"
-      }
-    }
-  },
-  "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "command": "bash '/home/julien.montagut@CDBDX.BIZ/.claude/hooks/herdr-agent-state.sh' session",
-            "timeout": 10,
-            "type": "command"
-          }
-        ],
-        "matcher": "*"
-      }
-    ]
-  },
-  "inputNeededNotifEnabled": true,
   "permissions": {
     "allow": [
       "Bash(gh pr list*)",
@@ -67,17 +30,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash '/home/julien.montagut@CDBDX.BIZ/.claude/hooks/herdr-agent-state.sh' session",
-            "timeout": 10
-          }
-        ]
-      },
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash '/home/julien/.claude/hooks/herdr-agent-state.sh' session",
+            "command": "h=\"$HOME/.claude/hooks/herdr-agent-state.sh\"; [ -f \"$h\" ] && bash \"$h\" session || true",
             "timeout": 10
           }
         ]
@@ -112,8 +65,8 @@
   "skipWorkflowUsageWarning": true,
   "theme": "dark-ansi",
   "editorMode": "vim",
+  "remoteControlAtStartup": true,
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
-  "skipAutoPermissionPrompt": true,
-  "remoteControlAtStartup": true
+  "skipAutoPermissionPrompt": true
 }
