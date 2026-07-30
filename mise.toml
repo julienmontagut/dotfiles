@@ -11,6 +11,9 @@ taplo = "latest"
 "cargo:nickel-lang-cli" = "latest"
 
 [dotfiles]
+# General Claude layer - portable, deploys everywhere. The Upcast-infrastructure
+# mise.upcast.toml. Client-specific config belongs in the client repo's own
+# .claude/, never here.
 "~/.claude" = { source = "claude", mode = "symlink-each" }
 "~/.config/alacritty" = "config/alacritty"
 "~/.config/ghostty" = "config/ghostty"
