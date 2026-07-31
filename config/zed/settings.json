@@ -8,12 +8,9 @@
     "use_smartcase_find": true
   },
   "minimap": {
-    
+
   },
   "auto_signature_help": false,
-  "scrollbar": {
-    
-  },
   "gutter": {
     "line_numbers": true
   },
