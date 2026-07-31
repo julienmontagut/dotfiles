@@ -1,3 +1,6 @@
+# A floor, not a pin: older mise aborts the packages step on the OrbStack cask (jdx/mise#11472).
+min_version = "2026.7.17"
+
 [settings]
 lockfile = true
 idiomatic_version_file_enable_tools = ["dotnet", "opentofu", "rust"]
