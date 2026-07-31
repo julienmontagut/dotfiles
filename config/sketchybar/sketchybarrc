@@ -60,13 +60,14 @@ sketchybar --default updates=when_shown \
 sketchybar --add event aerospace_workspace_change
 
 # Workspace indicators (named aerospace workspaces)
-for sid in dev gen work mgmt spin; do
+declare -A WS_ICON=( [gen]=$'' [code]=$'' [ref]=$'' [misc]=$'' )
+for sid in gen code ref misc; do
 sketchybar --add item space.$sid left \
            --subscribe space.$sid aerospace_workspace_change \
            --set space.$sid \
-                 label="$sid" \
-                 label.color=$FG \
-                 icon.drawing=off \
+                 icon="${WS_ICON[$sid]}" \
+                 icon.drawing=on \
+                 icon.color=$FG \
                  click_script="aerospace workspace $sid && sleep 0.1 && sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$sid" \
                  script="$HOME/.config/sketchybar/plugins/aerospace.sh $sid"
 done
