@@ -42,3 +42,9 @@ cargo-binstall = "latest"
 "cargo:bacon" = "latest"
 "cargo:forgejo-cli" = "latest"
 "aqua:maaslalani/slides" = "latest"
+
+# The Roslyn LSP, picked up from PATH by roslyn.nvim. Pinned rather than "latest":
+# every published version is prerelease-tagged and mise's dotnet backend filters
+# prereleases out of "latest", so bumping is a deliberate edit - check
+# `mise ls-remote dotnet:roslyn-language-server`.
+"dotnet:roslyn-language-server" = "5.11.0-1.26379.6"

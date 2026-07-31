@@ -138,12 +138,24 @@ vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
 vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Go to declaration" })
 vim.keymap.set("n", "gS", vim.lsp.buf.workspace_symbol, { desc = "Workspace symbols" })
 
+-- Pop the completion menu as you type, instead of only on <C-n>/<C-x><C-o>.
+vim.api.nvim_create_autocmd("LspAttach", {
+    callback = function(args)
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+        if client and client:supports_method("textDocument/completion") then
+            vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
+        end
+    end,
+})
+
 -- Bridge <C-w>hjkl out of terminal-mode
 for _, k in ipairs({ "h", "j", "k", "l" }) do
     vim.keymap.set("t", "<C-w>" .. k, [[<C-\><C-n><C-w>]] .. k)
 end
 
--- Treesitter: highlighting is native in neovim 0.12.
+-- Treesitter: 0.12 only auto-starts highlighting for markdown/lua/help/query, and
+-- nvim-treesitter (main) never starts it at all, so the FileType autocmd below
+-- does it for every filetype that has a parser.
 -- Bundled parsers: c, lua, markdown, vim, vimdoc.
 -- Install others with :TSInstall (requires tree-sitter CLI).
 local ts_parsers = {
@@ -167,6 +179,13 @@ local ts_to_install = vim.iter(ts_parsers)
 if #ts_to_install > 0 then
     require("nvim-treesitter").install(ts_to_install)
 end
+
+-- pcall: vim.treesitter.start errors for filetypes with no installed parser.
+vim.api.nvim_create_autocmd("FileType", {
+    callback = function(args)
+        pcall(vim.treesitter.start, args.buf)
+    end,
+})
 
 -- Treesitter textobjects
 require("nvim-treesitter-textobjects").setup({
@@ -246,12 +265,9 @@ vim.lsp.config("rust_analyzer", {
     },
 })
 
--- Only register servers whose binary is on PATH, so :checkhealth stays quiet.
--- Servers still start lazily, on filetype + root marker match.
-vim.lsp.enable(vim.tbl_filter(function(server)
-    local cmd = vim.lsp.config[server].cmd
-    return type(cmd) == "table" and vim.fn.executable(cmd[1]) == 1
-end, {
+-- Servers start lazily, on filetype or root marker match, so a missing binary costs
+-- one error on the first matching buffer rather than anything at startup.
+vim.lsp.enable({
     "lua_ls",
     "rust_analyzer",
     "taplo",
@@ -261,11 +277,6 @@ end, {
     "cssls",
     "sourcekit",
     "nickel_ls",
-}))
-
--- Roslyn (C#) - uses roslyn.nvim for the latest Roslyn LSP
-require("roslyn").setup({
-    filewatching = true,
 })
 
 -- Project root detection (best match first, git fallback)
