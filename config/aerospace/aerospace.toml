@@ -33,105 +33,72 @@ inner.horizontal = 8
 # Anything without a rule falls through to the gen catch-all at the bottom.
 # =============================================================================
 
-# --- dev: editors, IDEs, terminals, dev tooling ---
+# --- code: editors, IDEs, terminals, dev tooling ---
 [[on-window-detected]]
 if.app-id = 'dev.zed.Zed'
-run = 'move-node-to-workspace dev'
+run = 'move-node-to-workspace code'
 
 [[on-window-detected]]
 if.app-id = 'com.apple.dt.Xcode'
-run = 'move-node-to-workspace dev'
+run = 'move-node-to-workspace code'
 
 [[on-window-detected]]
 if.app-id = 'com.jetbrains.rider'
-run = 'move-node-to-workspace dev'
+run = 'move-node-to-workspace code'
 
 [[on-window-detected]]
 if.app-id = 'com.jetbrains.rustrover'
-run = 'move-node-to-workspace dev'
+run = 'move-node-to-workspace code'
 
 [[on-window-detected]]
 if.app-id = 'com.jetbrains.toolbox'
-run = 'move-node-to-workspace dev'
+run = 'move-node-to-workspace code'
 
 [[on-window-detected]]
 if.app-id = 'com.jetbrains.dotmemory'
-run = 'move-node-to-workspace dev'
+run = 'move-node-to-workspace code'
 
 [[on-window-detected]]
 if.app-id = 'com.jetbrains.dottrace'
-run = 'move-node-to-workspace dev'
+run = 'move-node-to-workspace code'
 
 [[on-window-detected]]
 if.app-id = 'com.mitchellh.ghostty'
-run = 'move-node-to-workspace dev'
+run = 'move-node-to-workspace code'
 
 [[on-window-detected]]
 if.app-id = 'dev.kdrag0n.MacVirt'
-run = 'move-node-to-workspace dev'
+run = 'move-node-to-workspace code'
 
 [[on-window-detected]]
 if.app-id = 'sh.loft.devpod'
-run = 'move-node-to-workspace dev'
+run = 'move-node-to-workspace code'
 
-# --- spin: run / preview / iOS simulator (otherwise placed manually) ---
-[[on-window-detected]]
-if.app-id = 'com.apple.iphonesimulator'
-run = 'move-node-to-workspace spin'
-
-# --- work: web apps, research, docs (Chrome, Claude, Slite, Craft) ---
+# --- ref: web apps, research, docs (Chrome, Claude, Slite, Craft) ---
 [[on-window-detected]]
 if.app-id = 'com.google.Chrome'
-run = 'move-node-to-workspace work'
+run = 'move-node-to-workspace ref'
 
 [[on-window-detected]]
 if.app-id = 'com.anthropic.claudefordesktop'
-run = 'move-node-to-workspace work'
+run = 'move-node-to-workspace ref'
 
 [[on-window-detected]]
 if.app-id = 'com.slite.desktop'
-run = 'move-node-to-workspace work'
+run = 'move-node-to-workspace ref'
 
 [[on-window-detected]]
 if.app-id = 'com.lukilabs.lukiapp'
-run = 'move-node-to-workspace work'
+run = 'move-node-to-workspace ref'
 
-# --- mgmt: mail, calendar, reminders, notes, contacts, comms, tracking ---
-[[on-window-detected]]
-if.app-id = 'com.apple.mail'
-run = 'move-node-to-workspace mgmt'
-
-[[on-window-detected]]
-if.app-id = 'com.apple.Notes'
-run = 'move-node-to-workspace mgmt'
-
-[[on-window-detected]]
-if.app-id = 'com.apple.iCal'
-run = 'move-node-to-workspace mgmt'
-
-[[on-window-detected]]
-if.app-id = 'com.apple.reminders'
-run = 'move-node-to-workspace mgmt'
-
-[[on-window-detected]]
-if.app-id = 'com.apple.AddressBook'
-run = 'move-node-to-workspace mgmt'
-
-[[on-window-detected]]
-if.app-id = 'com.apple.MobileSMS'
-run = 'move-node-to-workspace mgmt'
-
-[[on-window-detected]]
-if.app-id = 'com.apple.FaceTime'
-run = 'move-node-to-workspace mgmt'
-
-[[on-window-detected]]
-if.app-id = 'com.apple.mobilephone'
-run = 'move-node-to-workspace mgmt'
-
+# --- misc: secondary / professional tools (Linear, iOS simulator) ---
 [[on-window-detected]]
 if.app-id = 'com.linear'
-run = 'move-node-to-workspace mgmt'
+run = 'move-node-to-workspace misc'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.iphonesimulator'
+run = 'move-node-to-workspace misc'
 
 # --- games: float so they stay out of the tiled categories ---
 [[on-window-detected]]
@@ -165,18 +132,16 @@ run = 'move-node-to-workspace gen'
 
 [mode.main.binding]
 # Workspace switching (hyper + first letter of the workspace name)
-cmd-ctrl-alt-d = "workspace dev"  # dev: editors, IDEs, Ghostty, Xcode
 cmd-ctrl-alt-g = "workspace gen"  # gen: default catch-all
-cmd-ctrl-alt-w = "workspace work" # work: Chrome web apps, Claude, Slite, Craft
-cmd-ctrl-alt-m = "workspace mgmt" # mgmt: Mail, Calendar, Reminders, comms
-cmd-ctrl-alt-s = "workspace spin" # spin: secondary dev - run/preview/simulator
+cmd-ctrl-alt-c = "workspace code" # code: editors, IDEs, terminals, dev tooling
+cmd-ctrl-alt-r = "workspace ref"  # ref: web apps, research, docs
+cmd-ctrl-alt-m = "workspace misc" # misc: secondary tools (Linear, iOS simulator)
 
 # Move focused window to workspace (hyper + shift + first letter)
-cmd-ctrl-alt-shift-d = "move-node-to-workspace dev"
 cmd-ctrl-alt-shift-g = "move-node-to-workspace gen"
-cmd-ctrl-alt-shift-w = "move-node-to-workspace work"
-cmd-ctrl-alt-shift-m = "move-node-to-workspace mgmt"
-cmd-ctrl-alt-shift-s = "move-node-to-workspace spin"
+cmd-ctrl-alt-shift-c = "move-node-to-workspace code"
+cmd-ctrl-alt-shift-r = "move-node-to-workspace ref"
+cmd-ctrl-alt-shift-m = "move-node-to-workspace misc"
 
 # Focus navigation (vim-style)
 cmd-ctrl-alt-h = "focus left"
@@ -191,7 +156,7 @@ cmd-ctrl-alt-shift-k = "move up"
 cmd-ctrl-alt-shift-l = "move right"
 
 # Modes: layout (split / tabbed / float / fullscreen / resize) and open (launchers)
-cmd-ctrl-alt-minus = "mode layout" # layout + resize (moved off w, now the work workspace)
+cmd-ctrl-alt-minus = "mode layout" # layout + resize
 cmd-ctrl-alt-o = "mode open"
 
 # Window management

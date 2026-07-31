@@ -43,19 +43,12 @@ done <<< "$APPS"
 # Trim trailing space
 ICONS="${ICONS% }"
 
-# Build label with workspace number and app icons
-if [ -n "$ICONS" ]; then
-  LABEL="$WORKSPACE_ID $ICONS"
-else
-  LABEL="$WORKSPACE_ID"
-fi
+# Label shows the open-app icons; the workspace glyph lives in the item's icon
+sketchybar --set "$NAME" label="$ICONS"
 
-# Update label
-sketchybar --set "$NAME" label="$LABEL"
-
-# Highlight if focused - set both background and label colors
+# Highlight if focused - set background, icon, and label colors
 if [ "$WORKSPACE_ID" = "$FOCUSED_WORKSPACE" ]; then
-  sketchybar --set "$NAME" background.color="$BLUE" label.color="$BLUE"
+  sketchybar --set "$NAME" background.color="$BLUE" icon.color="$BLUE" label.color="$BLUE"
 else
-  sketchybar --set "$NAME" background.color="$GRAY" label.color="$GRAY"
+  sketchybar --set "$NAME" background.color="$GRAY" icon.color="$GRAY" label.color="$GRAY"
 fi
