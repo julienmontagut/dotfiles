@@ -77,10 +77,9 @@ else
 fi
 export DOTFILES_DIR
 
-if ! command -v mise &>/dev/null; then
-  curl -fsSL https://mise.run | sh
-  export PATH="$HOME/.local/bin:$PATH"
-fi
+# Unconditional: a guard would leave a stale mise, too old for newer cask metadata (see min_version).
+curl -fsSL https://mise.run | sh
+export PATH="$HOME/.local/bin:$PATH"
 
 # Try to authenticate into github so that mise's doesn't hit the rate limit of github. 
 # Use a GITHUB_TOKEN from the environment, else borrow an existing gh login if one is around, else 

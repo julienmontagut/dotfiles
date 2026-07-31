@@ -1,7 +1,7 @@
 #!/bin/bash
 # TouchID for sudo. The one macOS service that mise can't do declaratively: it edits a
-# root-owned file under /etc/pam.d. JankyBorders is now a [bootstrap.macos.launchd.agents]
-# entry in mise.toml. Run by [tasks.bootstrap] during `mise bootstrap` (macOS only).
+# root-owned file under /etc/pam.d. JankyBorders is a [bootstrap.macos.launchd.agents] entry in
+# config/mise/config.macos.toml. Run by [tasks.bootstrap] during `mise bootstrap` (macOS only).
 set -euo pipefail
 
 pam_file="/etc/pam.d/sudo_local"
