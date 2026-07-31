@@ -83,11 +83,7 @@ zstyle ':vcs_info:git:*' actionformats ' %F{yellow}%b%f%F{red}|%a%f'
 add-zsh-hook precmd vcs_info
 setopt prompt_subst
 
-PROMPT=$'%F{blue}%(4~|…/%3~|%~)%f${vcs_info_msg_0_} %(?..%F{red}%? %f)\n%F{green}❯%f '
-
-# Blank line above the prompt, but not the first one: preexec only fires once a command has run
-prompt_blank_line() { [[ $PROMPT == $'\n'* ]] || PROMPT=$'\n'$PROMPT }
-add-zsh-hook preexec prompt_blank_line
+PROMPT=$'\n%F{blue}%(4~|…/%3~|%~)%f${vcs_info_msg_0_} %(?..%F{red}%? %f)\n%F{green}❯%f '
 
 # =============================================================================
 # Tool initializations
