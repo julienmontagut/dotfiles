@@ -1,54 +1,37 @@
 #!/usr/bin/env bash
+# Paints one workspace item. $1 is the workspace id; $FOCUSED_WORKSPACE comes from the
+# aerospace_workspace_change event (aerospace.toml's exec-on-workspace-change).
+#
+# Three states, carried by color alone: focused (accent), occupied (dim), empty (faint). The two
+# resting states sit deliberately close to the background so the focused one is the only thing the
+# eye lands on.
 
-# Basalt Dark colors
-BLUE=0xff7ca2d8
-GRAY=0xff767575
+source "$HOME/.config/sketchybar/colors.sh"
+source "$HOME/.config/sketchybar/icons.sh"
 
-# Workspace ID passed as argument
 WORKSPACE_ID="$1"
 
-# Map app names to nerd font icons
-get_app_icon() {
-  case "$1" in
-    Alacritty|kitty|iTerm2|Terminal) echo $'\uf489' ;;
-    Firefox|Firefox\ Developer\ Edition) echo $'\ue745' ;;
-    Safari) echo $'\ue745' ;;
-    Chrome|Google\ Chrome) echo $'\uf268' ;;
-    Code|VSCode|Visual\ Studio\ Code) echo $'\ue70c' ;;
-    GoLand|IntelliJ\ IDEA) echo $'\ue7b5' ;;
-    Rider) echo $'\ue70c' ;;
-    RustRover) echo $'\ue7a8' ;;
-    Slack) echo $'\uf198' ;;
-    Discord) echo $'\ufb6e' ;;
-    Spotify) echo $'\uf1bc' ;;
-    Mail|Thunderbird) echo $'\uf6ef' ;;
-    Calendar) echo $'\uf073' ;;
-    Notes) echo $'\uf249' ;;
-    *) echo $'\uf15b' ;;
-  esac
-}
+# $FOCUSED_WORKSPACE is unset on the --update pass at startup (the event hasn't fired yet), so
+# resolve it ourselves then. Costs one extra fork at launch and nothing on subsequent events.
+FOCUSED="${FOCUSED_WORKSPACE:-$(aerospace list-workspaces --focused 2>/dev/null)}"
 
-# Get list of unique apps in this workspace
-APPS=$(aerospace list-windows --workspace "$WORKSPACE_ID" --format "%{app-name}" 2>/dev/null | sort -u)
-
-# Build icon string
 ICONS=""
 while IFS= read -r app; do
-  if [ -n "$app" ]; then
-    ICON=$(get_app_icon "$app")
-    ICONS="${ICONS}${ICON} "
-  fi
-done <<< "$APPS"
-
-# Trim trailing space
+    [ -n "$app" ] && ICONS="$ICONS$(app_icon "$app") "
+done <<<"$(aerospace list-windows --workspace "$WORKSPACE_ID" --format "%{app-name}" 2>/dev/null | sort -u)"
 ICONS="${ICONS% }"
 
-# Label shows the open-app icons; the workspace glyph lives in the item's icon
-sketchybar --set "$NAME" label="$ICONS"
-
-# Highlight if focused - set background, icon, and label colors
-if [ "$WORKSPACE_ID" = "$FOCUSED_WORKSPACE" ]; then
-  sketchybar --set "$NAME" background.color="$BLUE" icon.color="$BLUE" label.color="$BLUE"
+if [ "$WORKSPACE_ID" = "$FOCUSED" ]; then
+    COLOR="$ACCENT"
+elif [ -n "$ICONS" ]; then
+    COLOR="$DIM"
 else
-  sketchybar --set "$NAME" background.color="$GRAY" icon.color="$GRAY" label.color="$GRAY"
+    COLOR="$FAINT"
 fi
+
+# The workspace glyph stays in the item's icon; the label carries its apps, falling back to the
+# workspace name so an empty workspace is still identifiable.
+sketchybar --set "$NAME" \
+    label="${ICONS:-$WORKSPACE_ID}" \
+    icon.color="$COLOR" \
+    label.color="$COLOR"

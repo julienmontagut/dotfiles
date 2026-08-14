@@ -34,6 +34,7 @@ taplo = "latest"
 "~/.config/aerospace" = "config/aerospace"
 "~/.config/borders" = "config/borders"
 "~/.config/karabiner" = { source = "config/karabiner", mode = "symlink-each" }
+"~/.config/sketchybar" = "config/sketchybar"
 # Linux only
 "~/.config/fuzzel" = "config/fuzzel"
 "~/.config/kanshi" = "config/kanshi"

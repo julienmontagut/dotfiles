@@ -1,109 +1,99 @@
 #!/usr/bin/env bash
+# Basalt Dark bar for SketchyBar. Full-width strip at the top: aerospace workspaces on the left,
+# system status on the right. No item chrome anywhere - state is carried by icon and label color,
+# so an idle machine reads as one flat row and only a real problem picks up a warning colour.
 
-BG=0xff191a1a
-BLACK=0xff000000
-FG=0xffe7e5e5
-BLUE=0xff7ca2d8
-CYAN=0xff5ca8aa
-GREEN=0xff5eb88a
-YELLOW=0xffd4a656
-RED=0xffd47080
-MAGENTA=0xffae86d2
-GRAY=0xff767575
+CONFIG_DIR="$HOME/.config/sketchybar"
+PLUGINS="$CONFIG_DIR/plugins"
+
+# shellcheck source=colors.sh
+source "$CONFIG_DIR/colors.sh"
+# shellcheck source=icons.sh
+source "$CONFIG_DIR/icons.sh"
 
 FONT="Lilex Nerd Font Mono"
 
-CURRENT_DIR=$(dirname "$0")
-
-# Detect the main display. If it is the built-in one
-
-# Detect display characteristics
-# Check if we're on a high-DPI external display (Studio Display is 5120x2880 or similar)
-MAIN_DISPLAY_WIDTH=$(system_profiler SPDisplaysDataType | grep "Resolution" | head -1 | awk '{print $2}')
-
-# Detect if internal display has notch (MacBook Pro 14"/16" have notch, resolution width is 3024 or 3456)
-INTERNAL_WIDTH=$(system_profiler SPDisplaysDataType | grep -A 20 "Built-In" | grep "Resolution" | awk '{print $2}')
-
-# Set bar color (black for notch displays, Basalt Dark for others)
-if [ "$INTERNAL_WIDTH" = "3024" ] || [ "$INTERNAL_WIDTH" = "3456" ] || [ "$INTERNAL_WIDTH" = "3456" ]; then
-BAR_COLOR=$BLACK
-else
-BAR_COLOR=$BG
-fi
-
-# Bar settings
+# $BAR is opaque true black so the bar is seamless with the notch band - at any alpha the wallpaper
+# bleeds through and the housing reads as a distinct patch. No blur_radius: it blurs nothing behind
+# an opaque colour. sketchybar keeps one global bar config, so this cannot be scoped to the built-in
+# display, but #000000 against Basalt's #0e0e0e is 14/255 - nothing worth a second daemon over.
+#
+# topmost=on puts the bar at window layer 25, one above the macOS menu bar's 24. The menu bar is
+# auto-hidden and still reveals when the pointer hits the top edge, but it now reveals *behind* the
+# bar, so it is never seen. The trade is that this strip belongs to sketchybar: app menus can no
+# longer be reached with the mouse. Layer 3 (topmost=window) clears windows but not the menu bar,
+# and the default -20 sits below both.
 sketchybar --bar height=32 \
-               blur_radius=30 \
-               position=top \
-               padding_left=20 \
-               padding_right=20 \
-               color=$BAR_COLOR \
-               notch_offset=on
+    position=top \
+    padding_left=20 \
+    padding_right=20 \
+    color=$BAR \
+    topmost=on \
+    notch_offset=on
 
-# Default settings
-sketchybar --default updates=when_shown \
-                   icon.font="$FONT:Regular:28.0" \
-                   icon.color=$FG \
-                   icon.padding_left=8 \
-                   icon.padding_right=8 \
-                   label.font="$FONT:Medium:15.0" \
-                   label.color=$FG \
-                   label.padding_left=8 \
-                   label.padding_right=8 \
-                   background.height=4 \
-                   background.y_offset=-16 \
-                   background.corner_radius=0 \
-                   background.padding_left=4 \
-                   background.padding_right=4 \
+# updates=on, not when_shown: with aerospace driving the workspaces, sketchybar never considers
+# these items "shown", so when_shown silently freezes the entire bar - no periodic ticks, no event
+# scripts, a clock stuck at whatever time the rc last loaded. Nine scripts on a 10s floor is
+# nothing; a bar that lies about the time is not.
+sketchybar --default updates=on \
+    icon.font="$FONT:Medium:16.0" \
+    icon.color=$MUTED \
+    icon.padding_left=8 \
+    icon.padding_right=4 \
+    label.font="$FONT:Medium:13.0" \
+    label.color=$FG \
+    label.padding_left=4 \
+    label.padding_right=8
 
-# Events
 sketchybar --add event aerospace_workspace_change
 
-# Workspace indicators (named aerospace workspaces)
-declare -A WS_ICON=( [gen]=$'' [code]=$'' [ref]=$'' [misc]=$'' )
-for sid in gen code ref misc; do
-sketchybar --add item space.$sid left \
-           --subscribe space.$sid aerospace_workspace_change \
-           --set space.$sid \
-                 icon="${WS_ICON[$sid]}" \
-                 icon.drawing=on \
-                 icon.color=$FG \
-                 click_script="aerospace workspace $sid && sleep 0.1 && sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$sid" \
-                 script="$HOME/.config/sketchybar/plugins/aerospace.sh $sid"
+# Left: the four named aerospace workspaces. The item's icon is the workspace glyph, its label the
+# glyphs of the apps open there (see plugins/aerospace.sh).
+#
+# bash 3.2 has no associative arrays - pair the id and its glyph in one string and split on ':'.
+for pair in "gen:$ICON_GEN" "code:$ICON_CODE" "ref:$ICON_REF" "misc:$ICON_MISC"; do
+    sid="${pair%%:*}"
+    sketchybar --add item "space.$sid" left \
+        --subscribe "space.$sid" aerospace_workspace_change front_app_switched \
+        --set "space.$sid" \
+        icon="${pair#*:}" \
+        click_script="aerospace workspace $sid" \
+        script="$PLUGINS/aerospace.sh $sid"
 done
 
-# Right side items (added right to left)
+# Right: added right to left, so this reads as wifi | cpu | ram | battery | date.
+
 sketchybar --add item date right \
-         --set date update_freq=30 \
-                    icon.drawing=off \
-                    label.align=center \
-                    background.color=$MAGENTA \
-                    script="$HOME/.config/sketchybar/plugins/date.sh"
+    --set date update_freq=30 \
+    icon="$ICON_DATE" \
+    click_script="open -a Calendar" \
+    script="$PLUGINS/date.sh"
 
-# Battery 
 sketchybar --add item battery right \
-           --set battery update_freq=60 \
-                         script="$HOME/.config/sketchybar/plugins/battery.sh"
+    --subscribe battery power_source_change system_woke \
+    --set battery update_freq=120 \
+    script="$PLUGINS/battery.sh"
 
-# RAM
 sketchybar --add item ram right \
-         --set ram update_freq=10 \
-                   icon= \
-                   script="$HOME/.config/sketchybar/plugins/ram.sh"
+    --set ram update_freq=10 \
+    icon="$ICON_RAM" \
+    script="$PLUGINS/ram.sh"
 
-# CPU
 sketchybar --add item cpu right \
-         --set cpu update_freq=10 \
-                   icon= \
-                   script="$HOME/.config/sketchybar/plugins/cpu.sh"
+    --set cpu update_freq=10 \
+    icon="$ICON_CPU" \
+    click_script="open -a 'Activity Monitor'" \
+    script="$PLUGINS/cpu.sh"
 
-# WiFi
+# Icon only - the network name is noise, and the glyph already says connected or not.
 sketchybar --add item wifi right \
-         --set wifi update_freq=30 \
-                    click_script="open /System/Library/PreferencePanes/Network.prefPane" \
-                    script="$HOME/.config/sketchybar/plugins/wifi.sh"
+    --subscribe wifi wifi_change system_woke \
+    --set wifi update_freq=60 \
+    label.drawing=off \
+    click_script="open -a 'System Settings'" \
+    script="$PLUGINS/wifi.sh"
 
+# Runs every item's script once. aerospace.sh resolves the focused workspace itself when
+# $FOCUSED_WORKSPACE is absent, so the bar paints correctly even if sketchybar wins the launch
+# race against aerospace - no startup trigger needed.
 sketchybar --update
-
-INITIAL_WORKSPACE=$(aerospace list-workspaces --focused)
-sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE="$INITIAL_WORKSPACE"
