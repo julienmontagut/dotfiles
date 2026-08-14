@@ -1,24 +1,16 @@
 #!/usr/bin/env bash
 
-# Basalt Dark colors
-BLUE=0xff7ca2d8
-RED=0xffd47080
+source "$HOME/.config/sketchybar/colors.sh"
+source "$HOME/.config/sketchybar/icons.sh"
 
-# Find the WiFi interface (usually en0, but could be different)
+# Wi-Fi is en0 on every Apple Silicon Mac, but ask rather than assume - a Thunderbolt dock or a
+# USB ethernet adapter can reorder the interfaces.
 WIFI_DEVICE=$(networksetup -listallhardwareports | awk '/Wi-Fi/{getline; print $2}')
+SUMMARY=$(ipconfig getsummary "${WIFI_DEVICE:-en0}" 2>/dev/null)
 
-if [ -z "$WIFI_DEVICE" ]; then
-  WIFI_DEVICE="en0"
-fi
-
-
-# Get WiFi info using ipconfig (works better with recent macOS privacy changes)
-WIFI_INFO=$(ipconfig getsummary "$WIFI_DEVICE" 2>/dev/null)
-
-# Check if WiFi is connected by looking for LinkStatusActive and InterfaceType
-if echo "$WIFI_INFO" | grep -q "LinkStatusActive : TRUE" && echo "$WIFI_INFO" | grep -q "InterfaceType : WiFi"; then
-    sketchybar --set "$NAME" icon=󰖩 icon.color="$BLUE" label=""
+if echo "$SUMMARY" | grep -q "LinkStatusActive : TRUE" &&
+    echo "$SUMMARY" | grep -q "InterfaceType : WiFi"; then
+    sketchybar --set "$NAME" icon="$ICON_WIFI" icon.color="$MUTED"
 else
-  # WiFi is not active - red icon
-  sketchybar --set "$NAME" icon=󰖪 icon.color="$RED" label=""
+    sketchybar --set "$NAME" icon="$ICON_WIFI_OFF" icon.color="$RED"
 fi
