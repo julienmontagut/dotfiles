@@ -1,32 +1,18 @@
 #!/usr/bin/env bash
 
-# Basalt Dark colors
-GREEN=0xff5eb88a
-YELLOW=0xffd4a656
-RED=0xffd47080
+source "$HOME/.config/sketchybar/colors.sh"
 
-MEMORY_PRESSURE=$(memory_pressure | grep "System-wide memory free percentage:" | awk '{print 100-$5}' | sed 's/%//')
+# memory_pressure reports free %; we want used. awk coerces the trailing '%' away.
+# Default to 0 so a format change on a future macOS degrades to a wrong number, not a broken item.
+USED=$(memory_pressure | awk '/System-wide memory free percentage:/ {print 100-$5}')
+USED=${USED:-0}
 
-if [ -z "$MEMORY_PRESSURE" ]; then
-  # Fallback method
-  TOTAL_MEM=$(sysctl -n hw.memsize)
-  PAGE_SIZE=$(pagesize)
-  PAGES_FREE=$(vm_stat | grep "Pages free" | awk '{print $3}' | sed 's/\.//')
-  PAGES_INACTIVE=$(vm_stat | grep "Pages inactive" | awk '{print $3}' | sed 's/\.//')
-  FREE_MEM=$((($PAGES_FREE + $PAGES_INACTIVE) * $PAGE_SIZE))
-  USED_MEM=$(($TOTAL_MEM - $FREE_MEM))
-  MEMORY_PRESSURE=$((($USED_MEM * 100) / $TOTAL_MEM))
-fi
-
-# Determine color based on usage
-if [ "$MEMORY_PRESSURE" -gt 80 ]; then
-  COLOR="$RED"
-elif [ "$MEMORY_PRESSURE" -gt 50 ]; then
-  COLOR="$YELLOW"
+if [ "$USED" -gt 80 ]; then
+    COLOR="$RED"
+elif [ "$USED" -gt 50 ]; then
+    COLOR="$YELLOW"
 else
-  COLOR="$GREEN"
+    COLOR="$FG"
 fi
 
-sketchybar --set "$NAME" icon.color="$COLOR" \
-                         background.color="$COLOR" \
-                         label="${MEMORY_PRESSURE}%"
+sketchybar --set "$NAME" label="${USED}%" label.color="$COLOR"
