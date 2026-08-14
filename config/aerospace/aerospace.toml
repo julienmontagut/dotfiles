@@ -12,15 +12,35 @@ accordion-padding = 16
 # Keyboard layout preset for Dvorak
 key-mapping.preset = "dvorak"
 
-# Mouse / focus coupling: focus follows the mouse, and the mouse lazily
-# follows keyboard focus (window/workspace and monitor changes).
+# Mouse / focus coupling: focus follows the mouse, and the pointer is pulled across on a monitor
+# change - but never to a window centre. on-focus-changed = 'move-mouse window-lazy-center' used to
+# do that, and "lazy" only skips the warp when the pointer is already inside the target window, so
+# clicking a workspace in sketchybar (pointer on the bar, always outside) warped it every time.
+# AeroSpace cannot suppress a callback per caller, so the callback goes rather than the click.
 focus-follows-mouse.enabled = true
-on-focus-changed = ['move-mouse window-lazy-center']
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
+# Keep sketchybar's workspace indicators in sync. Without this the bar only ever updates when
+# clicked, since aerospace emits no event sketchybar can subscribe to on its own.
+exec-on-workspace-change = [
+  '/bin/bash',
+  '-c',
+  'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
+]
 
 # Gaps configuration
 [gaps]
-outer.top = 8
+# outer.top has to reserve the sketchybar strip, and how much depends on the display. aerospace
+# measures gaps from the *visible* frame, and macOS reserves a different amount per display:
+#   built-in : the notch band is already excluded from the visible frame, and the 32pt bar sits
+#              inside it, so the plain 8pt gap is all that's needed.
+#   external : nothing is reserved (the menu bar is auto-hidden), so the frame starts at y=0 and
+#              the gap has to cover the bar itself: 32 (bar height) + 8 = 40.
+# One shared value put external windows at y=8, overlapping the bar by 24pt.
+# Monitor patterns are unanchored case-insensitive matches on the monitor name, so 'built-in'
+# catches "Built-in Retina Display" and "Built-in Liquid Retina XDR Display" alike. Keep the two
+# numbers in step with --bar height in config/sketchybar/sketchybarrc.
+outer.top = [{ monitor.'built-in' = 8 }, 40]
 outer.bottom = 8
 outer.left = 8
 outer.right = 8
