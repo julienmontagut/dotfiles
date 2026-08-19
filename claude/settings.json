@@ -16,12 +16,10 @@
       "Bash(gh release view*)",
       "Bash(scw * list*)",
       "Bash(scw * get*)",
-      "Bash(scw config*)",
-      "Bash(claude mcp *)"
+      "Bash(scw config*)"
     ],
     "deny": [],
-    "ask": [],
-    "defaultMode": "plan"
+    "ask": []
   },
   "hooks": {
     "SessionStart": [

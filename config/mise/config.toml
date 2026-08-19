@@ -34,6 +34,8 @@ starship = "latest"
 tmux = "latest"
 tree-sitter = "latest"
 xh = "latest"
+zig = "latest"
+zls = "latest"
 zellij = "latest"
 zoxide = "latest"
 
@@ -50,4 +52,4 @@ cargo-binstall = "latest"
 # every published version is prerelease-tagged and mise's dotnet backend filters
 # prereleases out of "latest", so bumping is a deliberate edit - check
 # `mise ls-remote dotnet:roslyn-language-server`.
-"dotnet:roslyn-language-server" = "5.11.0-1.26379.6"
+"dotnet:roslyn-language-server" = "5.11.0-1.26380.4"

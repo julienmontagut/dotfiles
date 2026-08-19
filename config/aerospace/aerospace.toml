@@ -3,7 +3,7 @@
 config-version = 2
 
 # Start at login
-start-at-login = true
+start-at-login = false
 
 # Default layout: fullscreen (accordion with no peek padding)
 default-root-container-layout = 'accordion'
@@ -30,8 +30,12 @@ exec-on-workspace-change = [
 
 # Gaps configuration
 [gaps]
-# outer.top has to reserve the sketchybar strip, and how much depends on the display. aerospace
-# measures gaps from the *visible* frame, and macOS reserves a different amount per display:
+# macOS excludes the menu bar from the visible frame on every display, so 8 is enough everywhere.
+outer.top = 8
+
+# Sketchybar variant: outer.top had to reserve the strip, and how much depended on the display.
+# aerospace measures gaps from the *visible* frame, and macOS reserves a different amount per
+# display:
 #   built-in : the notch band is already excluded from the visible frame, and the 32pt bar sits
 #              inside it, so the plain 8pt gap is all that's needed.
 #   external : nothing is reserved (the menu bar is auto-hidden), so the frame starts at y=0 and
@@ -40,7 +44,7 @@ exec-on-workspace-change = [
 # Monitor patterns are unanchored case-insensitive matches on the monitor name, so 'built-in'
 # catches "Built-in Retina Display" and "Built-in Liquid Retina XDR Display" alike. Keep the two
 # numbers in step with --bar height in config/sketchybar/sketchybarrc.
-outer.top = [{ monitor.'built-in' = 8 }, 40]
+# outer.top = [{ monitor.'built-in' = 8 }, 40]
 outer.bottom = 8
 outer.left = 8
 outer.right = 8
