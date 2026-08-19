@@ -1,13 +1,13 @@
-# Linux machine config, symlinked to ~/.config/mise/config.linux.toml. Loaded only on Linux
-# (auto_env). Build/runtime deps that mise can't provide as tools. curl/git/ca-certificates stay
-# in install.sh (needed before mise exists); the Wayland desktop stack is in bin/install-sway.
+# Linux packages, symlinked to ~/.config/mise/config.linux.toml and loaded only on Linux
+# (auto_env). Build/runtime deps mise can't provide as tools. curl/git/ca-certificates stay in
+# install.sh (needed before mise exists); the Wayland desktop stack is in bin/install-sway.
 [bootstrap.packages]
 "apt:build-essential" = "latest"
 "apt:fontconfig" = "latest"      # fc-cache/fc-list for the Nerd Font installed via mise
-# "apt:libssl-dev" = "latest"
-# "apt:pkg-config" = "latest"     # cargo:bacon and cargo:forgejo-cli build deps
-"apt:xclip" = "latest" # nvim unnamedplus clipboard, tmux-yank
-"apt:zsh" = "latest"   # login shell (see config.toml [bootstrap.user])
+"apt:libssl-dev" = "latest"
+"apt:pkg-config" = "latest"      # with libssl-dev, the cargo:forgejo-cli build deps
+"apt:xclip" = "latest"           # nvim unnamedplus clipboard, tmux-yank
+"apt:zsh" = "latest"             # login shell (see config.toml [bootstrap.user])
 
 [tools]
 # Lilex Nerd Font, my default. No apt package exists. Copy the extracted ttf into

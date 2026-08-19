@@ -1,8 +1,7 @@
-# macOS machine config, symlinked to ~/.config/mise/config.macos.toml. Loaded only on macOS
-# (auto_env), so `mise bootstrap` on any other OS never sees these. Third-party-tap / `trusted:`
-# formulae + casks and the Mac App Store apps stay in the repo Brewfile (run by the macOS
-# [tasks.bootstrap] in mise.toml): mas apps need the `mas` CLI first, and brew bundle handles the
-# tap trust/order.
+# macOS packages and system preferences, symlinked to ~/.config/mise/config.macos.toml and loaded
+# only on macOS (auto_env), so `mise bootstrap` on Linux never sees these. Third-party-tap
+# formulae/casks and Mac App Store apps stay in the repo Brewfile (run by the [tasks.bootstrap] in
+# config.toml): mas needs its CLI first, and brew bundle handles the tap trust/order.
 [bootstrap.packages]
 "brew:FelixKratz/formulae/borders" = "latest"    # window-border daemon (launchd agent below)
 "brew:FelixKratz/formulae/sketchybar" = "latest" # status bar (launchd agent below)
@@ -26,8 +25,8 @@
 "brew-cask:zed" = "latest"
 
 # System preferences. Friendly sections where mise has them; the raw [bootstrap.macos.defaults]
-# block holds the keys with no friendly equivalent. The structured leftovers (Dock app list,
-# disabled Ctrl+Space hotkeys) run in the mise.toml [tasks.bootstrap] script.
+# block holds the keys with no friendly equivalent. The non-scalar leftovers (Dock app list,
+# disabled Ctrl+Space hotkeys) run in scripts/macos-setup.sh.
 [bootstrap.macos.keyboard]
 press_and_hold = false
 key_repeat = 1
@@ -54,9 +53,6 @@ three_finger_drag = true
 # first row lands behind sketchybar. ~/Desktop itself is untouched and still browsable in Finder.
 "com.apple.finder" = { _FXSortFoldersFirst = true, CreateDesktop = false }
 "com.apple.AppleMultitouchTrackpad" = { TrackpadRightClick = true }
-# Menu bar autohide, only worth it with sketchybar covering the strip.
-# always=0, desktopOnly=1, fullscreenOnly=2, never=3.
-# "com.apple.controlcenter" = { AutoHideMenuBarOption = 0 }
 
 # Both daemons exec their own rc file from ~/.config on start, and both rc files - plus the
 # plugin scripts sketchybar spawns - invoke `borders` / `sketchybar` / `aerospace` by name.
