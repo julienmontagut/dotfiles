@@ -54,6 +54,9 @@ three_finger_drag = true
 # first row lands behind sketchybar. ~/Desktop itself is untouched and still browsable in Finder.
 "com.apple.finder" = { _FXSortFoldersFirst = true, CreateDesktop = false }
 "com.apple.AppleMultitouchTrackpad" = { TrackpadRightClick = true }
+# Menu bar autohide, only worth it with sketchybar covering the strip.
+# always=0, desktopOnly=1, fullscreenOnly=2, never=3.
+# "com.apple.controlcenter" = { AutoHideMenuBarOption = 0 }
 
 # Both daemons exec their own rc file from ~/.config on start, and both rc files - plus the
 # plugin scripts sketchybar spawns - invoke `borders` / `sketchybar` / `aerospace` by name.
@@ -62,15 +65,15 @@ three_finger_drag = true
 # default settings and zero items.
 
 # No args: borders execs ~/.config/borders/bordersrc, which carries the colors/width/style.
-[bootstrap.macos.launchd.agents.com-felixkratz-borders]
-program = "/opt/homebrew/bin/borders"
-environment = { PATH = "/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin" }
-run_at_load = true
-keep_alive = true
+# [bootstrap.macos.launchd.agents.com-felixkratz-borders]
+# program = "/opt/homebrew/bin/borders"
+# environment = { PATH = "/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin" }
+# run_at_load = true
+# keep_alive = true
 
 # Same deal: sketchybar execs ~/.config/sketchybar/sketchybarrc on start.
-[bootstrap.macos.launchd.agents.com-felixkratz-sketchybar]
-program = "/opt/homebrew/bin/sketchybar"
-environment = { PATH = "/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin" }
-run_at_load = true
-keep_alive = true
+# [bootstrap.macos.launchd.agents.com-felixkratz-sketchybar]
+# program = "/opt/homebrew/bin/sketchybar"
+# environment = { PATH = "/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin" }
+# run_at_load = true
+# keep_alive = true
