@@ -26,13 +26,20 @@ vim.opt.splitright = true
 vim.opt.splitbelow = true
 vim.opt.swapfile = false
 vim.opt.undofile = true
-vim.opt.completeopt = { "menu", "menuone", "noselect" }
--- "o" adds 'omnifunc' (the LSP) as a <C-n> source, alongside the keyword sources.
-vim.opt.complete:append("o")
+vim.opt.autocomplete = true
+-- Under 'autocomplete' only fuzzy/longest/popup/preinsert/preview do anything
+-- (:h 'completeopt'). "popup" shows the resolved LSP docs beside the menu.
+vim.opt.completeopt = { "fuzzy", "popup" }
+-- Source order is priority under 'autocomplete's decaying timeout, so the LSP
+-- ('omnifunc', set per-buffer by nvim) goes first. "^5" caps each buffer scanner so
+-- keyword noise cannot drown the LSP items. Dropped "u" (unloaded bufs) and "t" (tags).
+vim.opt.complete = { "o", ".^5", "w^5", "b^5" }
 
 -- Disable unused providers
 vim.g.loaded_node_provider = 0
 vim.g.loaded_perl_provider = 0
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_python3_provider = 0
 
 vim.keymap.set("i", "jk", "<Esc>", { noremap = true, silent = true })
 
@@ -59,11 +66,8 @@ vim.api.nvim_set_hl(0, "MiniDiffSignAdd", { link = "GitSignsAdd" })
 vim.api.nvim_set_hl(0, "MiniDiffSignChange", { link = "GitSignsChange" })
 vim.api.nvim_set_hl(0, "MiniDiffSignDelete", { link = "GitSignsDelete" })
 require("flash").setup{}
--- require("nvim-surround").setup{}
 require("trouble").setup{}
 require("which-key").setup{}
-
--- require("plugins")
 
 -- Oil file explorer
 require("oil").setup({
@@ -80,7 +84,7 @@ require("oil").setup({
         end,
     },
 })
-vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" }) -- Snacks
+vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
 -- Snacks
 require("snacks").setup({
@@ -138,7 +142,10 @@ vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
 vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Go to declaration" })
 vim.keymap.set("n", "gS", vim.lsp.buf.workspace_symbol, { desc = "Workspace symbols" })
 
--- Pop the completion menu as you type, instead of only on <C-n>/<C-x><C-o>.
+-- 'autocomplete' + "o" in 'complete' already pop the menu as you type; this earns its
+-- place by making <C-y> apply snippet expansion, additionalTextEdits (auto-imports)
+-- and commands, and by serving the "popup" doc preview. autotrigger covers the
+-- server's non-keyword triggerCharacters (".", "::", "<").
 vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
         local client = vim.lsp.get_client_by_id(args.data.client_id)
@@ -161,6 +168,7 @@ end
 local ts_parsers = {
     "c_sharp",
     "rust",
+    "zig",
     "lua",
     "bash",
     "swift",
@@ -270,13 +278,9 @@ vim.lsp.config("rust_analyzer", {
 vim.lsp.enable({
     "lua_ls",
     "rust_analyzer",
+    "zls",
     "taplo",
-    "bashls",
-    "jsonls",
-    "html",
-    "cssls",
     "sourcekit",
-    "nickel_ls",
 })
 
 -- Project root detection (best match first, git fallback)
