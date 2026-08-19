@@ -1,71 +1,72 @@
 {
-  "global": { "show_in_menu_bar": false },
-  "profiles": [
-    {
-      "name": "Default",
-      "selected": true,
-      "virtual_hid_keyboard": {
-        "country_code": 0,
-        "keyboard_type_v2": "ansi"
-      },
-      "complex_modifications": {
-        "rules": [
-          {
-            "description": "Map caps_lock to escape on tap, left_control on hold",
-            "manipulators": [
-              {
-                "from": {
-                  "key_code": "caps_lock",
-                  "modifiers": { "optional": ["any"] }
-                },
-                "to": [{ "key_code": "left_control" }],
-                "to_if_alone": [{ "key_code": "escape" }],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "Map left_command to command+control+option",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "device_unless",
-                    "identifiers": [{ "vendor_id": 12951 }]
-                  }
-                ],
-                "from": {
-                  "key_code": "left_command",
-                  "modifiers": { "optional": ["any"] }
-                },
-                "to": [
-                  {
-                    "key_code": "left_command",
-                    "modifiers": ["left_control", "left_option"]
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "Map right command to left command",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "device_unless",
-                    "identifiers": [{ "vendor_id": 12951 }]
-                  }
-                ],
-                "from": { "key_code": "right_command" },
-                "to": [{ "key_code": "left_command" }],
-                "type": "basic"
-              }
-            ]
-          }
-        ]
-      }
-    }
-  ]
+    "global": { "show_in_menu_bar": false },
+    "profiles": [
+        {
+            "complex_modifications": {
+                "rules": [
+                    {
+                        "description": "Map caps_lock to escape on tap, left_control on hold",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "caps_lock",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "left_control" }],
+                                "to_if_alone": [{ "key_code": "escape" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Map left_command to command+control+option",
+                        "manipulators": [
+                            {
+                                "conditions": [
+                                    {
+                                        "identifiers": [{ "vendor_id": 12951 }],
+                                        "type": "device_unless"
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "left_command",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "left_command",
+                                        "modifiers": ["left_control", "left_option"]
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Map right command to left command",
+                        "enabled": false,
+                        "manipulators": [
+                            {
+                                "conditions": [
+                                    {
+                                        "identifiers": [{ "vendor_id": 12951 }],
+                                        "type": "device_unless"
+                                    }
+                                ],
+                                "from": { "key_code": "right_command" },
+                                "to": [{ "key_code": "left_command" }],
+                                "type": "basic"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "name": "Default",
+            "selected": true,
+            "virtual_hid_keyboard": {
+                "country_code": 0,
+                "keyboard_type_v2": "ansi"
+            }
+        }
+    ]
 }
