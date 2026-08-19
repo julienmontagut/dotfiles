@@ -1,7 +1,8 @@
 #!/bin/bash
-# The macOS defaults that don't fit mise's [bootstrap.macos.defaults] (scalar) section:
-# a disabled hotkey pair and the Dock's app list. The plain scalar preferences live in
-# mise.toml. Run by [tasks.bootstrap] during `mise bootstrap` (macOS only).
+# The macOS setup mise can't express declaratively: [bootstrap.macos.defaults] writes scalars
+# only, so the Dock's app array and the symbolic-hotkey dict need `defaults` calls, and TouchID
+# needs a root-owned file under /etc/pam.d. The scalar preferences live in config.macos.toml.
+# Run by [tasks.bootstrap] during `mise bootstrap` (macOS only).
 set -euo pipefail
 
 # Disable Ctrl+Space input source switching (conflicts with terminal leader keys).
@@ -42,7 +43,20 @@ add_dock_app "$HOME/Applications/RustRover.app"
 add_dock_app "/Applications/Xcode.app"
 
 for app in "Dock" "Finder" "SystemUIServer"; do
-    killall "$app" &>/dev/null || true
+  killall "$app" &>/dev/null || true
 done
+
+# TouchID for sudo.
+pam_file="/etc/pam.d/sudo_local"
+if [[ -f "$pam_file" ]] && grep -q "pam_tid.so" "$pam_file" 2>/dev/null; then
+  echo "TouchID for sudo already configured."
+else
+  echo "Creating $pam_file (requires sudo)..."
+  sudo tee "$pam_file" >/dev/null <<'EOF'
+# sudo_local: local config file which survives system update
+auth       sufficient     pam_tid.so
+EOF
+  echo "TouchID for sudo enabled."
+fi
 
 echo "Done! Some changes may require a logout/restart to take effect."

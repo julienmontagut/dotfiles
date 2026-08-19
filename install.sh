@@ -48,7 +48,7 @@ if [[ "$OS" == "Darwin" ]]; then
 else
   # Only the prerequisites needed before mise exists: git to clone, curl to fetch mise.
   # Everything else (build deps, zsh, xclip, fontconfig, …) is in [bootstrap.packages] in
-  # mise.toml and gets installed by `mise bootstrap`. The desktop stack lives in bin/install-sway.
+  # config/mise/config.linux.toml. The desktop stack lives in bin/install-sway.
   pkgs=(ca-certificates curl git)
   missing=()
   for pkg in "${pkgs[@]}"; do
@@ -63,7 +63,9 @@ fi
 # ================================================================================================
 # Locate the dotfiles repository or clone it
 # ================================================================================================
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-}")" 2>/dev/null && pwd || echo "")"
+# pwd -P: resolve to the physical path, so running this through a symlink to the checkout still
+# records the real location the dotfile sources in config/mise/config.toml point at.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-}")" 2>/dev/null && pwd -P || echo "")"
 if [[ -n "$SCRIPT_DIR" && -f "$SCRIPT_DIR/.git/HEAD" ]]; then
   DOTFILES_DIR="$SCRIPT_DIR"
 else
@@ -92,16 +94,20 @@ if [[ -n "${GITHUB_TOKEN:-}" ]]; then
 fi
 
 # ================================================================================================
-# mise bootstrap installs system packages, dotfiles, tools, the login shell, macOS defaults
-# and (via [tasks.bootstrap]) the macOS Dock/hotkeys/TouchID setup - all from mise.toml.
+# The machine is defined in config/mise/config.toml (+ config.{macos,linux}.toml), which lives at
+# ~/.config/mise. The seed pass below links it there from the repo; the full pass then installs
+# system packages, dotfiles, tools, the login shell, macOS defaults, and (via [tasks.bootstrap])
+# the Brewfile and macos-setup.sh. After this, `mise bootstrap` works from any directory.
 # ================================================================================================
+# An `[[ … ]] && x=…` one-liner would return 1 when FORCE is false and `set -e` would abort here.
+force_flag=""
+if [[ "$FORCE" == true ]]; then
+  force_flag="--force-dotfiles"
+fi
+
 (
   cd "$DOTFILES_DIR"
   mise trust --yes .
-  force_flag=""
-  [[ "$FORCE" == true ]] && force_flag="--force-dotfiles"
-  # Apply dotfiles first so the global ~/.config/mise/config.{macos,linux}.toml and miserc.toml
-  # exist before the packages step of the full bootstrap (on a fresh box they aren't linked yet).
   mise bootstrap --only dotfiles --yes $force_flag
-  mise bootstrap --yes $force_flag
 )
+mise bootstrap --yes $force_flag
