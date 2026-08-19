@@ -1,9 +1,20 @@
+# The machine definition, symlinked to ~/.config/mise/config.toml so `mise bootstrap` converges
+# a whole machine from any directory. Per-OS packages and settings are in config.macos.toml /
+# config.linux.toml, loaded by auto_env (see miserc.toml).
+#
+# Dotfile sources are absolute on purpose: mise resolves relative sources against the config
+# file's own directory and does not follow the symlink, so "config/nvim" would look under
+# ~/.config/mise. Hence the fixed checkout path: install.sh clones the repo there. Deliberately
+# not a [bootstrap.repos] entry - that aborts the whole bootstrap whenever the checkout is dirty,
+# which for a dotfiles repo is most of the time.
+
 # A floor, not a pin: older mise aborts the packages step on the OrbStack cask (jdx/mise#11472).
 min_version = "2026.7.17"
 
 [settings]
 lockfile = true
 idiomatic_version_file_enable_tools = ["dotnet", "opentofu", "rust"]
+dotfiles.default_mode = "symlink"
 
 [settings.github]
 use_git_credentials = true
@@ -53,3 +64,50 @@ cargo-binstall = "latest"
 # prereleases out of "latest", so bumping is a deliberate edit - check
 # `mise ls-remote dotnet:roslyn-language-server`.
 "dotnet:roslyn-language-server" = "5.11.0-1.26380.4"
+
+# Portable across both OSes. The macOS-only and Linux-only entries are linked everywhere: an
+# inert config file on the wrong OS costs nothing, and pruning it would cost a per-OS split.
+[dotfiles]
+# General Claude layer. The Upcast-infrastructure skills live in claude-upcast/ and are linked
+# only under MISE_ENV=upcast; see config.upcast.toml. Client-specific config belongs in the
+# client repo's own .claude/, never here.
+"~/.claude" = { source = "~/.local/share/dotfiles/claude", mode = "symlink-each" }
+"~/.config/alacritty" = "~/.local/share/dotfiles/config/alacritty"
+"~/.config/ghostty" = "~/.local/share/dotfiles/config/ghostty"
+"~/.config/git" = { source = "~/.local/share/dotfiles/config/git", mode = "symlink-each" }
+"~/.config/ideavim" = "~/.local/share/dotfiles/config/ideavim"
+"~/.config/mise" = { source = "~/.local/share/dotfiles/config/mise", mode = "symlink-each" }
+"~/.config/nvim" = "~/.local/share/dotfiles/config/nvim"
+"~/.config/tmux" = { source = "~/.local/share/dotfiles/config/tmux", mode = "symlink-each" }
+"~/.config/wezterm" = "~/.local/share/dotfiles/config/wezterm"
+"~/.config/zed" = { source = "~/.local/share/dotfiles/config/zed", mode = "symlink-each" }
+"~/.config/zellij/config.kdl" = "~/.local/share/dotfiles/config/zellij/config.kdl"
+"~/.config/zsh" = "~/.local/share/dotfiles/config/zsh"
+"~/.local/bin" = { source = "~/.local/share/dotfiles/bin", mode = "symlink-each" }
+"~/.zshenv" = "~/.local/share/dotfiles/zshenv"
+"~/.zshrc" = "~/.local/share/dotfiles/zshrc"
+# macOS
+"~/.config/aerospace" = "~/.local/share/dotfiles/config/aerospace"
+"~/.config/borders" = "~/.local/share/dotfiles/config/borders"
+"~/.config/karabiner" = { source = "~/.local/share/dotfiles/config/karabiner", mode = "symlink-each" }
+"~/.config/sketchybar" = "~/.local/share/dotfiles/config/sketchybar"
+# Linux
+"~/.config/fuzzel" = "~/.local/share/dotfiles/config/fuzzel"
+"~/.config/kanshi" = "~/.local/share/dotfiles/config/kanshi"
+"~/.config/keyd" = "~/.local/share/dotfiles/config/keyd"
+"~/.config/sway" = "~/.local/share/dotfiles/config/sway"
+"~/.config/waybar" = "~/.local/share/dotfiles/config/waybar"
+
+# The zsh plugin manager (zimfw) self-installs on the first interactive shell; see the zim block
+# in ./zshrc. No bootstrap task is needed for it.
+
+# Last step of `mise bootstrap`: the macOS bits that aren't declarative - the Brewfile
+# (trusted-tap formulae/casks and Mac App Store apps) and macos-setup.sh (Dock, hotkeys, TouchID).
+[tasks.bootstrap]
+description = "macOS-only: Brewfile and the non-declarative defaults/services"
+run = '''
+if [ "$(uname)" = Darwin ]; then
+  brew bundle --file ~/.local/share/dotfiles/Brewfile
+  ~/.local/share/dotfiles/scripts/macos-setup.sh
+fi
+'''

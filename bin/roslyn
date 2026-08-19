@@ -1,0 +1,4 @@
+#!/bin/sh
+# roslyn.nvim (and its :checkhealth) looks for a binary named `roslyn`; mise installs
+# dotnet:roslyn-language-server under its own name. Bridge the two.
+exec roslyn-language-server "$@"

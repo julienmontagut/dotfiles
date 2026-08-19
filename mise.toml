@@ -1,6 +1,5 @@
-[settings]
-dotfiles.root = "{{ config_root }}"
-dotfiles.default_mode = "symlink"
+# Tools for working on this repo. The machine itself is defined in config/mise/config.toml,
+# symlinked to ~/.config/mise, so `mise bootstrap` sets a machine up from any directory.
 
 [tools]
 lua = "latest"
@@ -10,56 +9,7 @@ shfmt = "latest"
 taplo = "latest"
 "cargo:nickel-lang-cli" = "latest"
 
+# Seed only. On a fresh machine the global config doesn't exist yet, so install.sh runs
+# `mise bootstrap --only dotfiles` here first to create it; the full bootstrap then reads it.
 [dotfiles]
-# General Claude layer - portable, deploys everywhere. The Upcast-infrastructure
-# skills live in claude-upcast/ and are linked only under MISE_ENV=upcast; see
-# mise.upcast.toml. Client-specific config belongs in the client repo's own
-# .claude/, never here.
-"~/.claude" = { source = "claude", mode = "symlink-each" }
-"~/.config/alacritty" = "config/alacritty"
-"~/.config/ghostty" = "config/ghostty"
-"~/.config/git" = { source = "config/git", mode = "symlink-each" }
-"~/.config/ideavim" = "config/ideavim"
 "~/.config/mise" = { source = "config/mise", mode = "symlink-each" }
-"~/.config/nvim" = "config/nvim"
-"~/.config/tmux" = { source = "config/tmux", mode = "symlink-each" }
-"~/.config/wezterm" = "config/wezterm"
-"~/.config/zed" = { source = "config/zed", mode = "symlink-each" }
-"~/.config/zellij/config.kdl" = "config/zellij/config.kdl"
-"~/.config/zsh" = "config/zsh"
-"~/.local/bin" = { source = "bin", mode = "symlink-each" }
-"~/.zshenv" = "zshenv"
-"~/.zshrc" = "zshrc"
-# macOS
-"~/.config/aerospace" = "config/aerospace"
-"~/.config/borders" = "config/borders"
-"~/.config/karabiner" = { source = "config/karabiner", mode = "symlink-each" }
-"~/.config/sketchybar" = "config/sketchybar"
-# Linux only
-"~/.config/fuzzel" = "config/fuzzel"
-"~/.config/kanshi" = "config/kanshi"
-"~/.config/keyd" = "config/keyd"
-"~/.config/sway" = "config/sway"
-"~/.config/waybar" = "config/waybar"
-
-# The zsh plugin manager (zimfw) self-installs on the first interactive shell;
-# see the zim block in ./zshrc. No bootstrap task is needed for it.
-
-# Machine packages, per-OS defaults, tools and the login shell live in the global user config
-# (config/mise/config.toml + config.macos.toml + config.linux.toml), so `mise bootstrap` converges
-# them from any directory. This repo config only carries what is inherently repo-bound: the
-# dotfiles above and the macOS-only task below (it runs this repo's scripts and Brewfile).
-
-# Runs at the end of `mise bootstrap`, from the repo. macOS only (this file also loads on Linux):
-# the Brewfile (trusted-tap formulae/casks + Mac App Store apps) and the defaults/services that
-# aren't declarative - the Dock app list, disabled Ctrl+Space hotkeys, and TouchID-for-sudo.
-
-[tasks.bootstrap]
-description = "macOS-only: Brewfile, non-declarative defaults, and services"
-run = '''
-if [ "$(uname)" = Darwin ]; then
-  brew bundle --file "{{ config_root }}/Brewfile"
-  "{{ config_root }}/scripts/macos-defaults.sh"
-  "{{ config_root }}/scripts/macos-services.sh"
-fi
-'''
