@@ -12,12 +12,8 @@ accordion-padding = 16
 # Keyboard layout preset for Dvorak
 key-mapping.preset = "dvorak"
 
-# Mouse / focus coupling: focus follows the mouse, and the pointer is pulled across on a monitor
-# change - but never to a window centre. on-focus-changed = 'move-mouse window-lazy-center' used to
-# do that, and "lazy" only skips the warp when the pointer is already inside the target window, so
-# clicking a workspace in sketchybar (pointer on the bar, always outside) warped it every time.
-# AeroSpace cannot suppress a callback per caller, so the callback goes rather than the click.
-focus-follows-mouse.enabled = true
+# Mouse / focus coupling: the pointer is pulled across on a monitor change but never to a window
+# centre.
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 
 # Keep sketchybar's workspace indicators in sync. Without this the bar only ever updates when
