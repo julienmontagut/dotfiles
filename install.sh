@@ -75,9 +75,11 @@ if [[ "$FORCE" == true ]]; then
 fi
 
 # First pass links ~/.config/mise from the clone, second pass reads it and converges the machine.
+# Only that one entry: a full --only dotfiles pass here would also load an existing (possibly
+# broken) ~/.config/mise and fail before it could repair it. --force for the same reason.
 (
   cd "$DOTFILES_DIR"
   mise trust --yes .
-  mise bootstrap --only dotfiles --yes $force_flag
+  mise bootstrap dotfiles apply '~/.config/mise' --force
 )
 mise bootstrap --yes $force_flag
