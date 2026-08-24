@@ -12,6 +12,8 @@
 #
 # When the script is not run from a git repository, the dotfiles repository is cloned
 # to DOTFILES_DIR (~/.local/share/dotfiles) and `install.sh` is executed again from there.
+# That default is only where a bare `curl | sh` puts the clone - an existing checkout works from
+# anywhere, since the machine config finds itself through the ~/.config/mise symlink.
 set -euo pipefail
 
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.local/share/dotfiles}"
@@ -63,8 +65,8 @@ fi
 # ================================================================================================
 # Locate the dotfiles repository or clone it
 # ================================================================================================
-# pwd -P: resolve to the physical path, so running this through a symlink to the checkout still
-# records the real location the dotfile sources in config/mise/config.toml point at.
+# pwd -P: resolve to the physical path, so ~/.config/mise ends up pointing at the real checkout
+# rather than at a symlink to it - every dotfile source climbs out through that link.
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-}")" 2>/dev/null && pwd -P || echo "")"
 if [[ -n "$SCRIPT_DIR" && -f "$SCRIPT_DIR/.git/HEAD" ]]; then
   DOTFILES_DIR="$SCRIPT_DIR"

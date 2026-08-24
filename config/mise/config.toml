@@ -1,12 +1,17 @@
-# The machine definition, symlinked to ~/.config/mise/config.toml so `mise bootstrap` converges
-# a whole machine from any directory. Per-OS packages and settings are in config.macos.toml /
-# config.linux.toml, loaded by auto_env (see miserc.toml).
+# The machine definition. ~/.config/mise is a symlink to this directory (see [dotfiles] in the
+# repo's mise.toml), so `mise bootstrap` converges a whole machine from any directory. Per-OS
+# packages and settings are in config.macos.toml / config.linux.toml, loaded by auto_env (see
+# miserc.toml).
 #
-# Dotfile sources are absolute on purpose: mise resolves relative sources against the config
-# file's own directory and does not follow the symlink, so "config/nvim" would look under
-# ~/.config/mise. Hence the fixed checkout path: install.sh clones the repo there. Deliberately
-# not a [bootstrap.repos] entry - that aborts the whole bootstrap whenever the checkout is dirty,
-# which for a dotfiles repo is most of the time.
+# Dotfile sources are relative and climb out through that symlink: mise joins them onto
+# ~/.config/mise textually, and the kernel resolves the symlink before applying "..", so "../nvim"
+# lands in <checkout>/config/nvim wherever the repo was cloned. Hence one symlink, not a fixed
+# path - and moving the checkout only needs ~/.config/mise re-pointed, since every other link
+# routes through it. Templating is not an option here: mise does not render {{ }} in dotfile
+# sources (verified - config_root, env and vars all come through literal).
+#
+# Deliberately not a [bootstrap.repos] entry - that aborts the whole bootstrap whenever the
+# checkout is dirty, which for a dotfiles repo is most of the time.
 
 # A floor, not a pin: older mise aborts the packages step on the OrbStack cask (jdx/mise#11472).
 min_version = "2026.7.17"
@@ -68,38 +73,43 @@ cargo-binstall = "latest"
 # Portable across both OSes. The macOS-only and Linux-only entries are linked everywhere: an
 # inert config file on the wrong OS costs nothing, and pruning it would cost a per-OS split.
 [dotfiles]
-# General Claude layer, deployed to both accounts: ~/.claude is Upcast and is what bare `claude`
-# uses, ~/.claude-igor is whichever client I'm billing and is reached through bin/igor. Only
-# credentials, sessions and project history differ between them. The Upcast-infrastructure skills
-# live in claude-upcast/ and are linked into ~/.claude alone, under MISE_ENV=upcast; see
-# config.upcast.toml. Client-specific config belongs in the client repo's own .claude/, never here.
-"~/.claude" = { source = "~/.local/share/dotfiles/claude", mode = "symlink-each" }
-"~/.claude-igor" = { source = "~/.local/share/dotfiles/claude", mode = "symlink-each" }
-"~/.config/alacritty" = "~/.local/share/dotfiles/config/alacritty"
-"~/.config/ghostty" = "~/.local/share/dotfiles/config/ghostty"
-"~/.config/git" = { source = "~/.local/share/dotfiles/config/git", mode = "symlink-each" }
-"~/.config/ideavim" = "~/.local/share/dotfiles/config/ideavim"
-"~/.config/mise" = { source = "~/.local/share/dotfiles/config/mise", mode = "symlink-each" }
-"~/.config/nvim" = "~/.local/share/dotfiles/config/nvim"
-"~/.config/tmux" = { source = "~/.local/share/dotfiles/config/tmux", mode = "symlink-each" }
-"~/.config/wezterm" = "~/.local/share/dotfiles/config/wezterm"
-"~/.config/zed" = { source = "~/.local/share/dotfiles/config/zed", mode = "symlink-each" }
-"~/.config/zellij/config.kdl" = "~/.local/share/dotfiles/config/zellij/config.kdl"
-"~/.config/zsh" = "~/.local/share/dotfiles/config/zsh"
-"~/.local/bin" = { source = "~/.local/share/dotfiles/bin", mode = "symlink-each" }
-"~/.zshenv" = "~/.local/share/dotfiles/zshenv"
-"~/.zshrc" = "~/.local/share/dotfiles/zshrc"
+# My Claude layer. ~/.claude is what bare `claude` uses; the client account (~/.claude-igor,
+# reached through bin/igor) gets its skills from plugins or local-only config, so none of my
+# tooling or credentials leak onto a client's bill.
+"~/.claude" = { source = "../../claude", mode = "symlink-each" }
+# The one exception: how I work is mine, not the client's. Linked as a single file rather than
+# extending the layer above, so ~/.claude-igor stays Claude Code's own directory.
+"~/.claude-igor/CLAUDE.md" = "../../claude/CLAUDE.md"
+# The Upcast-infrastructure skills. Unconditional, because ~/.claude is the Upcast account by
+# definition - the account split does the isolating that MISE_ENV=upcast used to. `symlink-each`
+# merges into the ~/.claude tree rather than replacing it, so this entry must follow the one above.
+"~/.claude/skills" = { source = "../../claude-upcast/skills", mode = "symlink-each" }
+"~/.config/alacritty" = "../alacritty"
+"~/.config/ghostty" = "../ghostty"
+"~/.config/git" = { source = "../git", mode = "symlink-each" }
+"~/.config/ideavim" = "../ideavim"
+"~/.config/nvim" = "../nvim"
+"~/.config/tmux" = { source = "../tmux", mode = "symlink-each" }
+"~/.config/wezterm" = "../wezterm"
+"~/.config/zed" = { source = "../zed", mode = "symlink-each" }
+"~/.config/zellij/config.kdl" = "../zellij/config.kdl"
+"~/.config/zsh" = "../zsh"
+"~/.local/bin" = { source = "../../bin", mode = "symlink-each" }
+"~/.zshenv" = "../../zshenv"
+"~/.zshrc" = "../../zshrc"
 # macOS
-"~/.config/aerospace" = "~/.local/share/dotfiles/config/aerospace"
-"~/.config/borders" = "~/.local/share/dotfiles/config/borders"
-"~/.config/karabiner" = { source = "~/.local/share/dotfiles/config/karabiner", mode = "symlink-each" }
-"~/.config/sketchybar" = "~/.local/share/dotfiles/config/sketchybar"
+"~/.config/aerospace" = "../aerospace"
+"~/.config/borders" = "../borders"
+"~/.config/karabiner" = { source = "../karabiner", mode = "symlink-each" }
+"~/.config/sketchybar" = "../sketchybar"
 # Linux
-"~/.config/fuzzel" = "~/.local/share/dotfiles/config/fuzzel"
-"~/.config/kanshi" = "~/.local/share/dotfiles/config/kanshi"
-"~/.config/keyd" = "~/.local/share/dotfiles/config/keyd"
-"~/.config/sway" = "~/.local/share/dotfiles/config/sway"
-"~/.config/waybar" = "~/.local/share/dotfiles/config/waybar"
+"~/.config/fuzzel" = "../fuzzel"
+"~/.config/kanshi" = "../kanshi"
+"~/.config/keyd" = "../keyd"
+"~/.config/sway" = "../sway"
+"~/.config/waybar" = "../waybar"
+# ~/.config/mise itself is deliberately absent: the repo's mise.toml seeds it, and declaring it
+# here would mean a source relative to the very symlink being replaced.
 
 # The zsh plugin manager (zimfw) self-installs on the first interactive shell; see the zim block
 # in ./zshrc. No bootstrap task is needed for it.
@@ -110,7 +120,7 @@ cargo-binstall = "latest"
 description = "macOS-only: Brewfile and the non-declarative defaults/services"
 run = '''
 if [ "$(uname)" = Darwin ]; then
-  brew bundle --file ~/.local/share/dotfiles/Brewfile
-  ~/.local/share/dotfiles/scripts/macos-setup.sh
+  brew bundle --file ~/.config/mise/../../Brewfile
+  ~/.config/mise/../../scripts/macos-setup.sh
 fi
 '''

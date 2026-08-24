@@ -3,8 +3,9 @@
 #
 # Bare `claude` is the Upcast account: the default has to be the safe one, because a launch
 # that misses the environment - a GUI launcher, cron, a non-interactive ssh - would otherwise
-# bill the client. Everything but credentials, sessions and project history is shared between
-# the two config dirs; see [dotfiles] in config/mise/config.toml.
+# bill the client. ~/.claude-igor is Claude Code's own directory and is not managed by these
+# dotfiles: client-side skills come from plugins or local-only config, so nothing of mine leaks
+# onto a client's bill. Only ~/.claude is in [dotfiles] in config/mise/config.toml.
 #
 # The dir is named after this command, not after the client: switching clients means a
 # `/login`, not a rename here.
