@@ -68,10 +68,13 @@ cargo-binstall = "latest"
 # Portable across both OSes. The macOS-only and Linux-only entries are linked everywhere: an
 # inert config file on the wrong OS costs nothing, and pruning it would cost a per-OS split.
 [dotfiles]
-# General Claude layer. The Upcast-infrastructure skills live in claude-upcast/ and are linked
-# only under MISE_ENV=upcast; see config.upcast.toml. Client-specific config belongs in the
-# client repo's own .claude/, never here.
+# General Claude layer, deployed to both accounts: ~/.claude is Upcast and is what bare `claude`
+# uses, ~/.claude-igor is whichever client I'm billing and is reached through bin/igor. Only
+# credentials, sessions and project history differ between them. The Upcast-infrastructure skills
+# live in claude-upcast/ and are linked into ~/.claude alone, under MISE_ENV=upcast; see
+# config.upcast.toml. Client-specific config belongs in the client repo's own .claude/, never here.
 "~/.claude" = { source = "~/.local/share/dotfiles/claude", mode = "symlink-each" }
+"~/.claude-igor" = { source = "~/.local/share/dotfiles/claude", mode = "symlink-each" }
 "~/.config/alacritty" = "~/.local/share/dotfiles/config/alacritty"
 "~/.config/ghostty" = "~/.local/share/dotfiles/config/ghostty"
 "~/.config/git" = { source = "~/.local/share/dotfiles/config/git", mode = "symlink-each" }
