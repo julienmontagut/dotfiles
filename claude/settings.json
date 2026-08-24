@@ -28,7 +28,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "h=\"$HOME/.claude/hooks/herdr-agent-state.sh\"; [ -f \"$h\" ] && bash \"$h\" session || true",
+            "command": "h=\"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/herdr-agent-state.sh\"; [ -f \"$h\" ] && bash \"$h\" session || true",
             "timeout": 10
           }
         ]
