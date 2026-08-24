@@ -86,9 +86,12 @@ cargo-binstall = "latest"
 
 [tasks.bootstrap]
 description = "macOS-only: Brewfile and the non-declarative defaults/services"
+# cd -P: unlike mise's dotfile sources, the shell resolves `..` lexically, so the climb out of
+# the ~/.config/mise symlink only reaches the checkout physically.
 run = '''
 if [ "$(uname)" = Darwin ]; then
-  brew bundle --file ~/.config/mise/../../Brewfile
-  ~/.config/mise/../../scripts/macos-setup.sh
+  cd -P ~/.config/mise/../..
+  brew bundle --file Brewfile
+  scripts/macos-setup.sh
 fi
 '''
