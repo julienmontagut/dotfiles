@@ -1,0 +1,11 @@
+#!/bin/sh
+# Claude Code on the current client's account.
+#
+# Bare `claude` is the Upcast account: the default has to be the safe one, because a launch
+# that misses the environment - a GUI launcher, cron, a non-interactive ssh - would otherwise
+# bill the client. Everything but credentials, sessions and project history is shared between
+# the two config dirs; see [dotfiles] in config/mise/config.toml.
+#
+# The dir is named after this command, not after the client: switching clients means a
+# `/login`, not a rename here.
+exec env CLAUDE_CONFIG_DIR="$HOME/.claude-igor" claude "$@"

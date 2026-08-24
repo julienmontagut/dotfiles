@@ -1,7 +1,9 @@
 # Upcast layer, applied only with MISE_ENV=upcast (which composes with the OS env auto_env sets).
 # These skills drive Upcast's own infrastructure and are useless without Upcast credentials, so
-# they stay off client machines. `symlink-each` merges into the ~/.claude tree rather than
-# replacing it. mise never prunes: dropping MISE_ENV stops linking new skills but leaves the
-# already-linked ones, so remove those by hand when de-provisioning.
+# they stay off client machines - and, on a shared machine, off the client account: ~/.claude is
+# the Upcast config dir, while the client's ~/.claude-igor deliberately gets only the general
+# layer. `symlink-each` merges into the ~/.claude tree rather than replacing it. mise never
+# prunes: dropping MISE_ENV stops linking new skills but leaves the already-linked ones, so
+# remove those by hand when de-provisioning.
 [dotfiles]
 "~/.claude/skills" = { source = "~/.local/share/dotfiles/claude-upcast/skills", mode = "symlink-each" }
