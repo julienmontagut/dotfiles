@@ -1,5 +1,5 @@
-# Tools for working on this repo. The machine itself is defined in config/mise/config.toml.
-
+# Tools for working on this repo. The machine itself is defined in config/mise/config.toml,
+# symlinked to ~/.config/mise, so `mise bootstrap` sets a machine up from any directory.
 [tools]
 lua = "latest"
 lua-language-server = "latest"
