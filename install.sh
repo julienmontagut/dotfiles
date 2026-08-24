@@ -1,19 +1,6 @@
 #!/usr/bin/env bash
-# Dev-machine installer. Same flow on macOS and Linux:
-#   1. Install the prerequisites mise needs to exist (curl, git; on macOS Xcode CLT + Homebrew).
-#   2. Locate or clone the repo
-#   3. Install mise
-#   4. Run `mise bootstrap` - it installs everything else (packages, dotfiles, tools, macOS setup).
-#
-# This install is idempotent, and can be run: 
-#  - as a copy/pasted standalone local script
-#  - as a remote `curl … | sh` script
-#  - run from a cloned git repo
-#
-# When the script is not run from a git repository, the dotfiles repository is cloned
-# to DOTFILES_DIR (~/.local/share/dotfiles) and `install.sh` is executed again from there.
-# That default is only where a bare `curl | sh` puts the clone - an existing checkout works from
-# anywhere, since the machine config finds itself through the ~/.config/mise symlink.
+# Dev-machine installer for macOS and Linux: prerequisites, then the repo, mise, and
+# `mise bootstrap`. Idempotent, and runs standalone, from `curl … | sh`, or from a clone.
 set -euo pipefail
 
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.local/share/dotfiles}"
@@ -32,9 +19,6 @@ if [[ "$OS" != "Darwin" && "$OS" != "Linux" ]]; then
   exit 1
 fi
 
-# ================================================================================================
-# System package manager setup and dev dependencies
-# ================================================================================================
 if [[ "$OS" == "Darwin" ]]; then
   if ! xcode-select -p &>/dev/null; then
     echo "Installing Xcode Command Line Tools..."
@@ -44,13 +28,9 @@ if [[ "$OS" == "Darwin" ]]; then
   if ! command -v brew &>/dev/null; then
     bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   fi
-  # Put brew on PATH for the rest of this run (the mise bootstrap task runs `brew bundle`).
-  # Future shells get it from the managed zshenv, not a stray ~/.zprofile edit.
   [[ -x /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
 else
-  # Only the prerequisites needed before mise exists: git to clone, curl to fetch mise.
-  # Everything else (build deps, zsh, xclip, fontconfig, …) is in [bootstrap.packages] in
-  # config/mise/config.linux.toml. The desktop stack lives in bin/install-sway.
+  # Only what is needed before mise exists. The rest is in [bootstrap.packages].
   pkgs=(ca-certificates curl git)
   missing=()
   for pkg in "${pkgs[@]}"; do
@@ -62,11 +42,7 @@ else
   fi
 fi
 
-# ================================================================================================
-# Locate the dotfiles repository or clone it
-# ================================================================================================
-# pwd -P: resolve to the physical path, so ~/.config/mise ends up pointing at the real checkout
-# rather than at a symlink to it - every dotfile source climbs out through that link.
+# pwd -P: ~/.config/mise must point at the real checkout, not at a symlink to it.
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-}")" 2>/dev/null && pwd -P || echo "")"
 if [[ -n "$SCRIPT_DIR" && -f "$SCRIPT_DIR/.git/HEAD" ]]; then
   DOTFILES_DIR="$SCRIPT_DIR"
@@ -81,13 +57,11 @@ else
 fi
 export DOTFILES_DIR
 
-# Unconditional: a guard would leave a stale mise, too old for newer cask metadata (see min_version).
+# Unguarded on purpose: an existing mise can be too old for newer cask metadata (see min_version).
 curl -fsSL https://mise.run | sh
 export PATH="$HOME/.local/bin:$PATH"
 
-# Try to authenticate into github so that mise's doesn't hit the rate limit of github. 
-# Use a GITHUB_TOKEN from the environment, else borrow an existing gh login if one is around, else 
-# continue unauthenticated. 
+# Borrow a gh login when there is no token, to keep mise off the anonymous GitHub rate limit.
 if [[ -z "${GITHUB_TOKEN:-}" ]] && command -v gh &>/dev/null; then
   GITHUB_TOKEN="$(gh auth token 2>/dev/null || true)"
 fi
@@ -95,18 +69,12 @@ if [[ -n "${GITHUB_TOKEN:-}" ]]; then
   export GITHUB_TOKEN
 fi
 
-# ================================================================================================
-# The machine is defined in config/mise/config.toml (+ config.{macos,linux}.toml), which lives at
-# ~/.config/mise. The seed pass below links it there from the repo; the full pass then installs
-# system packages, dotfiles, tools, the login shell, macOS defaults, and (via [tasks.bootstrap])
-# the Brewfile and macos-setup.sh. After this, `mise bootstrap` works from any directory.
-# ================================================================================================
-# An `[[ … ]] && x=…` one-liner would return 1 when FORCE is false and `set -e` would abort here.
 force_flag=""
 if [[ "$FORCE" == true ]]; then
   force_flag="--force-dotfiles"
 fi
 
+# First pass links ~/.config/mise from the clone, second pass reads it and converges the machine.
 (
   cd "$DOTFILES_DIR"
   mise trust --yes .

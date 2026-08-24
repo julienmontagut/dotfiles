@@ -1,19 +1,3 @@
-# The machine definition. ~/.config/mise is a symlink to this directory (see [dotfiles] in the
-# repo's mise.toml), so `mise bootstrap` converges a whole machine from any directory. Per-OS
-# packages and settings are in config.macos.toml / config.linux.toml, loaded by auto_env (see
-# miserc.toml).
-#
-# Dotfile sources are relative and climb out through that symlink: mise joins them onto
-# ~/.config/mise textually, and the kernel resolves the symlink before applying "..", so "../nvim"
-# lands in <checkout>/config/nvim wherever the repo was cloned. Hence one symlink, not a fixed
-# path - and moving the checkout only needs ~/.config/mise re-pointed, since every other link
-# routes through it. Templating is not an option here: mise does not render {{ }} in dotfile
-# sources (verified - config_root, env and vars all come through literal).
-#
-# Deliberately not a [bootstrap.repos] entry - that aborts the whole bootstrap whenever the
-# checkout is dirty, which for a dotfiles repo is most of the time.
-
-# A floor, not a pin: older mise aborts the packages step on the OrbStack cask (jdx/mise#11472).
 min_version = "2026.7.17"
 
 [settings]
@@ -55,39 +39,26 @@ zls = "latest"
 zellij = "latest"
 zoxide = "latest"
 
-# Required tools to install dependencies
 rust = "latest"
 cargo-binstall = "latest"
 
-# CLI tools out of the registry
 "cargo:bacon" = "latest"
 "cargo:forgejo-cli" = "latest"
 "aqua:maaslalani/slides" = "latest"
 
-# The Roslyn LSP, picked up from PATH by roslyn.nvim. Pinned rather than "latest":
-# every published version is prerelease-tagged and mise's dotnet backend filters
-# prereleases out of "latest", so bumping is a deliberate edit - check
-# `mise ls-remote dotnet:roslyn-language-server`.
+# "latest" resolves to nothing: every release is prerelease-tagged and the dotnet backend filters
+# those out. Bump from `mise ls-remote dotnet:roslyn-language-server`.
 "dotnet:roslyn-language-server" = "5.11.0-1.26380.4"
 
-# Portable across both OSes. The macOS-only and Linux-only entries are linked everywhere: an
-# inert config file on the wrong OS costs nothing, and pruning it would cost a per-OS split.
 [dotfiles]
-# My Claude layer. ~/.claude is what bare `claude` uses; the client account (~/.claude-igor,
-# reached through bin/igor) gets its skills from plugins or local-only config, so none of my
-# tooling or credentials leak onto a client's bill.
 "~/.claude" = { source = "../../claude", mode = "symlink-each" }
-# The one exception: how I work is mine, not the client's. Linked as a single file rather than
-# extending the layer above, so ~/.claude-igor stays Claude Code's own directory.
 "~/.claude-igor/CLAUDE.md" = "../../claude/CLAUDE.md"
-# The Upcast-infrastructure skills. Unconditional, because ~/.claude is the Upcast account by
-# definition - the account split does the isolating that MISE_ENV=upcast used to. `symlink-each`
-# merges into the ~/.claude tree rather than replacing it, so this entry must follow the one above.
+# Must follow ~/.claude: symlink-each merges into that tree instead of replacing it.
 "~/.claude/skills" = { source = "../../claude-upcast/skills", mode = "symlink-each" }
 "~/.config/alacritty" = "../alacritty"
 "~/.config/ghostty" = "../ghostty"
 "~/.config/git" = { source = "../git", mode = "symlink-each" }
-# A single file, not the directory: ~/.config/herdr also holds its sockets, logs and session state.
+# A single file: ~/.config/herdr also holds herdr's sockets, logs and session state.
 "~/.config/herdr/config.toml" = "../herdr/config.toml"
 "~/.config/ideavim" = "../ideavim"
 "~/.config/nvim" = "../nvim"
@@ -110,14 +81,9 @@ cargo-binstall = "latest"
 "~/.config/keyd" = "../keyd"
 "~/.config/sway" = "../sway"
 "~/.config/waybar" = "../waybar"
-# ~/.config/mise itself is deliberately absent: the repo's mise.toml seeds it, and declaring it
-# here would mean a source relative to the very symlink being replaced.
+# ~/.config/mise is absent on purpose: its source would be relative to the symlink being replaced.
+# The repo's mise.toml seeds it instead.
 
-# The zsh plugin manager (zimfw) self-installs on the first interactive shell; see the zim block
-# in ./zshrc. No bootstrap task is needed for it.
-
-# Last step of `mise bootstrap`: the macOS bits that aren't declarative - the Brewfile
-# (trusted-tap formulae/casks and Mac App Store apps) and macos-setup.sh (Dock, hotkeys, TouchID).
 [tasks.bootstrap]
 description = "macOS-only: Brewfile and the non-declarative defaults/services"
 run = '''
