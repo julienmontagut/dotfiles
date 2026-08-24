@@ -307,9 +307,9 @@ web_client {
 // Choose the theme that is specified in the themes section.
 // Default: default
 //
-// The "terminal" theme below references ANSI palette indices (0-15), so zellij
-// inherits the host terminal's colors (basalt-dark via ghostty) instead of
-// auto-deriving a blue bar background.
+// zellij ships no rose-pine built-in. The "terminal" theme below references ANSI palette
+// indices (0-15), so zellij inherits the host terminal's colors (rose-pine via ghostty,
+// dawn included) instead of auto-deriving a blue bar background.
 theme "terminal"
 
 themes {

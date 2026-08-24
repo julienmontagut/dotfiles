@@ -9,7 +9,10 @@ config.default_prog = { shell, "-l" }
 config.font = wezterm.font("Lilex")
 config.font_size = 16
 
-config.color_scheme = "Basalt Dark"
+-- wezterm.gui is absent in the mux server, where the scheme doesn't matter anyway.
+local appearance = wezterm.gui and wezterm.gui.get_appearance() or "Dark"
+config.color_scheme = appearance:find("Dark") and "Rosé Pine" or "Rosé Pine Dawn"
+-- config.color_scheme = "Basalt Dark"
 
 config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = true
