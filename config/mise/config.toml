@@ -87,6 +87,8 @@ cargo-binstall = "latest"
 "~/.config/alacritty" = "../alacritty"
 "~/.config/ghostty" = "../ghostty"
 "~/.config/git" = { source = "../git", mode = "symlink-each" }
+# A single file, not the directory: ~/.config/herdr also holds its sockets, logs and session state.
+"~/.config/herdr/config.toml" = "../herdr/config.toml"
 "~/.config/ideavim" = "../ideavim"
 "~/.config/nvim" = "../nvim"
 "~/.config/tmux" = { source = "../tmux", mode = "symlink-each" }
