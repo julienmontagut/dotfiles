@@ -50,11 +50,21 @@ gaps outer 8
 default_border pixel 2
 default_floating_border pixel 2
 
-# Colors (Basalt Dark)
+# Colors (Rosé Pine)
 # class                 border  backgr. text    indicator child_border
-client.focused          #7ca2d8 #7ca2d8 #0e0e0e #7ca2d8   #7ca2d8
-client.focused_inactive #767575 #767575 #e7e5e5 #767575   #767575
-client.unfocused        #3e3e44 #3e3e44 #acabaa #3e3e44   #3e3e44
+client.focused          #c4a7e7 #c4a7e7 #191724 #c4a7e7   #c4a7e7
+client.focused_inactive #6e6a86 #6e6a86 #e0def4 #6e6a86   #6e6a86
+client.unfocused        #26233a #26233a #908caa #26233a   #26233a
+
+# Colors (Rosé Pine Dawn)
+# client.focused          #907aa9 #907aa9 #faf4ed #907aa9   #907aa9
+# client.focused_inactive #9893a5 #9893a5 #575279 #9893a5   #9893a5
+# client.unfocused        #f2e9e1 #f2e9e1 #797593 #f2e9e1   #f2e9e1
+
+# Colors (Basalt Dark)
+# client.focused          #7ca2d8 #7ca2d8 #0e0e0e #7ca2d8   #7ca2d8
+# client.focused_inactive #767575 #767575 #e7e5e5 #767575   #767575
+# client.unfocused        #3e3e44 #3e3e44 #acabaa #3e3e44   #3e3e44
 
 # =============================================================================
 # Key bindings - Basics

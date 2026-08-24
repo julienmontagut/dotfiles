@@ -8,6 +8,15 @@
   "vim": {
     "use_smartcase_find": true,
   },
+  // Rosé Pine isn't bundled with Zed, so pull it from the extension registry.
+  "auto_install_extensions": {
+    "rose-pine-theme": true,
+  },
+  "theme": {
+    "mode": "system",
+    "dark": "Rosé Pine",
+    "light": "Rosé Pine Dawn",
+  },
   // "auto_signature_help": false,
   "gutter": {
     "line_numbers": true,

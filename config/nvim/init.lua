@@ -54,6 +54,8 @@ vim.pack.add({
     "https://github.com/nvim-mini/mini.nvim",
     "https://github.com/nvim-treesitter/nvim-treesitter",
     "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
+    -- Repo is named "neovim"; the colorscheme has to be found as "rose-pine".
+    { src = "https://github.com/rose-pine/neovim", name = "rose-pine" },
     "https://github.com/seblj/roslyn.nvim",
     "https://github.com/stevearc/oil.nvim",
 })
@@ -307,4 +309,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
     end,
 })
 
-vim.cmd[[colorscheme basalt]]
+-- rose-pine's default "auto" variant follows 'background': main when dark, dawn when light.
+vim.o.background = vim.env.THEME_VARIANT == "light" and "light" or "dark"
+vim.cmd[[colorscheme rose-pine]]
+-- vim.cmd[[colorscheme basalt]]
