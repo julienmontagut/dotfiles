@@ -34,13 +34,15 @@ starship = "latest"
 tmux = "latest"
 tree-sitter = "latest"
 xh = "latest"
+zellij = "latest"
 zig = "latest"
 zls = "latest"
-zellij = "latest"
 zoxide = "latest"
 
+# Dependencies to install other packages
 rust = "latest"
 cargo-binstall = "latest"
+dotnet = "latest"
 
 "cargo:bacon" = "latest"
 "cargo:forgejo-cli" = "latest"
