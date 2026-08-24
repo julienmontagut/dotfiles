@@ -9,7 +9,10 @@ shfmt = "latest"
 taplo = "latest"
 "cargo:nickel-lang-cli" = "latest"
 
-# Seed only. On a fresh machine the global config doesn't exist yet, so install.sh runs
-# `mise bootstrap --only dotfiles` here first to create it; the full bootstrap then reads it.
+# Seed only, and the anchor for everything else. On a fresh machine the global config doesn't
+# exist yet, so install.sh runs `mise bootstrap --only dotfiles` here first to create it; the full
+# bootstrap then reads it. A whole-directory symlink, not symlink-each: the machine config's
+# dotfile sources are relative and climb out through it (see config/mise/config.toml), which only
+# works if ~/.config/mise is itself a link into the checkout.
 [dotfiles]
-"~/.config/mise" = { source = "config/mise", mode = "symlink-each" }
+"~/.config/mise" = { source = "config/mise", mode = "symlink" }

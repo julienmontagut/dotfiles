@@ -83,4 +83,6 @@ alias berg="fj --host codeberg.org"
 # =============================================================================
 
 alias reload="source ~/.zshenv && source ~/.zshrc"
-alias dotfiles="cd ~/.local/share/dotfiles"
+# -P resolves the ~/.config/mise symlink, so this lands in the checkout wherever it is cloned.
+# `builtin` because zoxide takes over `cd` (see zshrc) and doesn't accept -P.
+alias dotfiles='builtin cd -P ~/.config/mise && builtin cd ../..'
