@@ -1,12 +1,10 @@
 #!/bin/bash
-# The macOS setup mise can't express declaratively: [bootstrap.macos.defaults] writes scalars
-# only, so the Dock's app array and the symbolic-hotkey dict need `defaults` calls, and TouchID
-# needs a root-owned file under /etc/pam.d. The scalar preferences live in config.macos.toml.
-# Run by [tasks.bootstrap] during `mise bootstrap` (macOS only).
+# The macOS setup mise can't express declaratively. The scalar preferences live in
+# config.macos.toml. Run by [tasks.bootstrap] during `mise bootstrap`.
 set -euo pipefail
 
-# Disable Ctrl+Space input source switching (conflicts with terminal leader keys).
-# Key 60 = "Select the previous input source", Key 61 = "Select next source in Input menu".
+# Disable Ctrl+Space input source switching, which conflicts with the terminal leader keys.
+# Key 60 = previous input source, key 61 = next input source.
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 "<dict><key>enabled</key><false/></dict>"
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 61 "<dict><key>enabled</key><false/></dict>"
 /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u

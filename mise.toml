@@ -1,5 +1,4 @@
-# Tools for working on this repo. The machine itself is defined in config/mise/config.toml,
-# symlinked to ~/.config/mise, so `mise bootstrap` sets a machine up from any directory.
+# Tools for working on this repo. The machine itself is defined in config/mise/config.toml.
 
 [tools]
 lua = "latest"
@@ -9,10 +8,8 @@ shfmt = "latest"
 taplo = "latest"
 "cargo:nickel-lang-cli" = "latest"
 
-# Seed only, and the anchor for everything else. On a fresh machine the global config doesn't
-# exist yet, so install.sh runs `mise bootstrap --only dotfiles` here first to create it; the full
-# bootstrap then reads it. A whole-directory symlink, not symlink-each: the machine config's
-# dotfile sources are relative and climb out through it (see config/mise/config.toml), which only
-# works if ~/.config/mise is itself a link into the checkout.
+# Seeds the machine config on a fresh box, and anchors it afterwards: every source in
+# config/mise/config.toml is relative and climbs out through this link, so it must stay a
+# whole-directory symlink into the checkout, never symlink-each.
 [dotfiles]
 "~/.config/mise" = { source = "config/mise", mode = "symlink" }
