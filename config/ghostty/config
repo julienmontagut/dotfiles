@@ -1,10 +1,12 @@
 # Icon
 macos-icon = custom-style
-macos-icon-ghost-color = #c4a2e0
-macos-icon-screen-color = #7ca2d8
+macos-icon-ghost-color = #c4a7e7
+macos-icon-screen-color = #9ccfd8
 
-# Theme
-theme = basalt-dark
+# Theme. Both are Ghostty built-ins, and the light:/dark: form follows the OS appearance.
+# The basalt-* files in themes/ still work as a `theme = basalt-dark` one-liner.
+theme = light:Rose Pine Dawn,dark:Rose Pine
+# theme = basalt-dark
 
 # Opacity
 background-blur = true
