@@ -1,4 +1,44 @@
-/* Waybar style - Basalt Dark theme */
+/* Waybar style - Rosé Pine
+ *
+ * GTK CSS has no prefers-color-scheme, so the variant is a manual swap: comment out one
+ * palette block and uncomment another. Everything below reads the named colors only. */
+
+/* Rosé Pine */
+@define-color bg      #191724;
+@define-color surface #26233a;
+@define-color muted   #6e6a86;
+@define-color subtle  #908caa;
+@define-color fg      #e0def4;
+@define-color accent  #c4a7e7;
+@define-color love    #eb6f92;
+@define-color gold    #f6c177;
+@define-color pine    #31748f;
+
+/* Rosé Pine Dawn */
+/*
+@define-color bg      #faf4ed;
+@define-color surface #f2e9e1;
+@define-color muted   #9893a5;
+@define-color subtle  #797593;
+@define-color fg      #575279;
+@define-color accent  #907aa9;
+@define-color love    #b4637a;
+@define-color gold    #ea9d34;
+@define-color pine    #286983;
+*/
+
+/* Basalt Dark */
+/*
+@define-color bg      #0e0e0e;
+@define-color surface #3e3e44;
+@define-color muted   #767575;
+@define-color subtle  #acabaa;
+@define-color fg      #e7e5e5;
+@define-color accent  #7ca2d8;
+@define-color love    #d47080;
+@define-color gold    #d4a656;
+@define-color pine    #5eb88a;
+*/
 
 * {
     font-family: "Lilex", "Lilex Nerd Font", monospace;
@@ -6,35 +46,35 @@
 }
 
 window#waybar {
-    background-color: #0e0e0e;
-    color: #e7e5e5;
-    border-bottom: 2px solid #3e3e44;
+    background-color: @bg;
+    color: @fg;
+    border-bottom: 2px solid @surface;
 }
 
 #workspaces button {
     padding: 0 8px;
-    color: #767575;
+    color: @muted;
     background-color: transparent;
     border: none;
     border-radius: 0;
 }
 
 #workspaces button:hover {
-    background: #3e3e44;
+    background: @surface;
 }
 
 #workspaces button.focused {
-    color: #7ca2d8;
-    border-bottom: 2px solid #7ca2d8;
+    color: @accent;
+    border-bottom: 2px solid @accent;
 }
 
 #workspaces button.urgent {
-    color: #d47080;
+    color: @love;
 }
 
 #mode {
-    background-color: #d47080;
-    color: #0e0e0e;
+    background-color: @love;
+    color: @bg;
     padding: 0 8px;
 }
 
@@ -49,23 +89,23 @@ window#waybar {
 }
 
 #battery.charging {
-    color: #5eb88a;
+    color: @pine;
 }
 
 #battery.warning:not(.charging) {
-    color: #d4a656;
+    color: @gold;
 }
 
 #battery.critical:not(.charging) {
-    color: #d47080;
+    color: @love;
 }
 
 #network.disconnected {
-    color: #d47080;
+    color: @love;
 }
 
 #pulseaudio.muted {
-    color: #767575;
+    color: @muted;
 }
 
 #tray > .passive {
