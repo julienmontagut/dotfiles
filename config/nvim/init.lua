@@ -27,11 +27,14 @@ vim.opt.splitbelow = true
 vim.opt.swapfile = false
 vim.opt.undofile = true
 vim.opt.autocomplete = true
--- Under 'autocomplete' only fuzzy/longest/popup/preinsert/preview do anything
--- (:h 'completeopt'). "popup" shows the resolved LSP docs beside the menu.
-vim.opt.completeopt = { "fuzzy", "popup" }
--- Source order is priority under 'autocomplete's decaying timeout, so the LSP
--- ('omnifunc', set per-buffer by nvim) goes first. "^5" caps each buffer scanner so
+-- Above my typing speed, so the menu appears on a pause instead of mid-word.
+vim.opt.autocompletedelay = 150
+-- "menu"/"menuone"/"noselect" are inert under 'autocomplete' itself, but the LSP's async
+-- vim.fn.complete() path is a plain builtin completion that still obeys them: without
+-- them it inserts the first match outright (:h compl-states) and "popup" goes dead.
+vim.opt.completeopt = { "menu", "menuone", "noselect", "fuzzy", "popup" }
+-- Source order is a time-slice priority under 'autocomplete's decaying timeout, so the
+-- LSP ('omnifunc', set per-buffer by nvim) goes first. "^5" caps each buffer scanner so
 -- keyword noise cannot drown the LSP items. Dropped "u" (unloaded bufs) and "t" (tags).
 vim.opt.complete = { "o", ".^5", "w^5", "b^5" }
 
@@ -144,15 +147,16 @@ vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
 vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Go to declaration" })
 vim.keymap.set("n", "gS", vim.lsp.buf.workspace_symbol, { desc = "Workspace symbols" })
 
--- 'autocomplete' + "o" in 'complete' already pop the menu as you type; this earns its
--- place by making <C-y> apply snippet expansion, additionalTextEdits (auto-imports)
--- and commands, and by serving the "popup" doc preview. autotrigger covers the
--- server's non-keyword triggerCharacters (".", "::", "<").
+-- 'autocomplete' + "o" in 'complete' drive the menu. This earns its place by making
+-- <C-y> apply snippet expansion, additionalTextEdits (auto-imports) and commands, and by
+-- serving the "popup" doc preview. No autotrigger: it is a second engine, and
+-- vim.lsp.completion.trigger() bails out whenever a popup is already open, so the two
+-- suppress each other.
 vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
         local client = vim.lsp.get_client_by_id(args.data.client_id)
         if client and client:supports_method("textDocument/completion") then
-            vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
+            vim.lsp.completion.enable(true, client.id, args.buf)
         end
     end,
 })
