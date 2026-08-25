@@ -4,7 +4,7 @@
 set -euo pipefail
 
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.local/share/dotfiles}"
-REPO_URL="${REPO_URL:-https://github.com/julienmontagut/dotfiles.git}"
+REPO_URL="${REPO_URL:-https://codeberg.org/julienmontagut/dotfiles.git}"
 FORCE=false
 
 for arg in "$@"; do
@@ -48,6 +48,8 @@ if [[ -n "$SCRIPT_DIR" && -f "$SCRIPT_DIR/.git/HEAD" ]]; then
   DOTFILES_DIR="$SCRIPT_DIR"
 else
   if [[ -d "$DOTFILES_DIR/.git" ]]; then
+    # Re-point checkouts made back when the repo still lived on GitHub.
+    git -C "$DOTFILES_DIR" remote set-url origin "$REPO_URL"
     git -C "$DOTFILES_DIR" pull --ff-only
   else
     git clone "$REPO_URL" "$DOTFILES_DIR"
