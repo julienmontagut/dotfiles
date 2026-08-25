@@ -34,7 +34,9 @@ sudo rm /etc/sudoers.d/10-julien-setpw  # removes the bootstrap rule and the not
 ```
 
 After that, every sudo requires the password you chose. Install dotfiles
-whenever you want (`curl -fsSL .../install.sh | bash`, or clone and run it).
+whenever you want (`curl -fsSL
+https://codeberg.org/julienmontagut/dotfiles/raw/branch/main/install.sh | bash`, or clone and
+run it).
 
 ## Delivery per environment
 
