@@ -47,6 +47,8 @@ Write tests that catch real bugs. Skip tests that just prove the compiler works.
 - Rebase workflow. Pull with rebase, keep history linear.
 - Push with `--force-with-lease`, never `--force`.
 - Commit messages: a single expressive one-liner, imperative mood, never a body. Put the *why* in the PR description, not the commit.
+- Never attribute a commit to Claude or any AI assistant. No `Claude-Session`, no `Co-Authored-By: Claude`, no session URL, no trailers of any kind. Naming Claude as the *subject* of a change is fine; the commit just must not credit it as an author.
+- Pace commits like a human. Never land several commits back to back faster than the quickest person who already knows the change could review it, stage it, write the message and commit: about four minutes each, more for a real diff. Batch the work into one commit rather than firing off a burst that no human could have typed.
 - Default branch: `main`.
 
 ## Communication
