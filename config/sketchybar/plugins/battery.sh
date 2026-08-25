@@ -23,13 +23,13 @@ if echo "$STATUS" | grep -q 'AC Power'; then
 else
     if [ "$PERCENTAGE" -gt 80 ]; then
         ICON="$ICON_BAT_100"
-        COLOR="$MUTED"
+        COLOR="$FG"
     elif [ "$PERCENTAGE" -gt 60 ]; then
         ICON="$ICON_BAT_80"
-        COLOR="$MUTED"
+        COLOR="$FG"
     elif [ "$PERCENTAGE" -gt 40 ]; then
         ICON="$ICON_BAT_60"
-        COLOR="$MUTED"
+        COLOR="$FG"
     elif [ "$PERCENTAGE" -gt 20 ]; then
         ICON="$ICON_BAT_40"
         COLOR="$YELLOW"
@@ -45,4 +45,5 @@ fi
 sketchybar --set "$NAME" drawing=on \
     icon="$ICON" \
     icon.color="$COLOR" \
-    label="${PERCENTAGE}%"
+    label="${PERCENTAGE}%" \
+    label.color="$COLOR"

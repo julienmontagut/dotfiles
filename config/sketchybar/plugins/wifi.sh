@@ -10,7 +10,7 @@ SUMMARY=$(ipconfig getsummary "${WIFI_DEVICE:-en0}" 2>/dev/null)
 
 if echo "$SUMMARY" | grep -q "LinkStatusActive : TRUE" &&
     echo "$SUMMARY" | grep -q "InterfaceType : WiFi"; then
-    sketchybar --set "$NAME" icon="$ICON_WIFI" icon.color="$MUTED"
+    sketchybar --set "$NAME" icon="$ICON_WIFI" icon.color="$GREEN"
 else
     sketchybar --set "$NAME" icon="$ICON_WIFI_OFF" icon.color="$RED"
 fi

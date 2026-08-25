@@ -3,7 +3,7 @@
 # JankyBorders configuration
 # See: https://github.com/FelixKratz/JankyBorders
 
-# Rosé Pine iris/muted. Dawn: active 0xff907aa9, inactive 0xff9893a5.
+# Rosé Pine iris/muted. Borders cannot follow the OS appearance, so it stays dark.
 # Basalt: active 0xff7ca2d8, inactive 0xff767575.
 borders \
     active_color=0xffc4a7e7 \

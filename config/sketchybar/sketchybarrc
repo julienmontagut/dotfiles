@@ -1,7 +1,16 @@
 #!/usr/bin/env bash
-# Basalt Dark bar for SketchyBar. Full-width strip at the top: aerospace workspaces on the left,
-# system status on the right. No item chrome anywhere - state is carried by icon and label color,
-# so an idle machine reads as one flat row and only a real problem picks up a warning colour.
+# Rosé Pine bar for SketchyBar. A fixed, opaque, full-width strip in base with square corners and
+# no item chrome anywhere: workspaces and the focused app on the left, the system cluster and the
+# clock on the right, all sitting straight on the bar. State is carried by icon and label colour -
+# one hue per metric, so the right cluster reads as distinct fields, and only a real problem picks
+# up a warning colour. The one rule drawn is the divider between items inside a cluster.
+#
+# Nothing sits in the centre, and that is deliberate: on a notched Mac the centre of the strip is
+# the notch, and an item placed there is physically hidden behind it no matter what the bar is
+# painted. The two clusters flank it instead.
+#
+# config/waybar/config + style.css mirror this layout, palette and icon set on Linux. Change the
+# shape of the bar here, change it there.
 
 CONFIG_DIR="$HOME/.config/sketchybar"
 PLUGINS="$CONFIG_DIR/plugins"
@@ -13,85 +22,181 @@ source "$CONFIG_DIR/icons.sh"
 
 FONT="Lilex Nerd Font Mono"
 
-# $BAR is opaque true black so the bar is seamless with the notch band - at any alpha the wallpaper
-# bleeds through and the housing reads as a distinct patch. No blur_radius: it blurs nothing behind
-# an opaque colour. sketchybar keeps one global bar config, so this cannot be scoped to the built-in
-# display, but #000000 against Basalt's #0e0e0e is 14/255 - nothing worth a second daemon over.
+# SEP_H is the divider rule, deliberately shorter than the bar so it reads as a hairline and not a
+# wall. CLUSTER_GAP is the space that separates two clusters now that no box does.
+SEP_H=14
+CLUSTER_GAP=16
+# Padding either side of a workspace digit.
+SPACE_PAD=11
+
+# $BAR is base, opaque and square - the theme's own background rather than the true black that
+# used to hide the notch. The notch now shows as a slightly darker rectangle in the middle; base is
+# dark enough that the seam is faint, and nothing is drawn there anyway.
 #
 # topmost=on puts the bar at window layer 25, one above the macOS menu bar's 24. The menu bar is
 # auto-hidden and still reveals when the pointer hits the top edge, but it now reveals *behind* the
-# bar, so it is never seen. The trade is that this strip belongs to sketchybar: app menus can no
-# longer be reached with the mouse. Layer 3 (topmost=window) clears windows but not the menu bar,
-# and the default -20 sits below both.
+# bar, so it is never seen. Layer 3 (topmost=window) clears windows but not the menu bar, and the
+# default -20 sits below both. The menu bar is not lost with it: clicking the centre item opens the
+# focused app's menu through the Accessibility API, which draws above everything (plugins/app_menu.sh).
 sketchybar --bar height=32 \
     position=top \
-    padding_left=20 \
-    padding_right=20 \
+    padding_left=16 \
+    padding_right=16 \
     color=$BAR \
-    topmost=on \
-    notch_offset=on
+    corner_radius=0 \
+    border_width=0 \
+    topmost=on
 
 # updates=on, not when_shown: with aerospace driving the workspaces, sketchybar never considers
 # these items "shown", so when_shown silently freezes the entire bar - no periodic ticks, no event
 # scripts, a clock stuck at whatever time the rc last loaded. Nine scripts on a 10s floor is
 # nothing; a bar that lies about the time is not.
+#
+# background.drawing=off by default: the pills are drawn by the brackets below, not by the items,
+# so an item's own background only ever turns on for the dividers.
 sketchybar --default updates=on \
-    icon.font="$FONT:Medium:16.0" \
+    icon.font="$FONT:Medium:14.0" \
     icon.color=$MUTED \
-    icon.padding_left=8 \
-    icon.padding_right=4 \
+    icon.padding_left=10 \
+    icon.padding_right=5 \
     label.font="$FONT:Medium:13.0" \
     label.color=$FG \
-    label.padding_left=4 \
-    label.padding_right=8
+    label.padding_left=0 \
+    label.padding_right=10 \
+    background.drawing=off
+
+# A 1px rule between two items inside the same pill. sketchybar has no separator primitive: this is
+# a zero-content item whose own background is the line.
+add_divider() {
+    sketchybar --add item "$1" "$2" \
+        --set "$1" width=1 \
+        icon.drawing=off \
+        label.drawing=off \
+        background.drawing=on \
+        background.color=$BORDER \
+        background.height=$SEP_H \
+        background.corner_radius=0
+}
+
+# Separates two clusters. With no boxes to bound them, the gap is what says "different group".
+add_gap() {
+    sketchybar --add item "$1" "$2" \
+        --set "$1" width=$CLUSTER_GAP \
+        icon.drawing=off \
+        label.drawing=off \
+        background.drawing=off
+}
 
 sketchybar --add event aerospace_workspace_change
 
-# Left: the four named aerospace workspaces. The item's icon is the workspace glyph, its label the
-# glyphs of the apps open there (see plugins/aerospace.sh).
+# --- Left: the workspaces, then the focused app ---------------------------------------------
+
+# The six aerospace workspaces. They are anonymous slots: the id *is* the digit, and the digit is
+# also the keybinding (hyper+N), same as sway.
 #
-# bash 3.2 has no associative arrays - pair the id and its glyph in one string and split on ':'.
-for pair in "gen:$ICON_GEN" "code:$ICON_CODE" "ref:$ICON_REF" "misc:$ICON_MISC"; do
+# Scratch is the one whose id and label differ - aerospace refuses a name starting with a dash, so
+# it keeps the id `scratch` and is drawn as `-`. It has no digit and hangs off hyper+minus, which
+# is what makes it a scratchpad rather than a seventh slot.
+#
+# bash 3.2 has no associative arrays - pair the id and its label in one string and split on ':'.
+# One character and nothing else, symmetric padding either side, no dividers. Occupied vs empty is
+# carried by colour.
+for pair in "1:1" "2:2" "3:3" "4:4" "5:5" "scratch:-"; do
     sid="${pair%%:*}"
     sketchybar --add item "space.$sid" left \
         --subscribe "space.$sid" aerospace_workspace_change front_app_switched \
         --set "space.$sid" \
         icon="${pair#*:}" \
+        icon.padding_left=$SPACE_PAD \
+        icon.padding_right=$SPACE_PAD \
+        label.drawing=off \
         click_script="aerospace workspace $sid" \
         script="$PLUGINS/aerospace.sh $sid"
 done
 
-# Right: added right to left, so this reads as wifi | cpu | ram | battery | date.
+
+add_gap gap.left left
+
+# Click to open the menu bar this bar covers: left for the app's own menu, right for the Apple
+# menu. The item already names the app whose menu it opens, so it needs no separate affordance.
+sketchybar --add item front_app left \
+    --subscribe front_app front_app_switched \
+    --set front_app \
+    icon="$ICON_APP" \
+    label.color=$SUBTLE \
+    click_script="$PLUGINS/app_menu.sh" \
+    script="$PLUGINS/front_app.sh"
+
+
+# --- Right: the system cluster, then the clock ----------------------------------------------
+#
+# Items added to `right` stack right to left, so this block reads bottom-up: the clock sits
+# furthest right, where a clock belongs, and the system cluster to its left.
 
 sketchybar --add item date right \
-    --set date update_freq=30 \
-    icon="$ICON_DATE" \
+    --set date update_freq=60 \
+    icon="$ICON_CAL" \
+    icon.color=$YELLOW \
+    label.color=$YELLOW \
     click_script="open -a Calendar" \
     script="$PLUGINS/date.sh"
+
+add_divider divider.time right
+
+sketchybar --add item clock right \
+    --set clock update_freq=15 \
+    icon="$ICON_CLOCK" \
+    icon.color=$YELLOW \
+    label.color=$YELLOW \
+    click_script="open -a Calendar" \
+    script="$PLUGINS/clock.sh"
+
+
+add_gap gap.right right
+
+sketchybar --add item volume right \
+    --subscribe volume volume_change \
+    --set volume \
+    icon.color=$ROSE \
+    label.color=$ROSE \
+    click_script="open -a 'System Settings'" \
+    script="$PLUGINS/volume.sh"
+
+add_divider divider.volume right
 
 sketchybar --add item battery right \
     --subscribe battery power_source_change system_woke \
     --set battery update_freq=120 \
     script="$PLUGINS/battery.sh"
 
+add_divider divider.ram right
+
 sketchybar --add item ram right \
     --set ram update_freq=10 \
     icon="$ICON_RAM" \
+    icon.color=$GREEN \
     script="$PLUGINS/ram.sh"
+
+add_divider divider.cpu right
 
 sketchybar --add item cpu right \
     --set cpu update_freq=10 \
     icon="$ICON_CPU" \
+    icon.color=$ACCENT \
     click_script="open -a 'Activity Monitor'" \
     script="$PLUGINS/cpu.sh"
+
+add_divider divider.wifi right
 
 # Icon only - the network name is noise, and the glyph already says connected or not.
 sketchybar --add item wifi right \
     --subscribe wifi wifi_change system_woke \
     --set wifi update_freq=60 \
     label.drawing=off \
+    icon.padding_right=10 \
     click_script="open -a 'System Settings'" \
     script="$PLUGINS/wifi.sh"
+
 
 # Runs every item's script once. aerospace.sh resolves the focused workspace itself when
 # $FOCUSED_WORKSPACE is absent, so the bar paints correctly even if sketchybar wins the launch

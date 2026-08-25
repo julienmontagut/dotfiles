@@ -16,11 +16,10 @@ export PATH
 export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_ENV_HINTS=1
 
-# Theme. Read by nvim (colors/basalt.lua, and the background nvim picks) and anything else that
-# wants to know what the terminal is wearing. Set THEME_VARIANT=light for the dawn side.
+# Theme. Rosé Pine everywhere.
 export THEME="rose-pine"
-export THEME_VARIANT="dark"
 # export THEME="basalt"
+# export THEME_VARIANT="dark"
 
 # Tool themes. Neither bat nor fzf ships rose-pine, so both stay on the ANSI palette and inherit
 # whatever the terminal is running.

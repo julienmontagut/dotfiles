@@ -1,101 +1,129 @@
-/* Waybar style - Rosé Pine
+/* Waybar style - Rosé Pine, the Linux half of the pair with config/sketchybar.
  *
- * GTK CSS has no prefers-color-scheme, so the variant is a manual swap: comment out one
- * palette block and uncomment another. Everything below reads the named colors only. */
+ * GTK CSS has no prefers-color-scheme, so Waybar cannot follow the OS appearance and stays dark.
+ * Everything below reads the named colors only.
+ *
+ * A fixed, opaque, full-width strip in base with square corners and no module chrome: modules sit
+ * straight on the bar and state is carried by colour alone. The one rule drawn is the divider
+ * between modules inside a cluster, and clusters are separated by margin rather than by a box.
+ * Reorder modules-* in config and the dividers below have to move with them. */
 
-/* Rosé Pine */
-@define-color bg      #191724;
-@define-color surface #26233a;
-@define-color muted   #6e6a86;
-@define-color subtle  #908caa;
-@define-color fg      #e0def4;
-@define-color accent  #c4a7e7;
-@define-color love    #eb6f92;
-@define-color gold    #f6c177;
-@define-color pine    #31748f;
-
-/* Rosé Pine Dawn */
-/*
-@define-color bg      #faf4ed;
-@define-color surface #f2e9e1;
-@define-color muted   #9893a5;
-@define-color subtle  #797593;
-@define-color fg      #575279;
-@define-color accent  #907aa9;
-@define-color love    #b4637a;
-@define-color gold    #ea9d34;
-@define-color pine    #286983;
-*/
-
-/* Basalt Dark */
-/*
-@define-color bg      #0e0e0e;
-@define-color surface #3e3e44;
-@define-color muted   #767575;
-@define-color subtle  #acabaa;
-@define-color fg      #e7e5e5;
-@define-color accent  #7ca2d8;
-@define-color love    #d47080;
-@define-color gold    #d4a656;
-@define-color pine    #5eb88a;
-*/
+/* Rosé Pine. Same tokens, same roles as config/sketchybar/colors.sh. Every step of the workspace
+ * ramp stays legible against base: muted 3.4:1, subtle 5.5:1, iris 8.4:1. */
+@define-color bar     #191724; /* base - the bar itself */
+@define-color divider #403d52; /* highlight med - the rule between items in one cluster. Overlay is
+                                * the usual choice but sits at 1.16:1 on base, invisible. */
+@define-color muted   #6e6a86; /* muted - empty workspace, and a muted or unavailable item */
+@define-color subtle  #908caa; /* subtle - occupied workspace, and the focused-window module */
+@define-color fg      #e0def4; /* text - the resting state of every label */
+@define-color accent  #c4a7e7; /* iris - focused workspace, cpu */
+@define-color rose    #ebbcba; /* rose - volume */
+@define-color foam    #9ccfd8; /* foam - memory, network, charging */
+@define-color gold    #f6c177; /* gold - clock and date at rest, and the warning threshold */
+@define-color love    #eb6f92; /* love - critical threshold */
 
 * {
-    font-family: "Lilex", "Lilex Nerd Font", monospace;
+    font-family: "Lilex Nerd Font Mono", "Lilex", monospace;
     font-size: 13px;
+    /* GTK draws a 1px focus outline on buttons that shifts the workspace glyphs. */
+    border: none;
+    border-radius: 0;
+    min-height: 0;
 }
 
 window#waybar {
-    background-color: @bg;
+    background-color: @bar;
     color: @fg;
-    border-bottom: 2px solid @surface;
 }
 
-#workspaces button {
-    padding: 0 8px;
-    color: @muted;
-    background-color: transparent;
-    border: none;
-    border-radius: 0;
-}
-
-#workspaces button:hover {
-    background: @surface;
-}
-
-#workspaces button.focused {
-    color: @accent;
-    border-bottom: 2px solid @accent;
-}
-
-#workspaces button.urgent {
-    color: @love;
-}
-
-#mode {
-    background-color: @love;
-    color: @bg;
-    padding: 0 8px;
-}
+/* --- bar and dividers ---------------------------------------------------------------------- */
 
 #clock,
-#battery,
+#workspaces,
+#mode,
+#window,
+#network,
 #cpu,
 #memory,
-#network,
+#battery,
 #pulseaudio,
 #tray {
+    background-color: transparent;
     padding: 0 10px;
+    color: @fg;
 }
 
-#battery.charging {
-    color: @pine;
+/* Dividers: every module that is not the first of its cluster. */
+#cpu,
+#memory,
+#battery,
+#pulseaudio,
+#clock.date {
+    border-left: 1px solid @divider;
 }
 
+/* Gaps between clusters - 16px, matching $CLUSTER_GAP in sketchybarrc. */
+#mode,
+#window,
+#network,
+#clock.time {
+    margin-left: 16px;
+}
+
+/* Breathing room at the ends of the strip, matching sketchybar's 16pt bar padding. */
+#workspaces {
+    margin-left: 16px;
+}
+
+#clock.date {
+    margin-right: 16px;
+}
+
+/* --- item colour: one hue per metric ------------------------------------------------------ */
+
+#clock {
+    color: @gold;
+}
+
+#window {
+    color: @subtle;
+}
+
+#cpu {
+    color: @accent;
+}
+
+#memory {
+    color: @foam;
+}
+
+#network {
+    color: @foam;
+}
+
+#pulseaudio {
+    color: @rose;
+}
+
+/* Battery rests as plain text and only picks up a hue when it wants attention. */
+#battery {
+    color: @fg;
+}
+
+#battery.charging,
+#battery.plugged {
+    color: @foam;
+}
+
+/* A metric over its warning threshold recolours the whole field, not half of it. */
+#cpu.warning,
+#memory.warning,
 #battery.warning:not(.charging) {
     color: @gold;
 }
 
+#cpu.critical,
+#memory.critical,
 #battery.critical:not(.charging) {
     color: @love;
 }
@@ -106,6 +134,43 @@ window#waybar {
 
 #pulseaudio.muted {
     color: @muted;
+}
+
+/* Sway's binding mode is a warning state, not a metric - it takes the whole pill. */
+#mode {
+    background-color: @love;
+    color: @bar;
+}
+
+/* --- workspaces --------------------------------------------------------------------------- */
+
+/* Three states, matching plugins/aerospace.sh: focused (accent), occupied (subtle), empty (dim).
+ * Sway only lists workspaces that exist, so a button being here at all means occupied - that is
+ * the default, and .empty (waybar >= 0.9.18) is what marks the persistent-but-unused ones. On an
+ * older waybar .empty never matches and those simply read as occupied. */
+/* A digit and nothing else, symmetric padding either side. No dividers - at this spacing five
+ * digits read as five slots without them. */
+#workspaces button {
+    padding: 0 11px;
+    margin: 0;
+    background-color: transparent;
+    color: @subtle;
+}
+
+#workspaces button.empty {
+    color: @muted;
+}
+
+#workspaces button.focused {
+    color: @accent;
+}
+
+#workspaces button.urgent {
+    color: @love;
+}
+
+#workspaces button:hover {
+    color: @fg;
 }
 
 #tray > .passive {
