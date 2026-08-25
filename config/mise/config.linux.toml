@@ -1,11 +1,30 @@
-# The Wayland desktop stack is not here, it is in bin/install-sway.
 [bootstrap.packages]
 "apt:build-essential" = "latest"
 "apt:fontconfig" = "latest"
+"apt:foot" = "latest"
+"apt:fuzzel" = "latest"
+"apt:kanshi" = "latest"
+"apt:keyd" = "latest"
 "apt:libssl-dev" = "latest"
+"apt:pavucontrol" = "latest"
 "apt:pkg-config" = "latest"
+"apt:sway" = "latest"
+"apt:swayidle" = "latest"
+"apt:swaylock" = "latest"
+"apt:waybar" = "latest"
+"apt:wl-clipboard" = "latest"
 "apt:xclip" = "latest"
 "apt:zsh" = "latest"
+
+# keyd reads /etc/keyd/*.conf and nothing else, so a ~/.config/keyd dotfile would be inert.
+# This is a copy, not a symlink: [bootstrap.files] has no symlink mode. Editing
+# config/keyd/default.conf therefore needs a `mise bootstrap` to land, which is the right
+# model anyway, since the service below reloads on change.
+[bootstrap.files]
+"/etc/keyd/default.conf" = { source = "../keyd/default.conf", mode = "0644", owner = "root", group = "root" }
+
+[bootstrap.services]
+keyd = {}
 
 [tools]
 "github:ryanoasis/nerd-fonts" = { version = "3.4.0", asset_pattern = "Lilex.zip", postinstall = "mkdir -p ~/.local/share/fonts && cp \"$MISE_TOOL_INSTALL_PATH\"/*.ttf ~/.local/share/fonts/ && fc-cache -f ~/.local/share/fonts" }
