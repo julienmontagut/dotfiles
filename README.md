@@ -5,10 +5,13 @@ Dotfiles managed with [mise](https://mise.jdx.dev) (`[dotfiles]`) and bash scrip
 ## Quick Start
 
 `./install.sh` is a cross-platform dotfiles install script that runs on `linux` and on `macos`. 
-Run it from a repository clone or via `curl https://raw.github.../install.sh | sh`.
+Run it from a repository clone or straight from Codeberg, which is where the repository lives
+(the GitHub copy is a read-only mirror):
 
 ```bash
-./install.sh            # provision this machine
+curl -fsSL https://codeberg.org/julienmontagut/dotfiles/raw/branch/main/install.sh | bash
+
+./install.sh            # provision this machine, from a clone
 ./install.sh --force    # also overwrite existing dotfiles
 ```
 
