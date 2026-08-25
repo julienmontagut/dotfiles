@@ -5,8 +5,12 @@
 # Variables
 # =============================================================================
 
-set $mod Mod4
-set $term ghostty
+# Alt, not Super: keyd turns a held Super into hyper (Super+Ctrl+Alt), so a
+# plain Mod4+key binding never matches. See config/keyd/default.conf.
+set $mod Mod1
+# ghostty is the macOS terminal and is packaged for neither apt nor mise. foot is the
+# Linux one, and is the single terminal every Linux config here points at.
+set $term foot
 set $menu fuzzel
 
 # =============================================================================
@@ -15,6 +19,18 @@ set $menu fuzzel
 
 # Wallpaper (uncomment and set path)
 # output * bg ~/Pictures/wallpaper.jpg fill
+
+# Scaling. Sway's default is scale 1, which is what lowdpi externals want, so
+# only the hidpi panels are listed here. Both sit near 220dpi, so scale 2 gives
+# text (and everything else) twice the device pixels without touching a single
+# app's font size.
+output eDP-1 scale 2
+
+# Apple Studio Display (5120x2880 @ 27", 218dpi). Sway matches externals on the
+# exact "make model serial" string, which is per-unit, so plug it in and run
+#   swaymsg -t get_outputs | grep -i -A3 'Output DP'
+# then uncomment this with the identifier it prints.
+# output "Apple Computer Inc Studio Display <serial>" scale 2
 
 # =============================================================================
 # Input configuration
@@ -44,8 +60,8 @@ mouse_warping container
 # Appearance
 # =============================================================================
 
-gaps inner 8
-gaps outer 8
+gaps inner 4
+gaps outer 0
 
 default_border pixel 2
 default_floating_border pixel 2
@@ -69,24 +85,37 @@ client.unfocused        #26233a #26233a #908caa #26233a   #26233a
 # =============================================================================
 # Key bindings - Basics
 # =============================================================================
+#
+# House rules: $mod plus a single key for anything used daily, the mnemonic key
+# where one exists, and Shift for the variant of a binding (move vs focus,
+# fullscreen vs float) or for anything destructive.
 
-# Start terminal
+# Terminal
 bindsym $mod+Return exec $term
 
-# Kill focused window
-bindsym $mod+Shift+q kill
-
-# Start launcher
+# Launcher
 bindsym $mod+space exec $menu
-
-# Reload config
-bindsym $mod+Shift+c reload
 
 # App-launch mode
 bindsym $mod+o mode "open"
 
-# Exit sway
-bindsym $mod+Shift+e exec swaynag -t warning -m 'Exit sway?' -B 'Yes' 'swaymsg exit'
+# Close focused window
+bindsym $mod+Escape kill
+
+# Lock the session
+bindsym $mod+Shift+backslash exec swaylock -f
+
+# Reload config
+bindsym $mod+Shift+c reload
+
+# Exit sway. Shift of the close-window key, and it asks first. The confirmation
+# is fuzzel rather than swaynag: swaynag is pointer-only (it does not even link
+# libxkbcommon), and fuzzel is already the launcher. Cancel is preselected, so
+# Return or Escape both back out.
+bindsym $mod+Shift+Escape exec printf 'Cancel\nExit sway' | fuzzel --dmenu --lines 2 --prompt 'Exit sway? ' | grep -qx 'Exit sway' && swaymsg exit
+
+# Drag with $mod held to move a floating window, right-drag to resize
+floating_modifier $mod normal
 
 # =============================================================================
 # Key bindings - Navigation
@@ -98,49 +127,86 @@ bindsym $mod+j focus down
 bindsym $mod+k focus up
 bindsym $mod+l focus right
 
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
 # Move
 bindsym $mod+Shift+h move left
 bindsym $mod+Shift+j move down
 bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# Focus the containing split
+bindsym $mod+a focus parent
+
+# Flatten one redundant wrapper. Pressing $mod+s or $mod+v and then opening a
+# window leaves a split container holding a single child, and those stack up as
+# V[H[H[foot firefox]]]. sway has no auto-flatten and `split none` only dissolves
+# a container with no siblings, so this peels one level per press; repeat until
+# the nesting is gone. It is a no-op once flat. The one level it cannot remove is
+# a wrapper sitting directly under the workspace: move a window out of it with
+# $mod+Shift+h or l first, then press this on what is left.
+bindsym $mod+Shift+a focus parent; split none; focus child
+
 # =============================================================================
 # Key bindings - Workspaces
 # =============================================================================
 
-# Switch workspace (number keys switch positionally; workspaces are named by
-# usage: g general, c comms, r reference/web/dev-secondary, d dev, m misc)
-bindsym $mod+1 workspace g
-bindsym $mod+2 workspace c
-bindsym $mod+3 workspace r
-bindsym $mod+4 workspace d
-bindsym $mod+5 workspace m
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+bindsym $mod+3 workspace number 3
+bindsym $mod+4 workspace number 4
+bindsym $mod+5 workspace number 5
 
-# Move to workspace
-bindsym $mod+Shift+1 move container to workspace g
-bindsym $mod+Shift+2 move container to workspace c
-bindsym $mod+Shift+3 move container to workspace r
-bindsym $mod+Shift+4 move container to workspace d
-bindsym $mod+Shift+5 move container to workspace m
+bindsym $mod+Shift+1 move container to workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5
+
+# Cycle workspaces
+bindsym $mod+Tab workspace next_on_output
+bindsym $mod+Shift+Tab workspace prev_on_output
+
+# Scratchpad
+bindsym $mod+minus scratchpad show
+bindsym $mod+Shift+minus move scratchpad
 
 # =============================================================================
 # Key bindings - Layout
 # =============================================================================
 
-# Split direction (home-row keys; b is awkward on dvorak)
-bindsym $mod+s splith
-bindsym $mod+v splitv
+# Split, named after neovim's :split and :vsplit. Those are the mirror of sway's
+# own names: vim's split stacks two windows, which sway calls splitv.
+bindsym $mod+s splitv
+bindsym $mod+v splith
 
-# Layout mode
-bindsym $mod+t layout tabbed
-bindsym $mod+e layout toggle split
+# Tabbed layout, and the same key back out of it
+bindsym $mod+t layout toggle tabbed split
 
-# Fullscreen
-bindsym $mod+f fullscreen
+# Float the focused window, or let it fill the screen
+bindsym $mod+f floating toggle
+bindsym $mod+Shift+f fullscreen
 
-# Floating
-bindsym $mod+w floating toggle
-bindsym $mod+d focus mode_toggle
+# =============================================================================
+# Key bindings - Media
+# =============================================================================
+#
+# wpctl ships with pipewire, which is what this machine runs. --locked keeps
+# these working while swaylock is up. Brightness and screenshots want
+# brightnessctl and grim, neither of which is installed yet.
+
+bindsym --locked XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+bindsym --locked XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+bindsym --locked XF86AudioRaiseVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+
+bindsym --locked XF86AudioMicMute exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
 
 # =============================================================================
 # Key bindings - Resize mode
@@ -151,6 +217,11 @@ mode "resize" {
     bindsym j resize grow height 100 px
     bindsym k resize shrink height 100 px
     bindsym l resize grow width 100 px
+
+    bindsym Left resize shrink width 100 px
+    bindsym Down resize grow height 100 px
+    bindsym Up resize shrink height 100 px
+    bindsym Right resize grow width 100 px
 
     bindsym Escape mode "default"
     bindsym Return mode "default"
