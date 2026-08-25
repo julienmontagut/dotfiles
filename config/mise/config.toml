@@ -78,9 +78,9 @@ dotnet = "latest"
 "~/.config/karabiner" = { source = "../karabiner", mode = "symlink-each" }
 "~/.config/sketchybar" = "../sketchybar"
 # Linux
+"~/.config/foot" = "../foot"
 "~/.config/fuzzel" = "../fuzzel"
 "~/.config/kanshi" = "../kanshi"
-"~/.config/keyd" = "../keyd"
 "~/.config/sway" = "../sway"
 "~/.config/waybar" = "../waybar"
 # ~/.config/mise is absent on purpose: its source would be relative to the symlink being replaced.
