@@ -33,7 +33,7 @@ opacity = 0.95
 [scrolling]
 history = 10000
 
-# Rosé Pine. Alacritty has no light/dark switch, so swap in the Dawn block below by hand.
+# Rosé Pine. Alacritty cannot follow the OS appearance, so it stays dark.
 [colors.primary]
 background = "#191724"
 foreground = "#e0def4"
@@ -61,35 +61,6 @@ blue = "#9ccfd8"
 magenta = "#c4a7e7"
 cyan = "#ebbcba"
 white = "#e0def4"
-
-# Rosé Pine Dawn
-# [colors.primary]
-# background = "#faf4ed"
-# foreground = "#575279"
-#
-# [colors.selection]
-# background = "#dfdad9"
-# text = "#575279"
-#
-# [colors.normal]
-# black = "#f2e9e1"
-# red = "#b4637a"
-# green = "#286983"
-# yellow = "#ea9d34"
-# blue = "#56949f"
-# magenta = "#907aa9"
-# cyan = "#d7827e"
-# white = "#575279"
-#
-# [colors.bright]
-# black = "#9893a5"
-# red = "#b4637a"
-# green = "#286983"
-# yellow = "#ea9d34"
-# blue = "#56949f"
-# magenta = "#907aa9"
-# cyan = "#d7827e"
-# white = "#575279"
 
 # Basalt Dark
 # [colors.primary]

@@ -6,11 +6,15 @@
 # Fonts name live in the trailing comment instead. Every codepoint below is present in
 # LilexNerdFontMono-Regular.ttf; re-check the cmap before adding one.
 
-# --- workspaces ---
-export ICON_GEN=󰋜 # U+F02DC nf-md-home catch-all
-export ICON_CODE=󰅩 # U+F0169 nf-md-code_braces
-export ICON_REF=󰖟 # U+F059F nf-md-web
-export ICON_MISC=󰒓 # U+F0493 nf-md-cog
+# Workspaces carry no glyph: they are named by position, 1 to 5, in both sketchybarrc and waybar,
+# and scratch is drawn as a plain dash. Nothing here to name.
+
+# --- left cluster ---
+export ICON_CLOCK=󰅐 # U+F0150 nf-md-clock_outline
+export ICON_CAL=󰃭 # U+F00ED nf-md-calendar
+
+# --- centre ---
+export ICON_APP=󰖸 # U+F05B8 nf-md-application
 
 # --- right cluster ---
 export ICON_CPU=󰻠 # U+F0EE0 nf-md-cpu_64_bit
@@ -18,6 +22,12 @@ export ICON_RAM=󰍛 # U+F035B nf-md-memory
 export ICON_DATE=󰃰 # U+F00F0 nf-md-calendar_clock
 export ICON_WIFI=󰖩 # U+F05A9 nf-md-wifi
 export ICON_WIFI_OFF=󰖪 # U+F05AA nf-md-wifi_off
+
+# --- volume ramp, lowest to highest; see volume.sh ---
+export ICON_VOL_MUTE=󰝟 # U+F075F nf-md-volume_off
+export ICON_VOL_LOW=󰕿 # U+F057F nf-md-volume_low
+export ICON_VOL_MID=󰖀 # U+F0580 nf-md-volume_medium
+export ICON_VOL_HIGH=󰕾 # U+F057E nf-md-volume_high
 
 # --- battery ramps, lowest to highest; see battery.sh ---
 export ICON_BAT_0=󰂎 # U+F008E nf-md-battery_outline
@@ -31,33 +41,3 @@ export ICON_CHG_40=󰂈 # U+F0088 nf-md-battery_charging_40
 export ICON_CHG_60=󰂉 # U+F0089 nf-md-battery_charging_60
 export ICON_CHG_80=󰂊 # U+F008A nf-md-battery_charging_80
 export ICON_CHG_100=󰂅 # U+F0085 nf-md-battery_charging_100
-
-# Every app aerospace.toml routes, plus the ones that turn up unrouted. The fallback is a
-# window, not a document - what we failed to recognise is a window.
-app_icon() {
-    case "$1" in
-        Ghostty)                                            echo 󰊠 ;; # U+F02A0 nf-md-ghost
-        Alacritty | kitty | iTerm2 | Terminal)              echo  ;; # U+F489 nf-oct-terminal
-        Zed)                                                echo 󰈮 ;; # U+F022E nf-md-file_code
-        Xcode | Simulator)                                  echo  ;; # U+F179 nf-fa-apple
-        Rider | "JetBrains Toolbox" | dotMemory | dotTrace) echo  ;; # U+E7B5 nf-dev-intellij
-        RustRover)                                          echo  ;; # U+E7A8 nf-dev-rust
-        "Google Chrome" | Chrome)                           echo  ;; # U+F268 nf-fa-chrome
-        Firefox*)                                           echo  ;; # U+E745 nf-dev-firefox
-        Safari)                                             echo  ;; # U+F267 nf-fa-safari
-        Claude)                                             echo 󰚩 ;; # U+F06A9 nf-md-robot
-        Slite | Craft)                                      echo 󰎚 ;; # U+F039A nf-md-note_text
-        Linear)                                             echo  ;; # U+F0AE nf-fa-tasks
-        Slack)                                              echo  ;; # U+F198 nf-fa-slack
-        Spotify)                                            echo  ;; # U+F1BC nf-fa-spotify
-        Steam)                                              echo  ;; # U+F1B6 nf-fa-steam
-        Mail | Thunderbird)                                 echo  ;; # U+F0E0 nf-fa-envelope
-        Finder)                                             echo 󰉋 ;; # U+F024B nf-md-folder
-        "System Settings")                                  echo 󰒓 ;; # U+F0493 nf-md-cog
-        OrbStack | DevPod)                                  echo  ;; # U+F308 nf-linux-docker
-        Numbers)                                            echo 󰓫 ;; # U+F04EB nf-md-table_large
-        Pages)                                              echo 󰈙 ;; # U+F0219 nf-md-file_document
-        Keynote)                                            echo 󱁷 ;; # U+F1077 nf-md-presentation
-        *)                                                  echo  ;; # U+F2D0 nf-fa-window_maximize
-    esac
-}

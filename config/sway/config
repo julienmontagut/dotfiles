@@ -12,6 +12,9 @@ set $mod Mod1
 # Linux one, and is the single terminal every Linux config here points at.
 set $term foot
 set $menu fuzzel
+# Chrome is the macOS browser; on Linux it is whatever the distro package is called. Not installed
+# by the mise bootstrap - the binding is here so the two halves keep the same keys.
+set $browser google-chrome-stable
 
 # =============================================================================
 # Output configuration
@@ -90,14 +93,15 @@ client.unfocused        #26233a #26233a #908caa #26233a   #26233a
 # where one exists, and Shift for the variant of a binding (move vs focus,
 # fullscreen vs float) or for anything destructive.
 
-# Terminal
+# Launchers. Bound directly rather than behind a mode, same three apps and same keys as aerospace.
+# Each exec of a single-instance GTK app opens a window in the running process, so none of the
+# macOS new-window trouble applies here.
 bindsym $mod+Return exec $term
+bindsym $mod+b exec $browser
+bindsym $mod+z exec zed
 
 # Launcher
 bindsym $mod+space exec $menu
-
-# App-launch mode
-bindsym $mod+o mode "open"
 
 # Close focused window
 bindsym $mod+Escape kill
@@ -165,11 +169,13 @@ bindsym $mod+3 workspace number 3
 bindsym $mod+4 workspace number 4
 bindsym $mod+5 workspace number 5
 
-bindsym $mod+Shift+1 move container to workspace number 1
-bindsym $mod+Shift+2 move container to workspace number 2
-bindsym $mod+Shift+3 move container to workspace number 3
-bindsym $mod+Shift+4 move container to workspace number 4
-bindsym $mod+Shift+5 move container to workspace number 5
+# Focus follows the window, matching aerospace's --focus-follows-window. Sway has no such flag, so
+# the two commands are chained.
+bindsym $mod+Shift+1 move container to workspace number 1; workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2; workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3; workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4; workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5; workspace number 5
 
 # Cycle workspaces
 bindsym $mod+Tab workspace next_on_output
@@ -228,23 +234,6 @@ mode "resize" {
 }
 
 bindsym $mod+r mode "resize"
-
-# =============================================================================
-# Key bindings - Open mode (app launchers)
-# =============================================================================
-
-# Cross-platform launchers mirror the AeroSpace open mode. The rest of the
-# letters (x Xcode, m Mail, comma System Settings, l Linear, s Slite) are
-# macOS-specific; fill in Linux equivalents as needed.
-mode "open" {
-    # exec must come last: sway's exec greedily takes the rest of the line,
-    # so the mode reset has to precede it.
-    bindsym t mode "default"; exec $term
-    bindsym z mode "default"; exec zed
-
-    bindsym Escape mode "default"
-    bindsym Return mode "default"
-}
 
 # =============================================================================
 # Status bar

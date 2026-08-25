@@ -2,12 +2,12 @@
 # Paints one workspace item. $1 is the workspace id; $FOCUSED_WORKSPACE comes from the
 # aerospace_workspace_change event (aerospace.toml's exec-on-workspace-change).
 #
-# Three states, carried by color alone: focused (accent), occupied (dim), empty (faint). The two
-# resting states sit deliberately close to the background so the focused one is the only thing the
-# eye lands on.
+# The item is a digit and nothing else, so all three states are carried by colour alone - there is
+# no chrome on this bar to carry them any other way. focused (iris) / occupied (subtle) / empty
+# (muted), which against base is 8.4:1 / 5.5:1 / 3.4:1: a clear ramp where even the resting states
+# stay readable.
 
 source "$HOME/.config/sketchybar/colors.sh"
-source "$HOME/.config/sketchybar/icons.sh"
 
 WORKSPACE_ID="$1"
 
@@ -15,23 +15,12 @@ WORKSPACE_ID="$1"
 # resolve it ourselves then. Costs one extra fork at launch and nothing on subsequent events.
 FOCUSED="${FOCUSED_WORKSPACE:-$(aerospace list-workspaces --focused 2>/dev/null)}"
 
-ICONS=""
-while IFS= read -r app; do
-    [ -n "$app" ] && ICONS="$ICONS$(app_icon "$app") "
-done <<<"$(aerospace list-windows --workspace "$WORKSPACE_ID" --format "%{app-name}" 2>/dev/null | sort -u)"
-ICONS="${ICONS% }"
-
 if [ "$WORKSPACE_ID" = "$FOCUSED" ]; then
     COLOR="$ACCENT"
-elif [ -n "$ICONS" ]; then
-    COLOR="$DIM"
+elif [ -n "$(aerospace list-windows --workspace "$WORKSPACE_ID" --format '%{window-id}' 2>/dev/null)" ]; then
+    COLOR="$SUBTLE"
 else
-    COLOR="$FAINT"
+    COLOR="$MUTED"
 fi
 
-# The workspace glyph stays in the item's icon; the label carries its apps, falling back to the
-# workspace name so an empty workspace is still identifiable.
-sketchybar --set "$NAME" \
-    label="${ICONS:-$WORKSPACE_ID}" \
-    icon.color="$COLOR" \
-    label.color="$COLOR"
+sketchybar --set "$NAME" icon.color="$COLOR"

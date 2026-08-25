@@ -26,21 +26,17 @@ exec-on-workspace-change = [
 
 # Gaps configuration
 [gaps]
-# macOS excludes the menu bar from the visible frame on every display, so 8 is enough everywhere.
-outer.top = 8
-
-# Sketchybar variant: outer.top had to reserve the strip, and how much depended on the display.
-# aerospace measures gaps from the *visible* frame, and macOS reserves a different amount per
-# display:
+# outer.top reserves the sketchybar strip, and how much depends on the display. aerospace measures
+# gaps from the *visible* frame, and macOS reserves a different amount per display:
 #   built-in : the notch band is already excluded from the visible frame, and the 32pt bar sits
-#              inside it, so the plain 8pt gap is all that's needed.
-#   external : nothing is reserved (the menu bar is auto-hidden), so the frame starts at y=0 and
-#              the gap has to cover the bar itself: 32 (bar height) + 8 = 40.
-# One shared value put external windows at y=8, overlapping the bar by 24pt.
+#              inside it, so a plain 8pt gap is all that's needed.
+#   external : nothing is reserved (the menu bar is auto-hidden, _HIHideMenuBar = 1), so the frame
+#              starts at y=0 and the gap has to cover the bar itself: 32 (bar height) + 8 = 40.
+# One shared value of 8 puts external windows at y=8, tiling them under the bar by 24pt.
 # Monitor patterns are unanchored case-insensitive matches on the monitor name, so 'built-in'
 # catches "Built-in Retina Display" and "Built-in Liquid Retina XDR Display" alike. Keep the two
 # numbers in step with --bar height in config/sketchybar/sketchybarrc.
-# outer.top = [{ monitor.'built-in' = 8 }, 40]
+outer.top = [{ monitor.'built-in' = 8 }, 40]
 outer.bottom = 8
 outer.left = 8
 outer.right = 8
@@ -48,79 +44,12 @@ inner.vertical = 8
 inner.horizontal = 8
 
 # =============================================================================
-# Persistent app-to-workspace assignment
-# Apps land in their home workspace on launch (matched by app-id).
-# Anything without a rule falls through to the gen catch-all at the bottom.
+# Window rules
+# Apps have no home workspace - a new window opens on the workspace you are already on, which is
+# aerospace's default once nothing overrides it. The only rules left set a layout, not a location.
 # =============================================================================
 
-# --- code: editors, IDEs, terminals, dev tooling ---
-[[on-window-detected]]
-if.app-id = 'dev.zed.Zed'
-run = 'move-node-to-workspace code'
-
-[[on-window-detected]]
-if.app-id = 'com.apple.dt.Xcode'
-run = 'move-node-to-workspace code'
-
-[[on-window-detected]]
-if.app-id = 'com.jetbrains.rider'
-run = 'move-node-to-workspace code'
-
-[[on-window-detected]]
-if.app-id = 'com.jetbrains.rustrover'
-run = 'move-node-to-workspace code'
-
-[[on-window-detected]]
-if.app-id = 'com.jetbrains.toolbox'
-run = 'move-node-to-workspace code'
-
-[[on-window-detected]]
-if.app-id = 'com.jetbrains.dotmemory'
-run = 'move-node-to-workspace code'
-
-[[on-window-detected]]
-if.app-id = 'com.jetbrains.dottrace'
-run = 'move-node-to-workspace code'
-
-[[on-window-detected]]
-if.app-id = 'com.mitchellh.ghostty'
-run = 'move-node-to-workspace code'
-
-[[on-window-detected]]
-if.app-id = 'dev.kdrag0n.MacVirt'
-run = 'move-node-to-workspace code'
-
-[[on-window-detected]]
-if.app-id = 'sh.loft.devpod'
-run = 'move-node-to-workspace code'
-
-# --- ref: web apps, research, docs (Chrome, Claude, Slite, Craft) ---
-[[on-window-detected]]
-if.app-id = 'com.google.Chrome'
-run = 'move-node-to-workspace ref'
-
-[[on-window-detected]]
-if.app-id = 'com.anthropic.claudefordesktop'
-run = 'move-node-to-workspace ref'
-
-[[on-window-detected]]
-if.app-id = 'com.slite.desktop'
-run = 'move-node-to-workspace ref'
-
-[[on-window-detected]]
-if.app-id = 'com.lukilabs.lukiapp'
-run = 'move-node-to-workspace ref'
-
-# --- misc: secondary / professional tools (Linear, iOS simulator) ---
-[[on-window-detected]]
-if.app-id = 'com.linear'
-run = 'move-node-to-workspace misc'
-
-[[on-window-detected]]
-if.app-id = 'com.apple.iphonesimulator'
-run = 'move-node-to-workspace misc'
-
-# --- games: float so they stay out of the tiled categories ---
+# --- games: float rather than tile ---
 [[on-window-detected]]
 if.app-id = 'com.valvesoftware.steam'
 run = 'layout floating'
@@ -141,27 +70,28 @@ run = 'layout floating'
 if.app-name-regex-substring = 'Cities Skylines'
 run = 'layout floating'
 
-# --- everything else falls through to gen (keep last) ---
-[[on-window-detected]]
-if = 'true'
-run = 'move-node-to-workspace gen'
-
 # =============================================================================
 # Main mode bindings
 # =============================================================================
 
 [mode.main.binding]
-# Workspace switching (hyper + first letter of the workspace name)
-cmd-ctrl-alt-g = "workspace gen"  # gen: default catch-all
-cmd-ctrl-alt-c = "workspace code" # code: editors, IDEs, terminals, dev tooling
-cmd-ctrl-alt-r = "workspace ref"  # ref: web apps, research, docs
-cmd-ctrl-alt-m = "workspace misc" # misc: secondary tools (Linear, iOS simulator)
+# Workspace switching (hyper + position). Five, fixed, anonymous, and the same five sway has - the
+# digit is the workspace, which is exactly what the bar draws. Nothing else gets a workspace
+# shortcut.
+cmd-ctrl-alt-1 = "workspace 1"
+cmd-ctrl-alt-2 = "workspace 2"
+cmd-ctrl-alt-3 = "workspace 3"
+cmd-ctrl-alt-4 = "workspace 4"
+cmd-ctrl-alt-5 = "workspace 5"
 
-# Move focused window to workspace (hyper + shift + first letter)
-cmd-ctrl-alt-shift-g = "move-node-to-workspace gen"
-cmd-ctrl-alt-shift-c = "move-node-to-workspace code"
-cmd-ctrl-alt-shift-r = "move-node-to-workspace ref"
-cmd-ctrl-alt-shift-m = "move-node-to-workspace misc"
+# Move focused window to workspace (hyper + shift + position). --focus-follows-window goes with
+# it: throwing a window somewhere means you meant to go there too, not to keep staring at the gap
+# it left. Built-in flag, so no chained command list.
+cmd-ctrl-alt-shift-1 = "move-node-to-workspace --focus-follows-window 1"
+cmd-ctrl-alt-shift-2 = "move-node-to-workspace --focus-follows-window 2"
+cmd-ctrl-alt-shift-3 = "move-node-to-workspace --focus-follows-window 3"
+cmd-ctrl-alt-shift-4 = "move-node-to-workspace --focus-follows-window 4"
+cmd-ctrl-alt-shift-5 = "move-node-to-workspace --focus-follows-window 5"
 
 # Focus navigation (vim-style)
 cmd-ctrl-alt-h = "focus left"
@@ -175,32 +105,54 @@ cmd-ctrl-alt-shift-j = "move down"
 cmd-ctrl-alt-shift-k = "move up"
 cmd-ctrl-alt-shift-l = "move right"
 
-# Modes: layout (split / tabbed / float / fullscreen / resize) and open (launchers)
-cmd-ctrl-alt-minus = "mode layout" # layout + resize
-cmd-ctrl-alt-o = "mode open"
+# Layout, bound directly rather than behind a mode - same keys sway uses for the same actions.
+cmd-ctrl-alt-s = "layout tiles horizontal"          # splith
+cmd-ctrl-alt-v = "layout tiles vertical"            # splitv
+cmd-ctrl-alt-t = "layout accordion horizontal"      # tabbed
+cmd-ctrl-alt-e = "layout tiles horizontal vertical" # toggle split orientation
+cmd-ctrl-alt-f = "fullscreen"
+cmd-ctrl-alt-w = "layout floating tiling"           # floating toggle
+cmd-ctrl-alt-0 = "balance-sizes"
+
+# Resize is the one thing that stays a mode, because it is the one thing you repeat. Sway keeps
+# exactly this mode and no other; so do we.
+cmd-ctrl-alt-r = "mode resize"
+
+# Scratch. aerospace has no scratchpad, so it is a sixth workspace that no digit reaches - drawn on
+# the bar as `-` and reachable only here, which is what sway's scratchpad amounts to in practice.
+# It keeps the id `scratch` because aerospace refuses a name starting with a dash.
+cmd-ctrl-alt-minus = "workspace scratch"
+cmd-ctrl-alt-shift-minus = "move-node-to-workspace --focus-follows-window scratch"
 
 # Window management
 cmd-ctrl-alt-shift-q = "close"
 cmd-ctrl-alt-period = "reload-config"
 
-# Terminal (new ghostty window in the existing process) and launcher (Spotlight)
-cmd-ctrl-alt-enter = "exec-and-forget open -na Ghostty"
+# Launchers. Each one has to open a *new window* in the app already running, and each app exposes a
+# different way to ask for that - `open -n` is never it, since it forks a second instance with its
+# own Dock icon.
+#   ghostty : AppleScript. `macos-applescript` defaults to true and Ghostty.sdef declares a
+#             `new window` command, so this is real IPC into the running process. The pgrep guard
+#             is there because quit-after-last-window-closed means Ghostty is often *not* running,
+#             and a bare `tell` would launch it - giving the startup window plus a second one.
+#             `ghostty +new-window` is Linux-only and answers "not supported on this platform".
+#   chrome  : SingletonLock makes the second process hand --new-window to the running one and exit.
+#   zed     : `zed --new` is Zed's own CLI over IPC; /opt/homebrew/bin is on aerospace's exec PATH.
+cmd-ctrl-alt-enter = """exec-and-forget pgrep -qx ghostty \
+  && osascript -e 'tell application "Ghostty" to new window' \
+  || open -a Ghostty"""
+cmd-ctrl-alt-b = "exec-and-forget open -na 'Google Chrome' --args --new-window"
+cmd-ctrl-alt-z = "exec-and-forget zed --new"
+
+# Launcher (Spotlight)
 cmd-ctrl-alt-space = "exec-and-forget osascript -e 'tell application \"System Events\" to key code 49 using command down'"
 
 # =============================================================================
-# Layout mode bindings (arrange + resize)
+# Resize mode - the only mode, mirroring sway's
 # =============================================================================
 
-[mode.layout.binding]
-# Arrange (one-shot, returns to main)
-s = ["layout tiles horizontal", "mode main"]          # split horizontal
-v = ["layout tiles vertical", "mode main"]            # split vertical
-e = ["layout tiles horizontal vertical", "mode main"] # toggle split orientation
-t = ["layout accordion horizontal", "mode main"]      # tabbed
-f = ["fullscreen", "mode main"]                       # fullscreen
-space = ["layout floating tiling", "mode main"]       # floating toggle
-
-# Resize (stays in mode; smart picks axis from orientation, 100px steps)
+[mode.resize.binding]
+# smart picks the axis from the container's orientation, 100px steps like sway's
 h = "resize smart -100"
 j = "resize smart -100"
 k = "resize smart +100"
@@ -209,19 +161,3 @@ l = "resize smart +100"
 
 esc = "mode main"
 enter = "mode main"
-
-# =============================================================================
-# Open mode bindings (app launchers)
-# =============================================================================
-
-[mode.open.binding]
-b = ["exec-and-forget open -a 'Google Chrome'", "mode main"]       # browser
-t = ["exec-and-forget open -na Ghostty", "mode main"]              # terminal
-z = ["exec-and-forget open -a Zed", "mode main"]
-l = ["exec-and-forget open -a Linear", "mode main"]
-s = ["exec-and-forget open -a Slite", "mode main"]
-x = ["exec-and-forget open -a Xcode", "mode main"]
-m = ["exec-and-forget open -a Mail", "mode main"]
-comma = ["exec-and-forget open -a 'System Settings'", "mode main"]
-
-esc = "mode main"

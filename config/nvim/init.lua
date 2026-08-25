@@ -314,6 +314,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
 })
 
 -- rose-pine's default "auto" variant follows 'background': main when dark, dawn when light.
-vim.o.background = vim.env.THEME_VARIANT == "light" and "light" or "dark"
+-- Nvim sets 'background' itself from the terminal's OSC 11 reply, so the variant tracks the OS
+-- appearance with no help from us. Detection failure falls back to dark, which is what we want.
 vim.cmd[[colorscheme rose-pine]]
 -- vim.cmd[[colorscheme basalt]]

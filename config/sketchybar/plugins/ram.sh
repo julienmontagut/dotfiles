@@ -12,7 +12,7 @@ if [ "$USED" -gt 80 ]; then
 elif [ "$USED" -gt 50 ]; then
     COLOR="$YELLOW"
 else
-    COLOR="$FG"
+    COLOR="$GREEN"
 fi
 
-sketchybar --set "$NAME" label="${USED}%" label.color="$COLOR"
+sketchybar --set "$NAME" label="${USED}%" label.color="$COLOR" icon.color="$COLOR"
