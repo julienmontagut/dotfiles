@@ -1,7 +1,8 @@
 {
   "attribution": {
     "commit": "",
-    "pr": ""
+    "pr": "",
+    "sessionUrl": false
   },
   "permissions": {
     "allow": [
@@ -30,6 +31,18 @@
             "type": "command",
             "command": "h=\"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/herdr-agent-state.sh\"; [ -f \"$h\" ] && bash \"$h\" session || true",
             "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=\"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/block-session-trailer.sh\"; [ -f \"$h\" ] && sh \"$h\" || exit 0",
+            "timeout": 5
           }
         ]
       }
