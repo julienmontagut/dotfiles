@@ -1,0 +1,14 @@
+# xdg-desktop-portal-wlr: the ScreenCast and Screenshot half of the portal under sway.
+# See: man 5 xdg-desktop-portal-wlr
+
+[screencast]
+# Which output to share. `simple` runs chooser_cmd; slurp -o -f %o -or highlights each output
+# and returns the one clicked, which is the closest thing sway has to GNOME's picker.
+# xdpw captures whole outputs only, so single-window sharing is not on offer: share a screen
+# and put the window on it. Teams and Meet both treat a screen share as a screen share.
+chooser_type=simple
+chooser_cmd=slurp -o -f %o -or
+
+# Capturing a 220dpi panel at its full refresh rate is a lot of pixels for a call that is
+# going to be re-encoded to 1080p30 anyway. Halves the CPU cost of a share on battery.
+max_fps=30

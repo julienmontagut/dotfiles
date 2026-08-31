@@ -1,26 +1,26 @@
-# Kanshi configuration
-# Automatic display configuration for Wayland
-# See: https://sr.ht/~emersion/kanshi/
-
-# Example profiles - customize for your displays.
+# Display arrangement. Started from sway/config; it watches for hotplug and reapplies.
+# See: man 5 kanshi
 #
-# NOTE: kanshi is not installed; sway/config is the live source of truth for
-# output scaling. Keep eDP-1 at scale 2 here so installing kanshi later does not
-# silently undo the hidpi scaling.
+# A profile matches when exactly its outputs are connected, so there is one profile per
+# real desk, not one per monitor. Externals are matched on "make model serial" because
+# DP-3 and DP-5 are whichever port the cable went into that morning; the internal panel
+# is matched on eDP-1, which is stable. Print the identifiers with:
+#
+#   swaymsg -t get_outputs
+#
+# Positions are logical pixels, so a scale-2 panel is half its mode. Scale itself is
+# deliberately not set here: sway/config owns it, and kanshi leaves attributes a profile
+# does not name alone. Anything not listed below falls through to sway's own defaults,
+# which stack outputs left to right - fine for a monitor seen once.
 
-# Laptop only
 profile laptop {
-    output eDP-1 enable scale 2
+    output eDP-1 enable
 }
 
-# Laptop with external monitor
+# Desk: lid panel off, P2219H left, P2217H right. Both externals are scale 1, so the second
+# starts at the first's full 1920.
 profile docked {
     output eDP-1 disable
-    output DP-1 enable scale 1 position 0,0
-}
-
-# Laptop with external monitor side by side
-profile dual {
-    output eDP-1 enable scale 2 position 0,0
-    output DP-1 enable scale 1 position 1920,0
+    output "Dell Inc. DELL P2219H DVPL9P2" enable position 0,0
+    output "Dell Inc. DELL P2217H 0G2TG72S32MB" enable position 1920,0
 }

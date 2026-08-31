@@ -78,22 +78,46 @@ dotnet = "latest"
 "~/.config/karabiner" = { source = "../karabiner", mode = "symlink-each" }
 "~/.config/sketchybar" = "../sketchybar"
 # Linux
+"~/.config/fontconfig/fonts.conf" = "../fontconfig/fonts.conf"
 "~/.config/foot" = "../foot"
 "~/.config/fuzzel" = "../fuzzel"
 "~/.config/kanshi" = "../kanshi"
+"~/.config/mako" = "../mako"
 "~/.config/sway" = "../sway"
+"~/.config/swaylock" = "../swaylock"
 "~/.config/waybar" = "../waybar"
+"~/.config/xdg-desktop-portal-wlr" = "../xdg-desktop-portal-wlr"
+# Overrides the packaged launcher so Chrome runs on Wayland: XWayland Chrome captures the
+# XWayland root rather than the desktop, which breaks screen sharing, and blurs at scale 2.
+"~/.local/share/applications/google-chrome.desktop" = "../applications/google-chrome.desktop"
 # ~/.config/mise is absent on purpose: its source would be relative to the symlink being replaced.
 # The repo's mise.toml seeds it instead.
 
 [tasks.bootstrap]
-description = "macOS-only: Brewfile and the non-declarative defaults/services"
+description = "The per-OS setup that has no declarative section: Brewfile and defaults on macOS, root-owned files on Linux"
 # cd -P: unlike mise's dotfile sources, the shell resolves `..` lexically, so the climb out of
 # the ~/.config/mise symlink only reaches the checkout physically.
 run = '''
+cd -P ~/.config/mise/../..
+
 if [ "$(uname)" = Darwin ]; then
-  cd -P ~/.config/mise/../..
   brew bundle --file Brewfile
   scripts/macos-setup.sh
+  exit 0
+fi
+
+# keyd reads /etc/keyd/*.conf and nothing else, so a ~/.config/keyd dotfile would be inert, and
+# mise has no section for root-owned files. The service reloads on change, hence the restart.
+if ! cmp -s config/keyd/default.conf /etc/keyd/default.conf; then
+  sudo install -D -m 0644 -o root -g root config/keyd/default.conf /etc/keyd/default.conf
+  sudo systemctl enable --now keyd
+  sudo systemctl restart keyd
+fi
+
+# brightnessctl is built without logind support, so the backlight keys need the udev rule's
+# group. `udevadm trigger` applies the rule now; the group needs a fresh login to take effect.
+if ! id -nG | tr ' ' '\n' | grep -qx video; then
+  sudo usermod -aG video "$USER"
+  sudo udevadm trigger --subsystem-match=backlight
 fi
 '''

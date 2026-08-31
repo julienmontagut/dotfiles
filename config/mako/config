@@ -1,0 +1,41 @@
+# Notification daemon. GNOME had one built in; sway has none, so without this every
+# notification (Teams, Chrome, notify-send) is silently dropped.
+# See: man 5 mako
+#
+# Only one process can own org.freedesktop.Notifications. If mako exits at login with
+# "Failed to acquire service name", something else took it first - swaync ships an enabled
+# systemd user unit and does exactly that. `systemctl --user mask swaync.service`, or remove
+# the package.
+
+font=Lilex Nerd Font 11
+width=380
+height=140
+margin=8
+padding=12
+border-size=2
+border-radius=4
+default-timeout=6000
+ignore-timeout=1
+max-visible=5
+anchor=top-right
+layer=overlay
+icons=1
+max-icon-size=48
+
+# Rosé Pine
+background-color=#191724f2
+text-color=#e0def4
+border-color=#26233a
+progress-color=over #26233a
+
+[urgency=low]
+text-color=#908caa
+
+[urgency=critical]
+border-color=#eb6f92
+default-timeout=0
+
+# Do not disturb, GNOME's switch of the same name, on $mod+Ctrl+n. Notifications still arrive
+# and still stack up in the history, they are just not drawn; `makoctl restore` replays them.
+[mode=do-not-disturb]
+invisible=1

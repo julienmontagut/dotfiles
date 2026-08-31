@@ -1,0 +1,25 @@
+#!/bin/sh
+# Ubuntu's waybar 0.9.24 is built without the upstream power-profiles-daemon module, so the
+# bar drives powerprofilesctl (which ships with the daemon) through a custom module instead.
+#
+#   power-profile        emit the current profile as waybar JSON
+#   power-profile next   switch to the next profile, wrapping around
+set -eu
+
+case "${1:-get}" in
+get)
+    profile=$(powerprofilesctl get)
+    printf '{"alt":"%s","class":"%s","tooltip":"Power profile: %s"}\n' "$profile" "$profile" "$profile"
+    ;;
+next)
+    # `powerprofilesctl list` prints "  balanced:" per profile, with "* " on the active one.
+    next=$(powerprofilesctl list | sed -n 's/^[ *] \([a-z-]*\):$/\1/p' |
+        awk -v current="$(powerprofilesctl get)" \
+            '{profiles[NR] = $0} $0 == current {i = NR} END {print profiles[i % NR + 1]}')
+    powerprofilesctl set "$next"
+    ;;
+*)
+    echo "usage: power-profile [get|next]" >&2
+    exit 1
+    ;;
+esac

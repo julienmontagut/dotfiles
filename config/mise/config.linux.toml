@@ -1,30 +1,46 @@
+# The sway session is meant to stand on its own, so everything GNOME used to provide
+# implicitly is listed here: portals for screen sharing, a notification daemon, a polkit
+# agent, and the bluetooth/network/audio front-ends.
 [bootstrap.packages]
+"apt:blueman" = "latest"
+"apt:bluez" = "latest"
+"apt:brightnessctl" = "latest"
 "apt:build-essential" = "latest"
 "apt:fontconfig" = "latest"
 "apt:foot" = "latest"
 "apt:fuzzel" = "latest"
+"apt:gnome-keyring" = "latest"
+"apt:grim" = "latest"
 "apt:kanshi" = "latest"
 "apt:keyd" = "latest"
+"apt:libnotify-bin" = "latest"
+"apt:libspa-0.2-bluetooth" = "latest"
 "apt:libssl-dev" = "latest"
+"apt:mako-notifier" = "latest"
+# GNOME's polkit agent lives inside gnome-shell. Without a replacement, anything that
+# needs an authorisation prompt (blueman, nm-connection-editor, udisks) fails silently.
+"apt:mate-polkit" = "latest"
+"apt:network-manager" = "latest"
+"apt:network-manager-gnome" = "latest"
 "apt:pavucontrol" = "latest"
+"apt:pipewire-pulse" = "latest"
 "apt:pkg-config" = "latest"
+"apt:playerctl" = "latest"
+"apt:power-profiles-daemon" = "latest"
+"apt:slurp" = "latest"
 "apt:sway" = "latest"
+"apt:swaybg" = "latest"
 "apt:swayidle" = "latest"
 "apt:swaylock" = "latest"
 "apt:waybar" = "latest"
+"apt:wireplumber" = "latest"
 "apt:wl-clipboard" = "latest"
+# Screen sharing. xdg-desktop-portal picks its backend from XDG_CURRENT_DESKTOP: under sway
+# that resolves to wlr for ScreenCast and gtk for everything else (file chooser, settings).
+"apt:xdg-desktop-portal-gtk" = "latest"
+"apt:xdg-desktop-portal-wlr" = "latest"
 "apt:xclip" = "latest"
 "apt:zsh" = "latest"
-
-# keyd reads /etc/keyd/*.conf and nothing else, so a ~/.config/keyd dotfile would be inert.
-# This is a copy, not a symlink: [bootstrap.files] has no symlink mode. Editing
-# config/keyd/default.conf therefore needs a `mise bootstrap` to land, which is the right
-# model anyway, since the service below reloads on change.
-[bootstrap.files]
-"/etc/keyd/default.conf" = { source = "../keyd/default.conf", mode = "0644", owner = "root", group = "root" }
-
-[bootstrap.services]
-keyd = {}
 
 [tools]
 "github:ryanoasis/nerd-fonts" = { version = "3.4.0", asset_pattern = "Lilex.zip", postinstall = "mkdir -p ~/.local/share/fonts && cp \"$MISE_TOOL_INSTALL_PATH\"/*.ttf ~/.local/share/fonts/ && fc-cache -f ~/.local/share/fonts" }
