@@ -5,35 +5,32 @@
 # Variables
 # =============================================================================
 
-# Alt, not Super: keyd turns a held Super into hyper (Super+Ctrl+Alt), so a
-# plain Mod4+key binding never matches. See config/keyd/default.conf.
+# Alt (mod1) instead of Super (mod4)
 set $mod Mod1
-# ghostty is the macOS terminal and is packaged for neither apt nor mise. foot is the
-# Linux one, and is the single terminal every Linux config here points at.
-set $term foot
-set $menu fuzzel
-# Chrome is the macOS browser; on Linux it is whatever the distro package is called. Not installed
-# by the mise bootstrap - the binding is here so the two halves keep the same keys.
+
+# Default app and programs. $term prefers ghostty because foot 1.16.2, the only version noble
+# ships, re-sends the legacy byte on key release under the kitty keyboard protocol: Enter,
+# Backspace and Tab then arrive twice in anything enabling it - neovim, herdr, claude code.
+# sway hands these lines to sh, so the substitution resolves at launch, and fuzzel gets an
+# absolute path because sh expands it before fuzzel is spawned. Drop the $(...) once foot is fixed.
+set $term "$(command -v ghostty || command -v foot)"
+set $menu fuzzel --terminal $term
 set $browser google-chrome-stable
 
 # =============================================================================
 # Output configuration
 # =============================================================================
 
-# Wallpaper (uncomment and set path)
-# output * bg ~/Pictures/wallpaper.jpg fill
+# Wallpaper. swaybg renders this; swap solid_color for a path plus `fill` for an image.
+output * bg #191724 solid_color
 
-# Scaling. Sway's default is scale 1, which is what lowdpi externals want, so
-# only the hidpi panels are listed here. Both sit near 220dpi, so scale 2 gives
-# text (and everything else) twice the device pixels without touching a single
-# app's font size.
+# Scale is the panel's own property and never changes, so it lives here; where the
+# panels sit relative to each other does change, and that is kanshi's job
+# (config/kanshi/config). kanshi only writes the attributes its profile names, so the
+# two do not fight, and an unknown monitor still gets a sane laptop scale from this line.
+# Sway's default of scale 1 is what the lowdpi externals want, so only the 220dpi
+# internal panel is listed.
 output eDP-1 scale 2
-
-# Apple Studio Display (5120x2880 @ 27", 218dpi). Sway matches externals on the
-# exact "make model serial" string, which is per-unit, so plug it in and run
-#   swaymsg -t get_outputs | grep -i -A3 'Output DP'
-# then uncomment this with the identifier it prints.
-# output "Apple Computer Inc Studio Display <serial>" scale 2
 
 # =============================================================================
 # Input configuration
@@ -51,13 +48,11 @@ input "type:touchpad" {
 }
 
 input "type:pointer" {
-    natural_scroll enabled
+    natural_scroll disabled
 }
 
-# Focus follows the mouse, and the cursor warps to the focused container
-# (mouse follows focus).
 focus_follows_mouse yes
-mouse_warping container
+# mouse_warping container
 
 # =============================================================================
 # Appearance
@@ -205,14 +200,42 @@ bindsym $mod+Shift+f fullscreen
 # Key bindings - Media
 # =============================================================================
 #
-# wpctl ships with pipewire, which is what this machine runs. --locked keeps
-# these working while swaylock is up. Brightness and screenshots want
-# brightnessctl and grim, neither of which is installed yet.
+# wpctl ships with pipewire, which is what this machine runs. --locked keeps these working
+# while swaylock is up.
 
+# -l 1.0 caps the sink at 100%: pipewire will happily amplify past it and distort.
 bindsym --locked XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
 bindsym --locked XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
-bindsym --locked XF86AudioRaiseVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+
+bindsym --locked XF86AudioRaiseVolume exec wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+
 bindsym --locked XF86AudioMicMute exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+
+bindsym --locked XF86AudioPlay exec playerctl play-pause
+bindsym --locked XF86AudioNext exec playerctl next
+bindsym --locked XF86AudioPrev exec playerctl previous
+
+# brightnessctl is built without logind support, so it writes to /sys through the group the
+# udev rule grants. `mise bootstrap` adds the user to it; that needs a fresh login to apply.
+bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
+bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
+
+# =============================================================================
+# Key bindings - Screenshots and notifications
+# =============================================================================
+#
+# Screenshots go to the clipboard rather than to disk: one is nearly always on its way into a
+# chat window, and wl-copy holds it until it is pasted. Print is duplicated onto $mod+p
+# because it needs Fn on this keyboard.
+
+bindsym $mod+p exec grim -g "$(slurp)" - | wl-copy
+bindsym $mod+Shift+p exec grim - | wl-copy
+bindsym Print exec grim -g "$(slurp)" - | wl-copy
+bindsym Shift+Print exec grim - | wl-copy
+
+bindsym $mod+n exec makoctl dismiss
+bindsym $mod+Shift+n exec makoctl dismiss --all
+# Do not disturb, the equivalent of GNOME's switch. See the mode block in config/mako/config.
+# makoctl has no toggle, so this reads the current modes and flips the one it cares about.
+bindsym $mod+Ctrl+n exec makoctl mode | grep -qx do-not-disturb && makoctl mode -r do-not-disturb || makoctl mode -a do-not-disturb
 
 # =============================================================================
 # Key bindings - Resize mode
@@ -248,5 +271,46 @@ bar {
 # Startup
 # =============================================================================
 
-# Include system config
+# First: 50-systemd-user.conf in here pushes WAYLAND_DISPLAY and SWAYSOCK into the systemd
+# user manager, which the exec below builds on. sway runs execs in config order.
 include /etc/sway/config.d/*
+
+# xdg-desktop-portal chooses its backend from XDG_CURRENT_DESKTOP, and the systemd user manager
+# starts at login, before sway, so it never sees it, and the include above does not forward
+# it either. Without this the portal answers with a backend that cannot capture a wlroots output, and
+# a screen share from Chrome or Firefox has nothing to offer. The restart is for the case where
+# a portal is already running from an earlier GNOME session in the same boot; one exec rather
+# than two because the restart has to follow the environment update, and `exec` rather than
+# `exec_always` so that reloading the config does not kill a share in progress.
+exec dbus-update-activation-environment --systemd XDG_CURRENT_DESKTOP=sway && systemctl --user restart xdg-desktop-portal.service
+
+# Notifications. Nothing else here implements org.freedesktop.Notifications, so without mako
+# every notification (Teams, Chrome, notify-send) is dropped silently.
+exec mako
+
+# Tray agents, both of which waybar hosts. These are not just icons: nm-applet is the secret
+# agent that prompts for a wifi password and blueman-applet is the pairing agent that prompts
+# to confirm a headset. GNOME provided both, and nothing in sway or waybar replaces them.
+exec nm-applet --indicator
+exec blueman-applet
+
+# Display arrangement, reapplied whenever a monitor is plugged or unplugged. See
+# config/kanshi/config for the profiles; `swaymsg -t get_outputs` prints the identifiers.
+#
+# exec_always, and a restart rather than a plain start: a reload reapplies the `output` lines
+# above, which relays the outputs out in sway's own order and undoes kanshi's positions. Nothing
+# hotplugs, so kanshi never notices. Restarting it here reapplies the profile on every reload.
+# sway hands the whole line to sh, so the semicolon is the shell's.
+exec_always pkill -x kanshi; kanshi
+
+# Authorisation prompts. GNOME's polkit agent lives inside gnome-shell, so without a stand-in
+# anything needing authorisation is refused with no dialog ever shown.
+exec /usr/libexec/polkit-mate-authentication-agent-1
+
+# Lock, then blank, then lock again before suspend. The --locked bindings above keep the volume
+# and brightness keys alive while the lock screen is up, and waybar's idle inhibitor suspends
+# all of it for the length of a presentation.
+exec swayidle -w \
+    timeout 300 'swaylock -f' \
+    timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+    before-sleep 'swaylock -f'

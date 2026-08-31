@@ -18,7 +18,7 @@
 @define-color fg      #e0def4; /* text - the resting state of every label */
 @define-color accent  #c4a7e7; /* iris - focused workspace, cpu */
 @define-color rose    #ebbcba; /* rose - volume */
-@define-color foam    #9ccfd8; /* foam - memory, network, charging */
+@define-color foam    #9ccfd8; /* foam - memory, and "a link is up": network, bluetooth, charging */
 @define-color gold    #f6c177; /* gold - clock and date at rest, and the warning threshold */
 @define-color love    #eb6f92; /* love - critical threshold */
 
@@ -38,26 +38,34 @@ window#waybar {
 
 /* --- bar and dividers ---------------------------------------------------------------------- */
 
-#clock,
-#workspaces,
-#mode,
-#window,
-#network,
-#cpu,
-#memory,
+#backlight,
 #battery,
+#bluetooth,
+#clock,
+#cpu,
+#custom-powerprofile,
+#idle_inhibitor,
+#memory,
+#mode,
+#network,
 #pulseaudio,
-#tray {
+#tray,
+#window,
+#workspaces {
     background-color: transparent;
     padding: 0 10px;
     color: @fg;
 }
 
-/* Dividers: every module that is not the first of its cluster. */
+/* Dividers: every module that is not the first of its cluster. The four clusters on the right are
+ * tray / machine state / devices / clock, in the order modules-right lists them. */
+#custom-powerprofile,
 #cpu,
 #memory,
-#battery,
 #pulseaudio,
+#bluetooth,
+#network,
+#battery,
 #clock.date {
     border-left: 1px solid @divider;
 }
@@ -65,7 +73,8 @@ window#waybar {
 /* Gaps between clusters - 16px, matching $CLUSTER_GAP in sketchybarrc. */
 #mode,
 #window,
-#network,
+#idle_inhibitor,
+#backlight,
 #clock.time {
     margin-left: 16px;
 }
@@ -75,11 +84,19 @@ window#waybar {
     margin-left: 16px;
 }
 
+#tray {
+    margin-left: 16px;
+}
+
 #clock.date {
     margin-right: 16px;
 }
 
-/* --- item colour: one hue per metric ------------------------------------------------------ */
+/* --- item colour -------------------------------------------------------------------------- */
+/*
+ * The metrics carry a hue of their own; the device modules rest as plain text and only take
+ * colour when they have something to say. foam is the one shared meaning: a link is up.
+ */
 
 #clock {
     color: @gold;
@@ -105,6 +122,30 @@ window#waybar {
     color: @rose;
 }
 
+#network.disconnected,
+#pulseaudio.muted,
+#bluetooth.disabled,
+#bluetooth.off {
+    color: @muted;
+}
+
+#bluetooth.connected {
+    color: @foam;
+}
+
+/* Both of these rest as plain text: they matter when they are off the default, not always. */
+#idle_inhibitor.activated {
+    color: @gold;
+}
+
+#custom-powerprofile.performance {
+    color: @love;
+}
+
+#custom-powerprofile.power-saver {
+    color: @foam;
+}
+
 /* Battery rests as plain text and only picks up a hue when it wants attention. */
 #battery {
     color: @fg;
@@ -126,14 +167,6 @@ window#waybar {
 #memory.critical,
 #battery.critical:not(.charging) {
     color: @love;
-}
-
-#network.disconnected {
-    color: @love;
-}
-
-#pulseaudio.muted {
-    color: @muted;
 }
 
 /* Sway's binding mode is a warning state, not a metric - it takes the whole pill. */

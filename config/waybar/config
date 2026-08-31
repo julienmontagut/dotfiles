@@ -1,7 +1,7 @@
 // Rosé Pine bar for Waybar - the Linux half of the pair. Mirrors config/sketchybar/sketchybarrc:
-// no bar, just smoked-glass capsules floating on the desktop - workspaces and the focused window
-// left, system cluster and clock right. Same Nerd Font glyphs, same palette. Change the shape of
-// the bar there, change it here.
+// workspaces and the focused window left, system cluster and clock right. Same Nerd Font glyphs
+// (Material Design, from Lilex Nerd Font), same palette. Change the shape of the bar there,
+// change it here.
 //
 // Nothing is centred, which on Linux buys nothing on its own - it is the notched Mac that cannot
 // use its centre. Keeping the two in step is worth more than reclaiming the space here.
@@ -9,27 +9,29 @@
 // Five workspaces, fixed and anonymous, same five as aerospace: the name is the digit, and the
 // digit is also the keybinding ($mod+1..5 here, hyper+N on macOS). Scratch is sway's native
 // scratchpad on $mod+minus, which is not a workspace and so never appears here.
+//
+// The tray holds nm-applet and blueman-applet (started from sway/config). Those two are here for
+// their agents - the wifi password prompt and the bluetooth pairing prompt GNOME used to supply -
+// and their menus. The network and bluetooth modules repeat the icon on purpose: those are the
+// glanceable status, the tray icons are the menus.
 {
     "layer": "top",
     "position": "top",
     "height": 32,
-    // 0, so the modules inside one pill touch and the dividers land between them. Gaps between
-    // pills are margins in style.css, not spacing here.
+    // 0, so the modules inside one cluster touch and the dividers land between them. Gaps between
+    // clusters are margins in style.css, not spacing here.
     "spacing": 0,
 
     "modules-left": ["sway/workspaces", "sway/mode", "sway/window"],
     "modules-center": [],
-    "modules-right": ["tray", "network", "cpu", "memory", "battery", "pulseaudio", "clock#time", "clock#date"],
-
-    "clock#time": {
-        "format": "󰅐 {:%H:%M}",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
-    },
-
-    "clock#date": {
-        "format": "󰃭 {:%d/%m}",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
-    },
+    // Four clusters: tray, machine state, devices, clock. style.css draws the dividers inside
+    // each and the gaps between them, so reordering here means reordering there.
+    "modules-right": [
+        "tray",
+        "idle_inhibitor", "custom/powerprofile", "cpu", "memory",
+        "backlight", "pulseaudio", "bluetooth", "network", "battery",
+        "clock#time", "clock#date"
+    ],
 
     "sway/workspaces": {
         "disable-scroll": true,
@@ -38,11 +40,7 @@
         // Sway only reports workspaces that exist, so without this the row would grow and shrink
         // as workspaces empty out. The five are fixed; they are always all drawn.
         "persistent-workspaces": {
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": []
+            "1": [], "2": [], "3": [], "4": [], "5": []
         }
     },
 
@@ -59,52 +57,111 @@
         "tooltip": false
     },
 
-    "network": {
-        "format-wifi": "󰖩 {signalStrength}%",
-        "format-ethernet": "󰈀",
-        "format-linked": "󰈀",
-        "format-disconnected": "󰖪",
-        "tooltip-format": "{ifname}: {ipaddr}"
+    // Click to keep the screen awake through a presentation or a screen share, which is the one
+    // thing swayidle cannot work out on its own.
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": { "activated": "󰅶", "deactivated": "󰾪" },
+        "tooltip-format-activated": "Idle inhibited",
+        "tooltip-format-deactivated": "Idle not inhibited"
+    },
+
+    // Ubuntu's waybar 0.9.24 is built without upstream's power-profiles-daemon module (it warns
+    // "Unknown module" if you try), so this drives powerprofilesctl through bin/power-profile.
+    // The signal is what makes a click redraw immediately instead of at the next interval.
+    "custom/powerprofile": {
+        "exec": "$HOME/.local/bin/power-profile",
+        "return-type": "json",
+        "interval": 30,
+        "signal": 8,
+        "format": "{icon}",
+        "format-icons": {
+            "performance": "󰓅",
+            "balanced": "󰾅",
+            "power-saver": "󰾆"
+        },
+        "on-click": "$HOME/.local/bin/power-profile next && pkill -RTMIN+8 waybar"
     },
 
     "cpu": {
         "format": "󰻠 {usage}%",
-        "states": {
-            "warning": 50,
-            "critical": 80
-        },
+        "states": { "warning": 50, "critical": 80 },
         "tooltip": false
     },
 
     "memory": {
         "format": "󰍛 {percentage}%",
-        "states": {
-            "warning": 50,
-            "critical": 80
-        }
+        "states": { "warning": 50, "critical": 80 }
     },
 
-    "battery": {
-        "states": {
-            "warning": 30,
-            "critical": 15
-        },
-        "format": "{icon} {capacity}%",
-        "format-charging": "{icon} {capacity}%",
-        "format-plugged": "{icon} {capacity}%",
-        "format-icons": {
-            "default": ["󰂎", "󰁻", "󰁽", "󰁿", "󰂁", "󰁹"],
-            "charging": ["󰂆", "󰂈", "󰂉", "󰂊", "󰂅"]
-        }
+    "backlight": {
+        "format": "{icon} {percent}%",
+        "format-icons": ["󰃞", "󰃟", "󰃠"],
+        "scroll-step": 5,
+        "tooltip": false
     },
 
     "pulseaudio": {
         "format": "{icon} {volume}%",
         "format-muted": "󰝟",
+        "format-bluetooth": "{icon} {volume}%",
+        "format-bluetooth-muted": "󰝟 {icon}",
         "format-icons": {
+            "headphone": "󰋋",
+            "headset": "󰋎",
+            "hands-free": "󰋎",
+            "phone": "󰏲",
+            "portable": "󰏲",
+            "car": "󰄋",
             "default": ["󰕿", "󰖀", "󰕾"]
         },
-        "on-click": "pavucontrol"
+        "scroll-step": 5,
+        "tooltip-format": "{desc}",
+        "on-click": "pavucontrol",
+        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+    },
+
+    "bluetooth": {
+        "format": "󰂯",
+        "format-disabled": "󰂲",
+        "format-off": "󰂲",
+        "format-connected": "󰂱 {num_connections}",
+        "tooltip-format": "{controller_alias}\n{status}",
+        "tooltip-format-connected": "{controller_alias}\n\n{device_enumerate}",
+        "tooltip-format-enumerate-connected": "{device_alias}",
+        "tooltip-format-enumerate-connected-battery": "{device_alias} ({device_battery_percentage}%)",
+        "on-click": "blueman-manager"
+    },
+
+    "network": {
+        "format-wifi": "{icon} {signalStrength}%",
+        "format-ethernet": "󰈀",
+        "format-linked": "󰈀 {ifname}",
+        "format-disconnected": "󰤭",
+        "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+        "tooltip-format-wifi": "{essid}\n{ipaddr}/{cidr}",
+        "tooltip-format-ethernet": "{ifname}\n{ipaddr}/{cidr}",
+        "tooltip-format-disconnected": "Disconnected",
+        "on-click": "nm-connection-editor"
+    },
+
+    "battery": {
+        "states": { "warning": 30, "critical": 15 },
+        "format": "{icon} {capacity}%",
+        "format-charging": "󰂄 {capacity}%",
+        "format-plugged": "󰚥 {capacity}%",
+        "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+        "tooltip-format": "{timeTo}"
+    },
+
+    "clock#time": {
+        "format": "󰅐 {:%H:%M}",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+    },
+
+    "clock#date": {
+        "format": "󰃭 {:%d/%m}",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
     },
 
     "tray": {

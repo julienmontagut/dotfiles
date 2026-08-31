@@ -1,2 +1,7 @@
 # No claude config. Rely on the user one defined under `claude/`
 .claude/
+
+
+# Added by cargo
+
+/target

@@ -9,4 +9,9 @@
 #
 # The dir is named after this command, not after the client: switching clients means a
 # `/login`, not a rename here.
+
+# The client's Azure DevOps PAT. Mode 600 and outside this repo, so it stays out of git; sourced
+# here rather than in zshrc so bare `claude` never carries a client credential.
+[ -f "$HOME/.config/secrets/azure-devops.env" ] && . "$HOME/.config/secrets/azure-devops.env"
+
 exec env CLAUDE_CONFIG_DIR="$HOME/.claude-igor" claude "$@"

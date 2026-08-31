@@ -1,0 +1,34 @@
+# Overrides /usr/share/applications/google-chrome.desktop. A .desktop file in
+# ~/.local/share/applications replaces the system one outright rather than merging, so this
+# has to repeat the identity fields; only the Exec lines differ from the packaged launcher.
+#
+# --ozone-platform-hint=auto: Chrome defaults to X11, and under sway that means XWayland.
+# WebRTC screen sharing then captures the XWayland root instead of the desktop (a black or
+# empty share in the Teams webapp), and every window is upscaled from scale 1 on the hidpi
+# panel. On Wayland, Chrome goes through xdg-desktop-portal like it did under GNOME.
+#
+# --password-store=gnome-libsecret: Chrome picks its password store from XDG_CURRENT_DESKTOP
+# and falls back to a plaintext store on anything it does not recognise, which would orphan
+# every password saved under GNOME. gnome-keyring answers on D-Bus regardless of the session.
+[Desktop Entry]
+Version=1.0
+Name=Google Chrome
+GenericName=Web Browser
+Comment=Access the Internet
+Exec=/usr/bin/google-chrome-stable --ozone-platform-hint=auto --password-store=gnome-libsecret %U
+StartupNotify=true
+StartupWMClass=google-chrome
+Terminal=false
+Icon=google-chrome
+Type=Application
+Categories=Network;WebBrowser;
+MimeType=application/pdf;application/rdf+xml;application/rss+xml;application/xhtml+xml;application/xhtml_xml;application/xml;image/gif;image/jpeg;image/png;image/webp;text/html;text/xml;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/google-chrome;
+Actions=new-window;new-private-window;
+
+[Desktop Action new-window]
+Name=New Window
+Exec=/usr/bin/google-chrome-stable --ozone-platform-hint=auto --password-store=gnome-libsecret
+
+[Desktop Action new-private-window]
+Name=New Incognito Window
+Exec=/usr/bin/google-chrome-stable --ozone-platform-hint=auto --password-store=gnome-libsecret --incognito
