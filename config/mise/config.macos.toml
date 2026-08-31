@@ -19,22 +19,13 @@
 "brew-cask:slite" = "latest"
 "brew-cask:spotify" = "latest"
 "brew-cask:steam" = "latest"
-# Menu bar toolkit; the only module wanted here is "Quit on close" - apps you choose quit when
-# their last window closes. Enable that one and leave the rest off, or its system monitor, volume
-# mixer and clock end up drawn twice next to sketchybar's. Needs Accessibility.
-# Two things this file cannot express:
-#   - The allowlist is GUI state, not repo state. Start with Zed, Google Chrome, Xcode, Rider,
-#     RustRover, Preview, System Settings; deliberately not Slack, Mail, Linear, Claude, Slite,
-#     OrbStack, Bitwarden, Google Drive. Ghostty uses its own quit-after-last-window-closed.
-#     Check `defaults domains | tr ',' '\n' | grep -i vorssaint` - if the list lands in a domain
-#     it can move into [bootstrap.macos.defaults] and stop being GUI state.
-#   - The cask is auto_updates, so brew and mise do not track its version; bootstrap installs it
-#     but is not what keeps it current.
-"brew-cask:vorssaint" = "latest"
+"brew-cask:vorssaint" = "latest" # Only for "Quit on close" at the moment
 "brew-cask:zed" = "latest"
 
-# The non-scalar preferences (Dock app list, disabled Ctrl+Space hotkeys) are not expressible
-# here and run in scripts/macos-setup.sh.
+[tools]
+mas = "latest"
+tart = "latest"
+
 [bootstrap.macos.keyboard]
 press_and_hold = false
 key_repeat = 1
@@ -53,12 +44,12 @@ tap_to_click = true
 three_finger_drag = true
 
 [bootstrap.macos.defaults]
-"NSGlobalDomain" = { AppleMetricUnits = true }
+"NSGlobalDomain" = { AppleMetricUnits = true, NSQuitAlwaysKeepsWindows = false }
 "com.apple.menuextra.clock" = { Show24Hour = true }
-"com.apple.dock" = { "autohide-delay" = 0.0, "autohide-time-modifier" = 0.3 }
-# CreateDesktop = false hides the desktop icons only, ~/Desktop is untouched.
+"com.apple.dock" = { "autohide-delay" = 0.0, "autohide-time-modifier" = 0.3, launchanim = false }
 "com.apple.finder" = { _FXSortFoldersFirst = true, CreateDesktop = false }
 "com.apple.AppleMultitouchTrackpad" = { TrackpadRightClick = true }
+"com.apple.universalaccess" = { reduceTransparency = true, reduceMotion = true }
 
 # Disabled with the rest of the tiling stack. Both agents need the explicit PATH below: their rc
 # files call borders/sketchybar/aerospace by name and launchd starts them with a bare PATH.
