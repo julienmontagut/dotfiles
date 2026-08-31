@@ -1,15 +1,12 @@
-# Tools for working on this repo. The machine itself is defined in config/mise/config.toml,
-# symlinked to ~/.config/mise, so `mise bootstrap` sets a machine up from any directory.
+# Tools for working on this repo
 [tools]
 lua = "latest"
 lua-language-server = "latest"
 stylua = "latest"
 shfmt = "latest"
 taplo = "latest"
-"cargo:nickel-lang-cli" = "latest"
 
-# Seeds the machine config on a fresh box, and anchors it afterwards: every source in
-# config/mise/config.toml is relative and climbs out through this link, so it must stay a
-# whole-directory symlink into the checkout, never symlink-each.
+# Seeds the machine config on a fresh box
 [dotfiles]
 "~/.config/mise" = { source = "config/mise", mode = "symlink" }
+

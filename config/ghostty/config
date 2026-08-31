@@ -10,7 +10,6 @@ theme = light:Rose Pine Dawn,dark:Rose Pine
 
 # Opacity
 background-blur = true
-# background-opacity = 0.95
 
 # Don't prompt to close while a multiplexer (herdr) is running.
 confirm-close-surface = false
@@ -27,10 +26,6 @@ font-size = 16
 # Shell integration
 shell-integration = zsh
 shell-integration-features = ssh-env,ssh-terminfo,cursor,sudo,title
-
-# herdr, or bash if it's missing or crashes. Must stay ONE simple command: macOS prefixes it with
-# `exec -l`, so a bare `[ ... ] && ...` here execs /bin/[ and the window dies instantly.
-command = /bin/sh -c '"$HOME/.local/share/mise/shims/herdr" || exec bash -l'
 
 # Keybindings
 # keybind = super+shift+n=new_window
