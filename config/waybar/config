@@ -1,7 +1,9 @@
 // Rosé Pine bar for Waybar - the Linux half of the pair. Mirrors config/sketchybar/sketchybarrc:
 // workspaces and the focused window left, system cluster and clock right. Same Nerd Font glyphs
-// (Material Design, from Lilex Nerd Font), same palette. Change the shape of the bar there,
-// change it here.
+// (Material Design, from Lilex Nerd Font), same palette, same module order. The chrome differs -
+// sketchybar draws one opaque strip, this floats above the wallpaper as a row of pills - because
+// sway has 10px gaps and a wallpaper worth seeing and macOS has neither. Change which modules
+// exist or what order they sit in there, change it here.
 //
 // Nothing is centred, which on Linux buys nothing on its own - it is the notched Mac that cannot
 // use its centre. Keeping the two in step is worth more than reclaiming the space here.
@@ -17,21 +19,41 @@
 {
     "layer": "top",
     "position": "top",
-    "height": 32,
-    // 0, so the modules inside one cluster touch and the dividers land between them. Gaps between
-    // clusters are margins in style.css, not spacing here.
+    "height": 34,
+    // The bar floats on the same 10px frame the windows do: `gaps inner 10` in the sway config
+    // puts a window 10px off the screen edge, and these put the bar there too, so the two line up
+    // on the left and right. Sway reserves height + margin-top, so the first window still clears
+    // the bar by the same 10px.
+    "margin-top": 10,
+    "margin-left": 10,
+    "margin-right": 10,
+    // 0: the pills carry their own margins in style.css, and a box spacing here would add to them
+    // asymmetrically at the ends.
     "spacing": 0,
 
     "modules-left": ["sway/workspaces", "sway/mode", "sway/window"],
     "modules-center": [],
-    // Four clusters: tray, machine state, devices, clock. style.css draws the dividers inside
-    // each and the gaps between them, so reordering here means reordering there.
-    "modules-right": [
-        "tray",
-        "idle_inhibitor", "custom/powerprofile", "cpu", "memory",
-        "backlight", "pulseaudio", "bluetooth", "network", "battery",
-        "clock#time", "clock#date"
-    ],
+    // Four pills: tray, machine state, devices, clock. Grouping them here rather than drawing
+    // dividers in CSS means a module can be moved between clusters without a matching CSS edit,
+    // and an empty module (sway/mode at rest) takes its whole pill with it when it hides.
+    "modules-right": ["tray", "group/machine", "group/devices", "group/time"],
+
+    // The group names are the CSS ids: #machine, #devices, #time. Keep them distinct from the
+    // module ids inside them (#cpu, #network, #clock) or the pill and its contents share a rule.
+    "group/machine": {
+        "orientation": "horizontal",
+        "modules": ["idle_inhibitor", "custom/powerprofile", "cpu", "memory"]
+    },
+
+    "group/devices": {
+        "orientation": "horizontal",
+        "modules": ["backlight", "pulseaudio", "bluetooth", "network", "battery"]
+    },
+
+    "group/time": {
+        "orientation": "horizontal",
+        "modules": ["clock#time", "clock#date"]
+    },
 
     "sway/workspaces": {
         "disable-scroll": true,
@@ -45,12 +67,13 @@
     },
 
     "sway/mode": {
-        "format": "<span style=\"italic\">{}</span>"
+        "format": "{}"
     },
 
     // app_id, not title, so this says the same thing sketchybar's centre item says: what is
     // focused, not what it happens to be showing. XWayland windows report no app_id and fall
-    // back to the bare glyph.
+    // back to the bare glyph. An empty workspace produces an empty label, and Waybar hides an
+    // empty label, so the pill disappears with it.
     "sway/window": {
         "format": "󰖸 {app_id}",
         "max-length": 50,
@@ -165,6 +188,7 @@
     },
 
     "tray": {
-        "spacing": 10
+        "spacing": 8,
+        "icon-size": 16
     }
 }

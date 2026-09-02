@@ -1,23 +1,40 @@
 # Lock screen. swaylock's built-in default is pure white, which is blinding at night.
 # See: man 5 swaylock
 #
-# swaylock is invoked as `swaylock -f` from the sway config and from swayidle, both of which
-# read this file. Colors are RGB(A) without a leading '#'.
+# swaylock is invoked as `$lock` from the sway config and from swayidle, both of which read this
+# file. The wallpaper is *not* here: swaylock runs neither wordexp nor a shell over its config, so
+# `~` and `$HOME` would reach gdk-pixbuf verbatim and fail. config/sway/config sets `$wallpaper`
+# once and passes it as `-i`, which is also what keeps the lock screen and the desktop on the same
+# image. Colors are RGB(A) without a leading '#'.
+#
+# swaylock 1.7.2 is the plain upstream: no clock, no blur, no text field. The ring is the whole
+# interface, so it is drawn large and left visible even when idle, and every state change is a
+# colour change on it. Read it as: muted at rest, iris per keystroke, love per backspace, gold
+# when cleared, foam while verifying, love when wrong.
 
+scaling=fill
+# The one thing drawn on top of the image, so it stays put rather than vanishing after a moment.
+indicator-idle-visible
 indicator-caps-lock
 indicator-radius=90
-indicator-thickness=8
-font=Lilex Nerd Font
+indicator-thickness=9
+show-failed-attempts
+# A stray Return on a woken laptop should not spend a PAM attempt.
+ignore-empty-password
 
-# Rosé Pine
+font=Lilex Nerd Font Mono
+font-size=20
+
+# Rosé Pine. The inside of the ring is base at 80%, so the wallpaper reads through it and the ring
+# never looks like a sticker; only `wrong` tints, and only faintly.
 color=191724
-inside-color=1f1d2e
-inside-clear-color=1f1d2e
-inside-caps-lock-color=1f1d2e
-inside-ver-color=1f1d2e
-inside-wrong-color=1f1d2e
+inside-color=191724cc
+inside-clear-color=191724cc
+inside-caps-lock-color=191724cc
+inside-ver-color=191724cc
+inside-wrong-color=eb6f9233
 
-ring-color=26233a
+ring-color=6e6a86
 ring-clear-color=f6c177
 ring-caps-lock-color=f6c177
 ring-ver-color=9ccfd8
@@ -29,10 +46,10 @@ caps-lock-key-hl-color=c4a7e7
 caps-lock-bs-hl-color=eb6f92
 
 text-color=e0def4
-text-clear-color=e0def4
-text-caps-lock-color=e0def4
-text-ver-color=e0def4
-text-wrong-color=e0def4
+text-clear-color=f6c177
+text-caps-lock-color=f6c177
+text-ver-color=9ccfd8
+text-wrong-color=eb6f92
 
 separator-color=00000000
 line-color=00000000
