@@ -86,6 +86,8 @@ dotnet = "latest"
 "~/.config/sway" = "../sway"
 "~/.config/swaylock" = "../swaylock"
 "~/.config/waybar" = "../waybar"
+# Shared by swaybg and swaylock, both driven from config/sway/config's $wallpaper.
+"~/.config/wallpapers" = "../wallpapers"
 "~/.config/xdg-desktop-portal-wlr" = "../xdg-desktop-portal-wlr"
 # Overrides the packaged launcher so Chrome runs on Wayland: XWayland Chrome captures the
 # XWayland root rather than the desktop, which breaks screen sharing, and blurs at scale 2.

@@ -6,14 +6,18 @@
 # "Failed to acquire service name", something else took it first - swaync ships an enabled
 # systemd user unit and does exactly that. `systemctl --user mask swaync.service`, or remove
 # the package.
+#
+# Shaped to match the waybar pills it sits under: same surface, same hairline, same radius, and
+# `outer-margin` puts the stack on the same 10px frame as the bar and the windows.
 
-font=Lilex Nerd Font 11
-width=380
-height=140
+font=Lilex Nerd Font Mono 11
+width=400
+height=160
+outer-margin=10
 margin=8
-padding=12
-border-size=2
-border-radius=4
+padding=14
+border-size=1
+border-radius=12
 default-timeout=6000
 ignore-timeout=1
 max-visible=5
@@ -22,11 +26,12 @@ layer=overlay
 icons=1
 max-icon-size=48
 
-# Rosé Pine
-background-color=#191724f2
+# Rosé Pine. Surface at 96%, one step up from base so a notification reads as a card laid on the
+# wallpaper rather than a hole cut in it - the same relationship the waybar pills have.
+background-color=#1f1d2ef5
 text-color=#e0def4
-border-color=#26233a
-progress-color=over #26233a
+border-color=#403d52
+progress-color=over #403d52
 
 [urgency=low]
 text-color=#908caa

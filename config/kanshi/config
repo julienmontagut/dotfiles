@@ -17,10 +17,41 @@ profile laptop {
     output eDP-1 enable
 }
 
+# Desk: Apple Studio Display alone, lid panel off. The 5K panel is 27" at 218dpi, so scale 2
+# gives the same 1x-equivalent size as the laptop and a 2560x1440 logical desktop.
+#
+# The display shows up as *two* connected outputs with identical make, model and serial: the
+# real 5120x2880 stream and a second head that only ever offers 2560x2880. It is a leftover DP
+# MST branch the display advertises alongside the single-stream link that actually drives it -
+# there is one physical monitor. kanshi has no criteria that tells the two apart, so the real
+# one is claimed by the identifier and the phantom is swept up by the trailing "*", which works
+# because kanshi walks profile entries in order against the heads in connection order and the
+# real stream is always enumerated before the branch. `mode` is named for the same reason: it
+# only fits the real head, so a mismatch fails loudly instead of lighting up the phantom.
+#
+# "*" also keeps this profile honest: it matches exactly three heads, so plugging a Dell in as
+# well falls through rather than blanking it.
+profile desk {
+    output eDP-1 disable
+    output "Apple Computer Inc StudioDisplay 0x07A03116" enable mode 5120x2880 position 0,0 scale 2
+    output * disable
+}
+
 # Desk: lid panel off, P2219H left, P2217H right. Both externals are scale 1, so the second
 # starts at the first's full 1920.
-profile docked {
+profile peaksys {
     output eDP-1 disable
     output "Dell Inc. DELL P2219H DVPL9P2" enable position 0,0
     output "Dell Inc. DELL P2217H 0G2TG72S32MB" enable position 1920,0
+
+    # Workspace 5 is the only one sway assigns to the left panel, so it holds what gets glanced
+    # at rather than typed into, and tabbed is the layout that suits it: each window is a
+    # full-width tab instead of a slice of 1920 pixels. $mod+t still toggles back to a split.
+    #
+    # Sway has no directive for a workspace's default layout, and an empty workspace is destroyed
+    # the moment its output goes away, so a login-time swaymsg would not survive the first
+    # undock. Hanging it off the profile reapplies it exactly when the panel comes back.
+    # back_and_forth returns to whichever workspace was focused, so a redock does not move you.
+    exec swaymsg 'workspace 5; layout tabbed; workspace back_and_forth'
 }
+

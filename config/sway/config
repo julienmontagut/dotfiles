@@ -21,8 +21,11 @@ set $browser google-chrome-stable
 # Output configuration
 # =============================================================================
 
-# Wallpaper. swaybg renders this; swap solid_color for a path plus `fill` for an image.
-output * bg #191724 solid_color
+# Wallpaper. swaybg renders it; swaylock reuses the same file, hence the variable. `fill` crops
+# to the output's aspect ratio, and the base colour behind it covers the moment before swaybg is
+# up and any output swaybg cannot draw. sway runs the path through wordexp, so $HOME resolves.
+set $wallpaper $HOME/.config/wallpapers/rose-pine-maze.png
+output * bg $wallpaper fill #191724
 
 # Scale is the panel's own property and never changes, so it lives here; where the
 # panels sit relative to each other does change, and that is kanshi's job
@@ -58,27 +61,50 @@ focus_follows_mouse yes
 # Appearance
 # =============================================================================
 
-gaps inner 4
+# One 10px rhythm across the session: waybar floats 10px off the screen edge (margin-* in
+# config/waybar/config), notifications do too (outer-margin in config/mako/config), and windows
+# sit 10px apart and 10px off the edge.
+#
+# outer stays 0 because sway *adds* inner to outer at the workspace edge - `outer 5` with
+# `inner 10` gives a 15px frame around a 10px gap, which is the one combination that looks
+# wrong. Raise outer only to make the frame deliberately wider than the gaps.
+gaps inner 10
 gaps outer 0
 
+# Borders are the only thing marking focus once the gaps are this wide, so they stay at 2px and
+# only the focused window draws one in a colour - see the palette below.
 default_border pixel 2
 default_floating_border pixel 2
 
-# Colors (Rosé Pine)
+# Titlebars only appear in the tabbed layout, which is workspace 5's default. Sway's own default
+# font is "monospace 10"; this is the same size in the font everything else here uses.
+font pango:Lilex Nerd Font Mono 10
+titlebar_padding 10 4
+titlebar_border_thickness 0
+
+# Colors (Rosé Pine). Only the focused window is coloured: it takes iris, everything else recedes
+# into the surface and overlay greys so a screen of tabs reads as one dark strip with one lit tab.
+# `background` is what sway paints where no client has drawn yet.
 # class                 border  backgr. text    indicator child_border
 client.focused          #c4a7e7 #c4a7e7 #191724 #c4a7e7   #c4a7e7
-client.focused_inactive #6e6a86 #6e6a86 #e0def4 #6e6a86   #6e6a86
-client.unfocused        #26233a #26233a #908caa #26233a   #26233a
+client.focused_inactive #403d52 #26233a #e0def4 #403d52   #403d52
+client.unfocused        #26233a #1f1d2e #908caa #26233a   #26233a
+client.urgent           #eb6f92 #eb6f92 #191724 #eb6f92   #eb6f92
+client.background       #191724
 
 # Colors (Rosé Pine Dawn)
 # client.focused          #907aa9 #907aa9 #faf4ed #907aa9   #907aa9
-# client.focused_inactive #9893a5 #9893a5 #575279 #9893a5   #9893a5
-# client.unfocused        #f2e9e1 #f2e9e1 #797593 #f2e9e1   #f2e9e1
+# client.focused_inactive #dfdad9 #f2e9e1 #575279 #dfdad9   #dfdad9
+# client.unfocused        #f2e9e1 #fffaf3 #797593 #f2e9e1   #f2e9e1
+# client.urgent           #b4637a #b4637a #faf4ed #b4637a   #b4637a
+# client.background       #faf4ed
 
 # Colors (Basalt Dark)
 # client.focused          #7ca2d8 #7ca2d8 #0e0e0e #7ca2d8   #7ca2d8
-# client.focused_inactive #767575 #767575 #e7e5e5 #767575   #767575
-# client.unfocused        #3e3e44 #3e3e44 #acabaa #3e3e44   #3e3e44
+# client.focused_inactive #3e3e44 #1c1c1c #e7e5e5 #3e3e44   #3e3e44
+# client.unfocused        #1c1c1c #131313 #acabaa #1c1c1c   #1c1c1c
+# client.urgent           #d87c7c #d87c7c #0e0e0e #d87c7c   #d87c7c
+# client.background       #0e0e0e
 
 # =============================================================================
 # Key bindings - Basics
@@ -101,8 +127,11 @@ bindsym $mod+space exec $menu
 # Close focused window
 bindsym $mod+Escape kill
 
-# Lock the session
-bindsym $mod+Shift+backslash exec swaylock -f
+# Lock the session. $lock rather than a bare swaylock because swayidle below runs the same
+# command twice more, and because swaylock does not expand `~` or `$HOME` in its own config file -
+# the image has to reach it on the command line, where sway's `exec` hands it to sh.
+set $lock swaylock -f -i "$wallpaper"
+bindsym $mod+Shift+backslash exec $lock
 
 # Reload config
 bindsym $mod+Shift+c reload
@@ -157,6 +186,24 @@ bindsym $mod+Shift+a focus parent; split none; focus child
 # =============================================================================
 # Key bindings - Workspaces
 # =============================================================================
+
+# Where the workspaces live on the two-monitor desk. The right panel is the one straight ahead,
+# so it holds the four working workspaces; the left one is peripheral and holds a single
+# workspace for what gets glanced at rather than typed into - chat, mail, logs, a reference
+# page. Sway takes the first output in the list that is actually connected, so eDP-1 is the
+# fallback and the laptop on its own still gets all five.
+#
+# A workspace is assigned when it is created, never retroactively, so a reload leaves the
+# current ones where they already are. Switching away from an empty one destroys it and the
+# next visit puts it on the right panel.
+set $main "Dell Inc. DELL P2217H 0G2TG72S32MB"
+set $side "Dell Inc. DELL P2219H DVPL9P2"
+
+workspace 1 output $main eDP-1
+workspace 2 output $main eDP-1
+workspace 3 output $main eDP-1
+workspace 4 output $main eDP-1
+workspace 5 output $side eDP-1
 
 bindsym $mod+1 workspace number 1
 bindsym $mod+2 workspace number 2
@@ -300,8 +347,10 @@ exec blueman-applet
 # exec_always, and a restart rather than a plain start: a reload reapplies the `output` lines
 # above, which relays the outputs out in sway's own order and undoes kanshi's positions. Nothing
 # hotplugs, so kanshi never notices. Restarting it here reapplies the profile on every reload.
-# sway hands the whole line to sh, so the semicolon is the shell's.
-exec_always pkill -x kanshi; kanshi
+# The whole payload is quoted because sway splits a command list on `;` before exec ever sees
+# it: unquoted, `kanshi` is read as a second sway command and the config errors out with
+# "Unknown/invalid command 'kanshi'", leaving the outputs wherever sway itself put them.
+exec_always "pkill -x kanshi; kanshi"
 
 # Authorisation prompts. GNOME's polkit agent lives inside gnome-shell, so without a stand-in
 # anything needing authorisation is refused with no dialog ever shown.
@@ -311,6 +360,6 @@ exec /usr/libexec/polkit-mate-authentication-agent-1
 # and brightness keys alive while the lock screen is up, and waybar's idle inhibitor suspends
 # all of it for the length of a presentation.
 exec swayidle -w \
-    timeout 300 'swaylock -f' \
+    timeout 300 '$lock' \
     timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
-    before-sleep 'swaylock -f'
+    before-sleep '$lock'
