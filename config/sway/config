@@ -27,13 +27,9 @@ set $browser google-chrome-stable
 set $wallpaper $HOME/.config/wallpapers/rose-pine-maze.png
 output * bg $wallpaper fill #191724
 
-# Scale is the panel's own property and never changes, so it lives here; where the
-# panels sit relative to each other does change, and that is kanshi's job
-# (config/kanshi/config). kanshi only writes the attributes its profile names, so the
-# two do not fight, and an unknown monitor still gets a sane laptop scale from this line.
-# Sway's default of scale 1 is what the lowdpi externals want, so only the 220dpi
-# internal panel is listed.
+# TODO: Set default as 1 and replace next one with vivobook panel name
 output eDP-1 scale 2
+output "Chimei Innolux Corporation 0x143B Unknown" scale 1
 
 # =============================================================================
 # Input configuration
