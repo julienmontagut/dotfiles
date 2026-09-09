@@ -55,7 +55,6 @@ dotnet = "latest"
 [dotfiles]
 "~/.claude" = { source = "../../claude", mode = "symlink-each" }
 "~/.claude-igor/CLAUDE.md" = "../../claude/CLAUDE.md"
-# Must follow ~/.claude: symlink-each merges into that tree instead of replacing it.
 "~/.config/alacritty" = "../alacritty"
 "~/.config/ghostty" = "../ghostty"
 "~/.config/git" = { source = "../git", mode = "symlink-each" }
