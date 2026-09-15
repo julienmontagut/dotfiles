@@ -14,7 +14,7 @@
 - Verify before asserting: read the docs or the source (`cargo doc --open`, decompiled/NuGet source, `man`). If unverifiable, say so.
 - Dependencies: stdlib/platform first, then one well-known crate/package, then write it. State in one line why a new dependency is needed.
 - Never introduce JavaScript, TypeScript or Python.
-- Behaviour changes are test-first: use `/tdd`.
+- Behaviour changes are test-first: use `/implement`.
 - Ask before: force-push, history rewrite, deleting branches/files outside the task, `tofu apply`, anything touching production data.
 
 ## Code style
