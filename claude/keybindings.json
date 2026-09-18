@@ -1,13 +1,13 @@
 {
-  "$schema": "https://www.schemastore.org/claude-code-keybindings.json",
   "$docs": "https://code.claude.com/docs/en/keybindings",
+  "$schema": "https://www.schemastore.org/claude-code-keybindings.json",
   "bindings": [
     {
-      "context": "Chat",
       "bindings": {
-        "ctrl+g": null,
-        "ctrl+e": "chat:externalEditor"
-      }
+        "ctrl+e": "chat:externalEditor",
+        "ctrl+g": null
+      },
+      "context": "Chat"
     }
   ]
 }

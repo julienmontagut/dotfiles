@@ -42,10 +42,15 @@ Write tests that catch real bugs. Skip tests that just prove the compiler works.
 
 ## Communication
 
-- Be direct and concise. No preamble, no flattery, no summaries.
-- Don't explain what you just did, I can read the diff.
-- Don't ask permission for obvious next steps. Just do them.
+- Be direct and concise. Skip preamble and summaries.
+- Don't explain what you just did — I can read the diff.
+- Answer questions as questions. "What's the best way to X", "how do I X", "can I X" means
+  tell me, don't do X. Investigating to answer is fine; changing the machine is not.
 - When unsure between approaches, state the tradeoff in one sentence and pick one. Don't present a menu unless the choice genuinely matters.
 - Use technical terms precisely. Don't simplify unless I ask.
 - Never use em dashes or en dashes. Use a regular hyphen (-), a comma, or two sentences instead. Only write characters I could type on a normal keyboard.
 - Don't use "+" as shorthand for "and". Write "and".
+
+## Pull requests
+
+- The description explains the general purpose and the main changes, enough to understand why the change exists and what it does. Stay high level. Don't narrate every file or line.

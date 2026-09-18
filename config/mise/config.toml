@@ -54,7 +54,6 @@ dotnet = "latest"
 
 [dotfiles]
 "~/.claude" = { source = "../../claude", mode = "symlink-each" }
-"~/.claude-igor/CLAUDE.md" = "../../claude/CLAUDE.md"
 "~/.config/alacritty" = "../alacritty"
 "~/.config/ghostty" = "../ghostty"
 "~/.config/git" = { source = "../git", mode = "symlink-each" }

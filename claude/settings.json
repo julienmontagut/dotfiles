@@ -1,9 +1,59 @@
 {
+  "agentPushNotifEnabled": true,
   "attribution": {
     "commit": "",
     "pr": "",
     "sessionUrl": false
   },
+  "editorMode": "vim",
+  "enabledPlugins": {
+    "csharp-lsp@claude-plugins-official": true,
+    "lua-lsp@claude-plugins-official": true,
+    "ponytail@ponytail": true,
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "swift-lsp@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-plugins-official": {
+      "source": {
+        "repo": "anthropics/claude-plugins-official",
+        "source": "github"
+      }
+    },
+    "ponytail": {
+      "source": {
+        "repo": "DietrichGebert/ponytail",
+        "source": "github"
+      }
+    }
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "h=\"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/block-session-trailer.sh\"; [ -f \"$h\" ] && sh \"$h\" || exit 0",
+            "timeout": 5,
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "command": "h=\"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/herdr-agent-state.sh\"; [ -f \"$h\" ] && bash \"$h\" session || true",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ]
+  },
+  "inputNeededNotifEnabled": true,
   "permissions": {
     "allow": [
       "Bash(gh pr list*)",
@@ -19,64 +69,14 @@
       "Bash(scw * get*)",
       "Bash(scw config*)"
     ],
-    "deny": [],
-    "ask": []
+    "ask": [],
+    "deny": []
   },
-  "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=\"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/herdr-agent-state.sh\"; [ -f \"$h\" ] && bash \"$h\" session || true",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=\"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/block-session-trailer.sh\"; [ -f \"$h\" ] && sh \"$h\" || exit 0",
-            "timeout": 5
-          }
-        ]
-      }
-    ]
-  },
-  "worktree": {
-    "baseRef": "fresh"
-  },
-  "enabledPlugins": {
-    "csharp-lsp@claude-plugins-official": true,
-    "lua-lsp@claude-plugins-official": true,
-    "ponytail@ponytail": true,
-    "rust-analyzer-lsp@claude-plugins-official": true,
-    "swift-lsp@claude-plugins-official": true
-  },
-  "extraKnownMarketplaces": {
-    "claude-plugins-official": {
-      "source": {
-        "source": "github",
-        "repo": "anthropics/claude-plugins-official"
-      }
-    },
-    "ponytail": {
-      "source": {
-        "source": "github",
-        "repo": "DietrichGebert/ponytail"
-      }
-    }
-  },
-  "tui": "fullscreen",
+  "remoteControlAtStartup": true,
   "skipWorkflowUsageWarning": true,
   "theme": "dark-ansi",
-  "editorMode": "vim",
-  "remoteControlAtStartup": true,
-  "inputNeededNotifEnabled": true,
-  "agentPushNotifEnabled": true
+  "tui": "fullscreen",
+  "worktree": {
+    "baseRef": "fresh"
+  }
 }
