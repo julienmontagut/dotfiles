@@ -49,7 +49,6 @@ three_finger_drag = true
 "com.apple.dock" = { "autohide-delay" = 0.0, "autohide-time-modifier" = 0.3, launchanim = false }
 "com.apple.finder" = { _FXSortFoldersFirst = true, CreateDesktop = false }
 "com.apple.AppleMultitouchTrackpad" = { TrackpadRightClick = true }
-"com.apple.universalaccess" = { reduceTransparency = true, reduceMotion = true }
 
 # Disabled with the rest of the tiling stack. Both agents need the explicit PATH below: their rc
 # files call borders/sketchybar/aerospace by name and launchd starts them with a bare PATH.
