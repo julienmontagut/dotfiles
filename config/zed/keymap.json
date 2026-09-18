@@ -1,83 +1,83 @@
 [
   {
-    "context": "Editor && showing_completions",
     "bindings": {
       "ctrl-e": "editor::Cancel",
       "ctrl-n": "editor::SelectNext",
       "ctrl-p": "editor::SelectPrevious",
       "ctrl-y": "editor::ConfirmCompletion",
       "enter": "editor::ConfirmCompletion",
-      "tab": "editor::ConfirmCompletion",
+      "tab": "editor::ConfirmCompletion"
     },
+    "context": "Editor && showing_completions"
   },
   // gr* LSP namespace (Neovim parity) + gD remap + diagnostics
   {
-    "context": "Editor && (vim_mode == normal || vim_mode == visual) && !VimWaiting && !menu",
     "bindings": {
-      "g r n": "editor::Rename",
-      "g r a": "editor::ToggleCodeActions",
-      "g r r": "editor::FindAllReferences",
-      "g r i": "editor::GoToImplementation",
-      "g r t": "editor::GoToTypeDefinition",
-      "g O": "outline::Toggle",
-      "g S": "project_symbols::Toggle",
-      "g D": "editor::GoToDeclaration",
-      "] d": "editor::GoToDiagnostic",
       "[ d": "editor::GoToPreviousDiagnostic",
+      "] d": "editor::GoToDiagnostic",
+      "g D": "editor::GoToDeclaration",
+      "g O": "outline::Toggle",
+      "g r a": "editor::ToggleCodeActions",
+      "g r i": "editor::GoToImplementation",
+      "g r n": "editor::Rename",
+      "g r r": "editor::FindAllReferences",
+      "g r t": "editor::GoToTypeDefinition",
+      "g S": "project_symbols::Toggle"
     },
+    "context": "Editor && (vim_mode == normal || vim_mode == visual) && !VimWaiting && !menu"
   },
   // space leader — letters identical to Neovim + IdeaVim
   {
-    "context": "Editor && (vim_mode == normal || vim_mode == visual) && !VimWaiting && !menu",
     "bindings": {
-      "space space": "file_finder::Toggle",
+      "space b": "tab_switcher::ToggleAll",
+      "space d": "diagnostics::Deploy",
+      "space e": "project_panel::ToggleFocus",
       "space f": "file_finder::Toggle",
       "space g": "pane::DeploySearch",
-      "space b": "tab_switcher::ToggleAll",
-      "space e": "project_panel::ToggleFocus",
       "space s": "project_symbols::Toggle",
-      "space v": "git_panel::ToggleFocus",
+      "space space": "file_finder::Toggle",
       "space t": "terminal_panel::Toggle",
-      "space d": "diagnostics::Deploy",
+      "space v": "git_panel::ToggleFocus"
     },
+    "context": "Editor && (vim_mode == normal || vim_mode == visual) && !VimWaiting && !menu"
   },
   // window verbs (hjkl nav is native in editor)
   {
-    "context": "Editor && vim_mode == normal && !VimWaiting && !menu",
     "bindings": {
-      "ctrl-w v": "pane::SplitRight",
-      "ctrl-w s": "pane::SplitDown",
       "ctrl-w c": "pane::CloseActiveItem",
       "ctrl-w q": "pane::CloseActiveItem",
+      "ctrl-w s": "pane::SplitDown",
+      "ctrl-w v": "pane::SplitRight"
     },
+    "context": "Editor && vim_mode == normal && !VimWaiting && !menu"
   },
   // extend ctrl-w hjkl into the docks (terminal / project / git panels)
   {
-    "context": "Dock",
     "bindings": {
       "ctrl-w h": "workspace::ActivatePaneLeft",
-      "ctrl-w l": "workspace::ActivatePaneRight",
-      "ctrl-w k": "workspace::ActivatePaneUp",
       "ctrl-w j": "workspace::ActivatePaneDown",
+      "ctrl-w k": "workspace::ActivatePaneUp",
+      "ctrl-w l": "workspace::ActivatePaneRight"
     },
+    "context": "Dock"
   },
   // GUI fallback — works from any panel. Bind both; only the live one fires per OS.
   {
-    "context": "Workspace",
     "bindings": {
-      "ctrl-`": "terminal_panel::ToggleFocus",
-      "cmd-p": "file_finder::Toggle",
-      "alt-p": "file_finder::Toggle",
-      "cmd-e": "project_panel::ToggleFocus",
-      "alt-e": "project_panel::ToggleFocus",
-      "cmd-s": "project_symbols::Toggle",
-      "alt-s": "project_symbols::Toggle",
-      "cmd-a": "command_palette::Toggle",
       "alt-a": "command_palette::Toggle",
-      "cmd-d": "diagnostics::Deploy",
       "alt-d": "diagnostics::Deploy",
-      "cmd-t": "terminal_panel::Toggle",
+      "alt-e": "project_panel::ToggleFocus",
+      "alt-p": "file_finder::Toggle",
+      "alt-s": "project_symbols::Toggle",
       "alt-t": "terminal_panel::Toggle",
+      "cmd-a": "command_palette::Toggle",
+      "cmd-d": "diagnostics::Deploy",
+      "cmd-e": "project_panel::ToggleFocus",
+      "cmd-p": "file_finder::Toggle",
+      "cmd-s": "project_symbols::Toggle",
+      "cmd-t": "terminal_panel::Toggle",
+      "ctrl-`": "terminal_panel::ToggleFocus"
     },
-  },
+    "context": "Workspace"
+  }
 ]

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.10/schema.json",
+  "assist": { "actions": { "source": { "useSortedKeys": "on" } } },
+  "files": {
+    "includes": [
+      "**/*.json",
+      "!config/karabiner/karabiner.json",
+      "!config/nvim/nvim-pack-lock.json"
+    ]
+  },
+  "formatter": { "useEditorconfig": true },
+  "json": {
+    "formatter": { "lineWidth": 100, "trailingCommas": "none" },
+    "parser": { "allowComments": true, "allowTrailingCommas": true }
+  }
+}

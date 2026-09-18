@@ -1,5 +1,6 @@
 # Tools for working on this repo
 [tools]
+biome = "latest"
 lua = "latest"
 lua-language-server = "latest"
 stylua = "latest"
@@ -10,3 +11,20 @@ taplo = "latest"
 [dotfiles]
 "~/.config/mise" = { source = "config/mise", mode = "symlink" }
 
+[tasks.pre-commit]
+description = "Format and sort the hand-written JSON before it lands"
+# $STAGED comes from the generated hook, space-separated, so a path with a space would break the
+# split. ponytail: no such path exists here; quote and NUL-split if one ever does.
+run = '''
+json=$(printf '%s\n' $STAGED | grep '\.json$' || true)
+[ -n "$json" ] || exit 0
+# biome.json excludes the generated JSON, so naming a file here is not enough to format it.
+biome check --write --no-errors-on-unmatched $json
+# Re-stages the whole file: a partially staged JSON file would carry its unstaged hunks in too.
+git add $json
+'''
+
+# The hook lives in .git/, which no clone carries, so wire it on the way in. The guard keeps the
+# common case to one stat instead of spawning mise on every cd.
+[hooks]
+enter = "[ -x .git/hooks/pre-commit ] || mise generate git-pre-commit --write"

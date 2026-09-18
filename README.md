@@ -66,6 +66,7 @@ config/mise/          # The machine definition, linked to ~/.config/mise
 hosts/                # cloud-init for the home machines
 scripts/              # macOS setup steps that aren't declarative
 Brewfile              # Homebrew packages (macOS GUI apps)
+biome.json            # JSON formatting and key sorting, run by the `pre-commit` task
 mise.toml             # Tooling for working on this repo, and the ~/.config/mise seed
 ```
 
