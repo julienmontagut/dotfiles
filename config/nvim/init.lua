@@ -4,7 +4,7 @@ vim.g.mapleader = " "
 
 -- General user interface
 vim.opt.number = true
-vim.opt.colorcolumn = "100"
+vim.opt.colorcolumn = "80,100"
 vim.opt.cursorline = true
 vim.opt.signcolumn = "yes"
 vim.opt.termguicolors = true
@@ -88,15 +88,21 @@ require("which-key").setup{}
 require("oil").setup({
     default_file_explorer = true,
     view_options = {
-        show_hidden = false,
-        is_hidden_file = function(name, bufnr)
+        show_hidden = true,
+        is_always_hidden = function(name, _)
             if name == ".git" then
                 return true
             end
-            local dir = require("oil").get_current_dir(bufnr)
-            vim.fn.system({ "git", "-C", dir, "check-ignore", "-q", "--", name })
-            return vim.v.shell_error == 0 -- exit 0 = ignored = hidden
+            return false
         end,
+    --     is_hidden_file = function(name, bufnr)
+    --         if name == ".git" then
+    --             return true
+    --         end
+    --         local dir = require("oil").get_current_dir(bufnr)
+    --         vim.fn.system({ "git", "-C", dir, "check-ignore", "-q", "--", name })
+    --         return vim.v.shell_error == 0 -- exit 0 = ignored = hidden
+    --     end,
     },
 })
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
