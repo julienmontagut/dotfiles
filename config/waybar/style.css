@@ -27,9 +27,8 @@
 
 * {
     font-family: "Lilex Nerd Font Mono", "Lilex", monospace;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 500;
-    /* GTK draws a 1px focus outline on buttons that shifts the workspace glyphs. */
     border: none;
     border-radius: 0;
     min-height: 0;
@@ -57,9 +56,9 @@ window#waybar {
 #devices,
 #time {
     background-color: alpha(@surface, 0.97);
-    border: 1px solid @hl_med;
-    border-radius: 13px;
-    margin: 4px 2px;
+    border: 2px solid @hl_med;
+    border-radius: 4px;
+    margin: 0 8px;
     padding: 0 4px;
     color: @fg;
 }
@@ -186,7 +185,7 @@ window#waybar {
 #workspaces button {
     padding: 0 7px;
     margin: 3px 1px;
-    border-radius: 9px;
+    border-radius: 4px;
     background-color: transparent;
     color: @subtle;
     transition: background-color 150ms ease, color 150ms ease;
@@ -232,7 +231,7 @@ window#waybar {
 tooltip {
     background-color: @surface;
     border: 1px solid @hl_med;
-    border-radius: 12px;
+    border-radius: 4px;
 }
 
 tooltip label {
@@ -243,13 +242,13 @@ tooltip label {
 menu {
     background-color: @surface;
     border: 1px solid @hl_med;
-    border-radius: 12px;
+    border-radius: 4px;
     padding: 4px;
     color: @fg;
 }
 
 menu menuitem {
-    border-radius: 8px;
+    border-radius: 4px;
     padding: 4px 10px;
 }
 

@@ -24,9 +24,9 @@
     // puts a window 10px off the screen edge, and these put the bar there too, so the two line up
     // on the left and right. Sway reserves height + margin-top, so the first window still clears
     // the bar by the same 10px.
-    "margin-top": 10,
-    "margin-left": 10,
-    "margin-right": 10,
+    "margin-top": 8,
+    "margin-left": 8,
+    "margin-right": 8,
     // 0: the pills carry their own margins in style.css, and a box spacing here would add to them
     // asymmetrically at the ends.
     "spacing": 0,

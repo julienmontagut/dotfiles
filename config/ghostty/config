@@ -10,6 +10,7 @@ theme = light:Rose Pine Dawn,dark:Rose Pine
 
 # Opacity
 background-blur = true
+background-opacity = 0.9
 
 # Don't prompt to close while a multiplexer (herdr) is running.
 confirm-close-surface = false
@@ -21,7 +22,7 @@ quit-after-last-window-closed = true
 
 # Font
 font-family = Lilex
-font-size = 16
+font-size = 14
 
 # Shell integration
 shell-integration = zsh

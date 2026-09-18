@@ -24,7 +24,7 @@ set $browser google-chrome-stable
 # Wallpaper. swaybg renders it; swaylock reuses the same file, hence the variable. `fill` crops
 # to the output's aspect ratio, and the base colour behind it covers the moment before swaybg is
 # up and any output swaybg cannot draw. sway runs the path through wordexp, so $HOME resolves.
-set $wallpaper $HOME/.config/wallpapers/rose-pine-maze.png
+set $wallpaper $HOME/Pictures/wallpapers/private-use/wallhaven-d6qwkg.jpg
 output * bg $wallpaper fill #191724
 
 # TODO: Set default as 1 and replace next one with vivobook panel name
@@ -57,25 +57,20 @@ focus_follows_mouse yes
 # Appearance
 # =============================================================================
 
-# One 10px rhythm across the session: waybar floats 10px off the screen edge (margin-* in
-# config/waybar/config), notifications do too (outer-margin in config/mako/config), and windows
-# sit 10px apart and 10px off the edge.
+# One 8px rhythm across the session: waybar, notifications
 #
-# outer stays 0 because sway *adds* inner to outer at the workspace edge - `outer 5` with
-# `inner 10` gives a 15px frame around a 10px gap, which is the one combination that looks
-# wrong. Raise outer only to make the frame deliberately wider than the gaps.
-gaps inner 10
+gaps inner 16
 gaps outer 0
 
 # Borders are the only thing marking focus once the gaps are this wide, so they stay at 2px and
 # only the focused window draws one in a colour - see the palette below.
-default_border pixel 2
-default_floating_border pixel 2
+default_border pixel 4
+default_floating_border pixel 4
 
 # Titlebars only appear in the tabbed layout, which is workspace 5's default. Sway's own default
 # font is "monospace 10"; this is the same size in the font everything else here uses.
-font pango:Lilex Nerd Font Mono 10
-titlebar_padding 10 4
+font pango:Lilex Nerd Font Mono 12
+titlebar_padding 8 4
 titlebar_border_thickness 0
 
 # Colors (Rosé Pine). Only the focused window is coloured: it takes iris, everything else recedes
@@ -110,12 +105,8 @@ client.background       #191724
 # where one exists, and Shift for the variant of a binding (move vs focus,
 # fullscreen vs float) or for anything destructive.
 
-# Launchers. Bound directly rather than behind a mode, same three apps and same keys as aerospace.
-# Each exec of a single-instance GTK app opens a window in the running process, so none of the
-# macOS new-window trouble applies here.
+# Application quick launch
 bindsym $mod+Return exec $term
-bindsym $mod+b exec $browser
-bindsym $mod+z exec zed
 
 # Launcher
 bindsym $mod+space exec $menu
@@ -151,21 +142,11 @@ bindsym $mod+j focus down
 bindsym $mod+k focus up
 bindsym $mod+l focus right
 
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
-bindsym $mod+Right focus right
-
 # Move
 bindsym $mod+Shift+h move left
 bindsym $mod+Shift+j move down
 bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
-
-bindsym $mod+Shift+Left move left
-bindsym $mod+Shift+Down move down
-bindsym $mod+Shift+Up move up
-bindsym $mod+Shift+Right move right
 
 # Focus the containing split
 bindsym $mod+a focus parent
