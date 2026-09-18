@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+# One-time migration to the lowercase XDG user directories, run by hand once per machine.
+#
+# Pairs with config/xdg-user-dirs/: that config renames the five directories that are kept and
+# drops Desktop, Templates and PublicShare. The config on its own would leave an existing
+# machine pointing at directories that still carry their capitalised names, so this moves them
+# across. A fresh machine never needs it, because user-dirs.conf disables xdg-user-dirs-update
+# before anything creates the capitalised set and bootstrap's mkdir makes the lowercase one.
+#
+# Delete this script once every machine has run it.
+set -euo pipefail
+
+# macOS keeps ~/Desktop and ~/Documents under Finder, localises their display names, and
+# defaults to a case-insensitive filesystem where `mv Documents documents` fails as "identical".
+if [ "$(uname)" != Linux ]; then
+    echo "linux only: macOS has no XDG user dirs and its filesystem is case-insensitive" >&2
+    exit 1
+fi
+
+for pair in Downloads:downloads Documents:documents Music:music Pictures:pictures Videos:videos; do
+    old="$HOME/${pair%%:*}"
+    new="$HOME/${pair##*:}"
+    [ -d "$old" ] || continue
+    # Both present means something recreated the capitalised one after an earlier run. Merging
+    # blind is how files go missing, so name it and leave it.
+    if [ -d "$new" ]; then
+        echo "skipped: $old and $new both exist, merge by hand" >&2
+    else
+        mv "$old" "$new"
+        echo "moved:   $old -> $new"
+    fi
+done
+
+# -mindepth 1 rather than a glob so dotfiles come along, -n so a name already in documents is
+# kept rather than clobbered. Anything -n refuses is what makes the rmdir below fail, which is
+# the intended way to find out.
+if [ -d "$HOME/Desktop" ]; then
+    mkdir -p "$HOME/documents"
+    find "$HOME/Desktop" -mindepth 1 -maxdepth 1 -exec mv -n {} "$HOME/documents/" \;
+fi
+
+# rmdir, not rm -rf: a directory that still holds something is one this script has no business
+# emptying on its own.
+for dir in Desktop Templates Public; do
+    [ -d "$HOME/$dir" ] || continue
+    if rmdir "$HOME/$dir" 2>/dev/null; then
+        echo "removed: $HOME/$dir"
+    else
+        echo "kept:    $HOME/$dir is not empty" >&2
+    fi
+done
+
+# GTK's sidebar lists the XDG directories from GLib on its own, so bookmarking them was always
+# redundant. They also store absolute paths with no $HOME indirection, which is what makes them
+# stale now and what keeps this file out of [dotfiles].
+bookmarks="${XDG_CONFIG_HOME:-$HOME/.config}/gtk-3.0/bookmarks"
+if [ -f "$bookmarks" ]; then
+    # % as the address delimiter, because | is the alternation operator inside the regex.
+    sed -i -E '\%/(Desktop|Downloads|Documents|Music|Pictures|Videos|Templates|Public)/?$%d' "$bookmarks"
+    echo "pruned:  $bookmarks"
+fi
+
+echo
+echo "Left to do by hand:"
+echo "  - log out and back in, so processes that cached the old paths pick up the new ones"
+echo "  - ~/.config/Claude/claude_desktop_config.json still references ~/Desktop"

@@ -86,6 +86,12 @@ dotnet = "latest"
 # Shared by swaybg and swaylock, both driven from config/sway/config's $wallpaper.
 "~/.config/wallpapers" = "../wallpapers"
 "~/.config/xdg-desktop-portal-wlr" = "../xdg-desktop-portal-wlr"
+# Lowercase user directories, with Desktop, Templates and PublicShare dropped. user-dirs.conf
+# has to ship alongside: without it xdg-user-dirs-update rewrites user-dirs.dirs on every login.
+# The autostart entry masks the packaged one that relocalises the directory names.
+"~/.config/user-dirs.dirs" = "../xdg-user-dirs/user-dirs.dirs"
+"~/.config/user-dirs.conf" = "../xdg-user-dirs/user-dirs.conf"
+"~/.config/autostart/user-dirs-update-gtk.desktop" = "../autostart/user-dirs-update-gtk.desktop"
 # Overrides the packaged launcher so Chrome runs on Wayland: XWayland Chrome captures the
 # XWayland root rather than the desktop, which breaks screen sharing, and blurs at scale 2.
 "~/.local/share/applications/google-chrome.desktop" = "../applications/google-chrome.desktop"
@@ -119,4 +125,9 @@ if ! id -nG | tr ' ' '\n' | grep -qx video; then
   sudo usermod -aG video "$USER"
   sudo udevadm trigger --subsystem-match=backlight
 fi
+
+# enabled=False in config/xdg-user-dirs/user-dirs.conf means nothing creates these any more, so
+# a fresh machine would carry five entries in user-dirs.dirs pointing at directories that do not
+# exist. Machines that predate the rename are migrated once, by hand, with xdg-user-dirs-migrate.
+mkdir -p ~/downloads ~/documents ~/music ~/pictures ~/videos
 '''

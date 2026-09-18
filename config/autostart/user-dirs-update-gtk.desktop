@@ -1,0 +1,8 @@
+# Shadows /etc/xdg/autostart/user-dirs-update-gtk.desktop. That one relocalises the user
+# directory names when the locale changes, which is how a machine ends up with ~/Téléchargements.
+# Hidden=true is the autostart spec's own way to suppress a system entry; an empty file only
+# works by accident, because implementations happen to skip what they cannot parse.
+[Desktop Entry]
+Type=Application
+Name=user-dirs-update-gtk
+Hidden=true

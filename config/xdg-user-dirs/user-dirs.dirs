@@ -1,0 +1,11 @@
+# Lowercase, and without DESKTOP, TEMPLATES and PUBLICSHARE. An absent key is what reads as
+# "no such directory": GLib returns NULL for it, while "$HOME" would hand every caller a real,
+# populated directory to enumerate into a menu or share over the network. DESKTOP is the one
+# exception, since GLib falls back to $HOME/Desktop in code whatever this file says.
+#
+# $HOME is expanded by whoever reads the file, so keep it literal.
+XDG_DOWNLOAD_DIR="$HOME/downloads"
+XDG_DOCUMENTS_DIR="$HOME/documents"
+XDG_MUSIC_DIR="$HOME/music"
+XDG_PICTURES_DIR="$HOME/pictures"
+XDG_VIDEOS_DIR="$HOME/videos"
