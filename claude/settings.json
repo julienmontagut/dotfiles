@@ -10,7 +10,6 @@
   "enabledPlugins": {
     "csharp-lsp@claude-plugins-official": true,
     "lua-lsp@claude-plugins-official": true,
-    "ponytail@ponytail": true,
     "rust-analyzer-lsp@claude-plugins-official": true,
     "swift-lsp@claude-plugins-official": true
   },
@@ -18,12 +17,6 @@
     "claude-plugins-official": {
       "source": {
         "repo": "anthropics/claude-plugins-official",
-        "source": "github"
-      }
-    },
-    "ponytail": {
-      "source": {
-        "repo": "DietrichGebert/ponytail",
         "source": "github"
       }
     }
