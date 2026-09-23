@@ -4,8 +4,6 @@
 "brew:FelixKratz/formulae/sketchybar" = "latest"
 "brew-cask:appcleaner" = "latest"
 "brew-cask:claude" = "latest"
-"brew-cask:crossover" = "latest"
-"brew-cask:devpod" = "latest"
 "brew-cask:font-inter" = "latest"
 "brew-cask:font-lilex" = "latest"
 "brew-cask:font-lilex-nerd-font" = "latest"
@@ -13,13 +11,11 @@
 "brew-cask:ghostty" = "latest"
 "brew-cask:google-chrome" = "latest"
 "brew-cask:jetbrains-toolbox" = "latest"
+"brew-cask:podman-desktop" = "latest"
 "brew-cask:karabiner-elements" = "latest"
 "brew-cask:linear" = "latest"
-"brew-cask:orbstack" = "latest"
-"brew-cask:slite" = "latest"
 "brew-cask:spotify" = "latest"
 "brew-cask:steam" = "latest"
-"brew-cask:vorssaint" = "latest" # Only for "Quit on close" at the moment
 "brew-cask:zed" = "latest"
 
 [tools]
