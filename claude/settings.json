@@ -22,18 +22,6 @@
     }
   },
   "hooks": {
-    "PreToolUse": [
-      {
-        "hooks": [
-          {
-            "command": "h=\"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/block-session-trailer.sh\"; [ -f \"$h\" ] && sh \"$h\" || exit 0",
-            "timeout": 5,
-            "type": "command"
-          }
-        ],
-        "matcher": "Bash"
-      }
-    ],
     "SessionStart": [
       {
         "hooks": [
