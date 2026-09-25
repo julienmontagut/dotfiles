@@ -3,18 +3,15 @@
  * GTK CSS has no prefers-color-scheme, so Waybar cannot follow the OS appearance and stays dark.
  * Everything below reads the named colors only.
  *
- * The bar itself draws nothing: it is a transparent strip floating 10px off the screen edge, and
- * what you see is one rounded, near-opaque pill per cluster sitting on the wallpaper. Clusters are
- * declared as groups in config, so this file never has to know which module belongs to which -
- * it styles the four group ids and lets the modules inside stay plain text. State is carried by
- * colour, exactly as before; the pills only replace the dividers that used to separate clusters.
+ * The bar is one square block with the same 2px border as a window, sitting 8px off the screen
+ * edge like the windows do. Clusters are declared as groups in config and set apart by spacing
+ * only; the modules inside stay plain text and carry state by colour.
  */
 
 /* Rosé Pine. Same tokens, same roles as config/sketchybar/colors.sh. Every step of the workspace
- * ramp stays legible against the pill: muted 3.2:1, subtle 5.2:1, iris 7.9:1. */
-@define-color base    #191724; /* base - the ground the pills sit on, and text on a filled chip */
-@define-color surface #1f1d2e; /* surface - the pill itself */
-@define-color overlay #26233a; /* overlay - a hover ground, and the separator in a menu */
+ * ramp stays legible against the bar: muted 3.2:1, subtle 5.2:1, iris 7.9:1. */
+@define-color base    #191724; /* base - the bar, same as the terminal, and text on a filled chip */
+@define-color surface #1f1d2e; /* surface - a tooltip */
 @define-color hl_med  #403d52; /* highlight med - every hairline, and a workspace chip's hover */
 @define-color muted   #6e6a86; /* muted - empty workspace, and a muted or unavailable item */
 @define-color subtle  #908caa; /* subtle - occupied workspace, and the focused-window module */
@@ -34,45 +31,25 @@
     min-height: 0;
 }
 
-/* The strip is only a carrier for the pills. Anything opaque here would put a full-width band back
- * over the wallpaper and undo the margins set in config. */
 window#waybar {
-    background-color: transparent;
+    background-color: alpha(@base, 0.9);
+    border: 2px solid @hl_med;
     color: @fg;
 }
 
-/* --- pills ---------------------------------------------------------------------------------- */
-
-/* The four clusters on the right (tray / machine state / devices / clock) and the three items on
- * the left. #machine, #devices and #time are the group boxes; the rest are modules that happen
- * to stand alone. 26px tall inside a 34px bar, so the radius is exactly half and they are capsules.
- * #mode and #window render an empty label most of the time and Waybar hides an empty label, so
- * their pills come and go with them. */
+/* The clusters: #machine, #devices and #time are the group boxes, the rest are modules that
+ * stand alone. #mode and #window render an empty label most of the time and Waybar hides an
+ * empty label, so their space comes and goes with them. */
 #workspaces,
 #mode,
 #window,
-#tray,
 #machine,
 #devices,
 #time {
-    background-color: alpha(@surface, 0.97);
-    border: 2px solid @hl_med;
-    border-radius: 4px;
     margin: 0 8px;
-    padding: 0 4px;
-    color: @fg;
 }
 
-/* The ends of the row sit flush with the bar's own margin rather than 3px inside it. */
-#workspaces {
-    margin-left: 0;
-}
-
-#time {
-    margin-right: 0;
-}
-
-/* Modules are plain text inside their pill: no ground, no rule, just breathing room. */
+/* Modules are plain text inside their cluster: no ground, no rule, just breathing room. */
 #backlight,
 #battery,
 #bluetooth,
@@ -165,14 +142,10 @@ window#waybar {
     color: @love;
 }
 
-/* Sway's binding mode is a warning state, not a metric - it takes the whole pill. Declared after
- * the pill rule so it wins on background as well as text. */
+/* Sway's binding mode is a warning state, not a metric. */
 #mode {
-    background-color: @love;
-    border-color: @love;
-    color: @base;
+    color: @love;
     font-style: italic;
-    padding: 0 10px;
 }
 
 /* --- workspaces ----------------------------------------------------------------------------- */
@@ -185,7 +158,6 @@ window#waybar {
 #workspaces button {
     padding: 0 7px;
     margin: 3px 1px;
-    border-radius: 4px;
     background-color: transparent;
     color: @subtle;
     transition: background-color 150ms ease, color 150ms ease;
@@ -210,54 +182,16 @@ window#waybar {
     color: @fg;
 }
 
-/* --- tray ----------------------------------------------------------------------------------- */
+/* --- tooltips -------------------------------------------------------------------------------- */
 
-#tray {
-    padding: 0 6px;
-}
-
-#tray > .passive {
-    -gtk-icon-effect: dim;
-}
-
-#tray > .needs-attention {
-    -gtk-icon-effect: highlight;
-}
-
-/* --- popups --------------------------------------------------------------------------------- */
-
-/* Tooltips and the tray's right-click menus are GTK windows of their own, so they inherit the
- * system theme unless they are named here. Same surface, same radius, same hairline as the pills. */
+/* Tooltips are GTK windows of their own, so they inherit the system theme unless they are
+ * named here. Same surface and hairline as the bar. */
 tooltip {
     background-color: @surface;
     border: 1px solid @hl_med;
-    border-radius: 4px;
 }
 
 tooltip label {
     color: @fg;
     padding: 6px 4px;
-}
-
-menu {
-    background-color: @surface;
-    border: 1px solid @hl_med;
-    border-radius: 4px;
-    padding: 4px;
-    color: @fg;
-}
-
-menu menuitem {
-    border-radius: 4px;
-    padding: 4px 10px;
-}
-
-menu menuitem:hover {
-    background-color: @overlay;
-    color: @fg;
-}
-
-menu separator {
-    background-color: @overlay;
-    margin: 4px 2px;
 }

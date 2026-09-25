@@ -1,9 +1,9 @@
 // Rosé Pine bar for Waybar - the Linux half of the pair. Mirrors config/sketchybar/sketchybarrc:
 // workspaces and the focused window left, system cluster and clock right. Same Nerd Font glyphs
 // (Material Design, from Lilex Nerd Font), same palette, same module order. The chrome differs -
-// sketchybar draws one opaque strip, this floats above the wallpaper as a row of pills - because
-// sway has 10px gaps and a wallpaper worth seeing and macOS has neither. Change which modules
-// exist or what order they sit in there, change it here.
+// sketchybar sits flush with the screen edge, this one sits on the same 8px frame as the windows -
+// because sway has gaps and macOS does not. Change which modules exist or what order they sit in
+// there, change it here.
 //
 // Nothing is centred, which on Linux buys nothing on its own - it is the notched Mac that cannot
 // use its centre. Keeping the two in step is worth more than reclaiming the space here.
@@ -12,34 +12,25 @@
 // digit is also the keybinding ($mod+1..5 here, hyper+N on macOS). Scratch is sway's native
 // scratchpad on $mod+minus, which is not a workspace and so never appears here.
 //
-// The tray holds nm-applet and blueman-applet (started from sway/config). Those two are here for
-// their agents - the wifi password prompt and the bluetooth pairing prompt GNOME used to supply -
-// and their menus. The network and bluetooth modules repeat the icon on purpose: those are the
-// glanceable status, the tray icons are the menus.
+// No tray: nm-applet and blueman-applet (started from sway/config) run only as the wifi and
+// bluetooth agents, and the network and bluetooth modules are their one glanceable status.
 {
     "layer": "top",
     "position": "top",
     "height": 34,
-    // The bar floats on the same 10px frame the windows do: `gaps inner 10` in the sway config
-    // puts a window 10px off the screen edge, and these put the bar there too, so the two line up
-    // on the left and right. Sway reserves height + margin-top, so the first window still clears
-    // the bar by the same 10px.
+    // The bar is one block on the same frame as the windows: 8px off the screen edge like
+    // `gaps inner 8`, and sway puts the same 8px between it and the first window.
     "margin-top": 8,
     "margin-left": 8,
     "margin-right": 8,
-    // 0: the pills carry their own margins in style.css, and a box spacing here would add to them
-    // asymmetrically at the ends.
     "spacing": 0,
 
     "modules-left": ["sway/workspaces", "sway/mode", "sway/window"],
     "modules-center": [],
-    // Four pills: tray, machine state, devices, clock. Grouping them here rather than drawing
-    // dividers in CSS means a module can be moved between clusters without a matching CSS edit,
-    // and an empty module (sway/mode at rest) takes its whole pill with it when it hides.
-    "modules-right": ["tray", "group/machine", "group/devices", "group/time"],
+    "modules-right": ["group/machine", "group/devices", "group/time"],
 
     // The group names are the CSS ids: #machine, #devices, #time. Keep them distinct from the
-    // module ids inside them (#cpu, #network, #clock) or the pill and its contents share a rule.
+    // module ids inside them (#cpu, #network, #clock) or the group and its contents share a rule.
     "group/machine": {
         "orientation": "horizontal",
         "modules": ["idle_inhibitor", "custom/powerprofile", "cpu", "memory"]
@@ -165,7 +156,7 @@
         "tooltip-format-wifi": "{essid}\n{ipaddr}/{cidr}",
         "tooltip-format-ethernet": "{ifname}\n{ipaddr}/{cidr}",
         "tooltip-format-disconnected": "Disconnected",
-        "on-click": "nm-connection-editor"
+        "on-click": "foot nmtui-connect"
     },
 
     "battery": {
@@ -185,10 +176,5 @@
     "clock#date": {
         "format": "󰃭 {:%d/%m}",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
-    },
-
-    "tray": {
-        "spacing": 8,
-        "icon-size": 16
     }
 }

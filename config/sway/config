@@ -59,19 +59,19 @@ focus_follows_mouse yes
 
 # One 8px rhythm across the session: waybar, notifications
 #
-gaps inner 16
+gaps inner 8
 gaps outer 0
 
 # Borders are the only thing marking focus once the gaps are this wide, so they stay at 2px and
 # only the focused window draws one in a colour - see the palette below.
-default_border pixel 4
-default_floating_border pixel 4
+default_border pixel 2
+default_floating_border pixel 2
 
 # Titlebars only appear in the tabbed layout, which is workspace 5's default. Sway's own default
 # font is "monospace 10"; this is the same size in the font everything else here uses.
 font pango:Lilex Nerd Font Mono 12
 titlebar_padding 8 4
-titlebar_border_thickness 0
+titlebar_border_thickness 2
 
 # Colors (Rosé Pine). Only the focused window is coloured: it takes iris, everything else recedes
 # into the surface and overlay greys so a screen of tabs reads as one dark strip with one lit tab.
@@ -310,9 +310,10 @@ exec dbus-update-activation-environment --systemd XDG_CURRENT_DESKTOP=sway && sy
 # every notification (Teams, Chrome, notify-send) is dropped silently.
 exec swaync
 
-# Tray agents, both of which waybar hosts. These are not just icons: nm-applet is the secret
-# agent that prompts for a wifi password and blueman-applet is the pairing agent that prompts
-# to confirm a headset. GNOME provided both, and nothing in sway or waybar replaces them.
+# Wifi and bluetooth agents. waybar has no tray, so their icons go nowhere and waybar's own
+# network and bluetooth modules show the status instead. nm-applet is the secret agent that
+# prompts for a wifi password and blueman-applet is the pairing agent that prompts to confirm a
+# headset. GNOME provided both, and nothing in sway or waybar replaces them.
 exec nm-applet --indicator
 exec blueman-applet
 
