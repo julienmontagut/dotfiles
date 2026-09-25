@@ -24,7 +24,7 @@ set $browser google-chrome-stable
 # Wallpaper. swaybg renders it; swaylock reuses the same file, hence the variable. `fill` crops
 # to the output's aspect ratio, and the base colour behind it covers the moment before swaybg is
 # up and any output swaybg cannot draw. sway runs the path through wordexp, so $HOME resolves.
-set $wallpaper $HOME/Pictures/wallpapers/private-use/wallhaven-d6qwkg.jpg
+set $wallpaper $HOME/pictures/wallpapers/private-use/wallhaven-d6qwkg.jpg
 output * bg $wallpaper fill #191724
 
 # TODO: Set default as 1 and replace next one with vivobook panel name

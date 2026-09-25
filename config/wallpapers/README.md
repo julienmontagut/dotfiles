@@ -14,5 +14,5 @@ im.quantize(colors=32, dither=Image.Dither.NONE).save('rose-pine-maze.png', opti
 ```
 
 `config/sway/config` sets `$wallpaper` and hands it to both swaybg and swaylock. It currently
-points at `~/Pictures/wallpapers/private-use/wallhaven-d6qwkg.jpg`, which stays out of the repo
+points at `~/pictures/wallpapers/private-use/wallhaven-d6qwkg.jpg`, which stays out of the repo
 because wallhaven images are not redistributable; `rose-pine-maze.png` is the CC0 fallback.
