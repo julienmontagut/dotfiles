@@ -255,11 +255,9 @@ bindsym $mod+Shift+p exec grim - | wl-copy
 bindsym Print exec grim -g "$(slurp)" - | wl-copy
 bindsym Shift+Print exec grim - | wl-copy
 
-bindsym $mod+n exec makoctl dismiss
-bindsym $mod+Shift+n exec makoctl dismiss --all
-# Do not disturb, the equivalent of GNOME's switch. See the mode block in config/mako/config.
-# makoctl has no toggle, so this reads the current modes and flips the one it cares about.
-bindsym $mod+Ctrl+n exec makoctl mode | grep -qx do-not-disturb && makoctl mode -r do-not-disturb || makoctl mode -a do-not-disturb
+bindsym $mod+n exec swaync-client -t -sw
+bindsym $mod+Shift+n exec swaync-client -C -sw
+bindsym $mod+Ctrl+n exec swaync-client -d -sw
 
 # =============================================================================
 # Key bindings - Resize mode
@@ -308,9 +306,9 @@ include /etc/sway/config.d/*
 # `exec_always` so that reloading the config does not kill a share in progress.
 exec dbus-update-activation-environment --systemd XDG_CURRENT_DESKTOP=sway && systemctl --user restart xdg-desktop-portal.service
 
-# Notifications. Nothing else here implements org.freedesktop.Notifications, so without mako
+# Notifications. Nothing else here implements org.freedesktop.Notifications, so without swaync
 # every notification (Teams, Chrome, notify-send) is dropped silently.
-exec mako
+exec swaync
 
 # Tray agents, both of which waybar hosts. These are not just icons: nm-applet is the secret
 # agent that prompts for a wifi password and blueman-applet is the pairing agent that prompts

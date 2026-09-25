@@ -16,7 +16,6 @@
 "apt:libnotify-bin" = "latest"
 "apt:libspa-0.2-bluetooth" = "latest"
 "apt:libssl-dev" = "latest"
-"apt:mako-notifier" = "latest"
 # GNOME's polkit agent lives inside gnome-shell. Without a replacement, anything that
 # needs an authorisation prompt (blueman, nm-connection-editor, udisks) fails silently.
 "apt:mate-polkit" = "latest"
@@ -32,6 +31,7 @@
 "apt:swaybg" = "latest"
 "apt:swayidle" = "latest"
 "apt:swaylock" = "latest"
+"apt:sway-notification-center" = "latest"
 "apt:waybar" = "latest"
 "apt:wireplumber" = "latest"
 "apt:wl-clipboard" = "latest"
