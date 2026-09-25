@@ -20,21 +20,32 @@ profile laptop {
 # Desk: Apple Studio Display alone, lid panel off. The 5K panel is 27" at 218dpi, so scale 2
 # gives the same 1x-equivalent size as the laptop and a 2560x1440 logical desktop.
 #
-# The display shows up as *two* connected outputs with identical make, model and serial: the
-# real 5120x2880 stream and a second head that only ever offers 2560x2880. It is a leftover DP
-# MST branch the display advertises alongside the single-stream link that actually drives it -
-# there is one physical monitor. kanshi has no criteria that tells the two apart, so the real
-# one is claimed by the identifier and the phantom is swept up by the trailing "*", which works
-# because kanshi walks profile entries in order against the heads in connection order and the
-# real stream is always enumerated before the branch. `mode` is named for the same reason: it
-# only fits the real head, so a mismatch fails loudly instead of lighting up the phantom.
+# This is the one profile that names an external by connector instead of "make model serial",
+# and it has to. The display comes up as *two* connected heads carrying identical make, model
+# and serial: the real 5120x2880 stream on DP-1, and a second head on DP-2 offering nothing but
+# 2560x2880, one half of the 5K tile. Both are static connectors with their own AUX channel and
+# DDC, so the names belong to the ports and do not shuffle the way a dock's MST branches do.
 #
-# "*" also keeps this profile honest: it matches exactly three heads, so plugging a Dell in as
-# well falls through rather than blanking it.
+# An identifier cannot tell those two heads apart, and kanshi resolves the ambiguity by position
+# rather than by fit: it walks a profile's entries and gives each one the first head it matches
+# in the compositor's connection order, with no backtracking and no idea which modes were asked
+# for. So the identifier lands on whichever of the two heads was enumerated first, and that
+# differs between session start and hotplug - every plug-in handed it to DP-2, the 5120x2880
+# mode did not fit, and kanshi threw the whole configuration away and left sway's defaults lit
+# on both panels. Naming each head outright is what removes the choice.
+#
+# Worth knowing before editing: kanshi's parser *prepends* each non-wildcard entry, so a profile
+# is matched bottom-up while "*" is matched last regardless. That only matters when two entries
+# can claim the same head - here none can, which is the point.
+#
+# Three entries, so the profile matches exactly three heads: plugging a Dell in as well falls
+# through rather than blanking it. If the display ever moves to another port the names go with
+# it, nothing matches, and sway's defaults come back - visibly wrong rather than silently half
+# applied. `swaymsg -t get_outputs` prints the new pair.
 profile desk {
     output eDP-1 disable
-    output "Apple Computer Inc StudioDisplay 0x07A03116" enable mode 5120x2880 position 0,0 scale 2
-    output * disable
+    output DP-2 disable
+    output DP-1 enable mode 5120x2880 position 0,0 scale 2
 }
 
 # Desk: lid panel off, P2219H left, P2217H right. Both externals are scale 1, so the second
