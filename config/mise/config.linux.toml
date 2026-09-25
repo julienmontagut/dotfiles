@@ -43,4 +43,4 @@
 "apt:zsh" = "latest"
 
 [tools]
-"github:ryanoasis/nerd-fonts" = { version = "3.4.0", asset_pattern = "Lilex.zip", postinstall = "mkdir -p ~/.local/share/fonts && cp \"$MISE_TOOL_INSTALL_PATH\"/*.ttf ~/.local/share/fonts/ && fc-cache -f ~/.local/share/fonts" }
+"github:ryanoasis/nerd-fonts" = { version = "3.5.1", asset_pattern = "Lilex.zip", postinstall = 'mkdir -p ~/.local/share/fonts && cp "$MISE_TOOL_INSTALL_PATH"/*.ttf ~/.local/share/fonts/ && fc-cache -f ~/.local/share/fonts' }
