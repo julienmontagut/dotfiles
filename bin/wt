@@ -1,0 +1,70 @@
+#!/bin/sh
+# Git worktrees under ~/worktrees/<org>/<repo>, one directory per branch.
+#
+#   wt clone <url> <org>/<repo>  set up that directory, repo in .bare with a .git link to it
+#   wt open <branch>             add a worktree at <branch>, checking out or creating the branch
+#   wt close <branch>            remove a worktree, once its work is committed and pushed
+set -eu
+
+confirm() {
+    printf '%s [y/N] ' "$1"
+    read -r answer
+    [ "$answer" = y ] || [ "$answer" = Y ]
+}
+
+case "${1:-}" in
+clone)
+    url=${2:?url required}
+    root="$HOME/worktrees/${3:?<org>/<repo> required}"
+
+    # Not `git clone --bare`: that copies every remote head into refs/heads, leaving local
+    # branches with no upstream, which defeats both `git worktree add`'s tracking DWIM and the
+    # unpushed check in `wt close`. Fetching into refs/remotes/origin keeps refs/heads empty.
+    mkdir -p "$root"
+    git init -q --bare "$root/.bare"
+    echo "gitdir: ./.bare" > "$root/.git"
+    git -C "$root" remote add origin "$url"
+    git -C "$root" config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
+    git -C "$root" fetch
+    git -C "$root" remote set-head origin --auto
+    echo "$root"
+    ;;
+open)
+    branch=${2:?branch required}
+    root=$(dirname "$(git rev-parse --path-format=absolute --git-common-dir)")
+    # Without this a branch pushed from elsewhere looks new and gets recreated as a divergence.
+    git -C "$root" fetch -q
+    if git -C "$root" show-ref --verify -q "refs/heads/$branch" ||
+        git -C "$root" show-ref --verify -q "refs/remotes/origin/$branch"; then
+        git -C "$root" worktree add "$root/$branch" "$branch"
+    else
+        confirm "Branch $branch does not exist. Create it?"
+        # --no-track: origin/HEAD is the base, not the upstream. push.autoSetupRemote sets that.
+        git -C "$root" worktree add --no-track -b "$branch" "$root/$branch" origin/HEAD
+    fi
+    echo "$root/$branch"
+    ;;
+close)
+    branch=${2:?branch required}
+    root=$(dirname "$(git rev-parse --path-format=absolute --git-common-dir)")
+    worktree="$root/$branch"
+
+    if [ -n "$(git -C "$worktree" status --porcelain)" ]; then
+        confirm "$branch has uncommitted changes. Stage and commit them?"
+        printf 'Message: '
+        read -r message
+        git -C "$worktree" add -A
+        git -C "$worktree" commit -qm "$message"
+    fi
+    if ! git -C "$worktree" rev-parse -q --verify '@{u}' > /dev/null ||
+        [ -n "$(git -C "$worktree" rev-list -n 1 '@{u}..')" ]; then
+        confirm "$branch has unpushed commits. Push them?"
+        git -C "$worktree" push
+    fi
+    git -C "$root" worktree remove "$worktree"
+    ;;
+*)
+    echo "usage: wt clone <url> <org>/<repo> | wt open <branch> | wt close <branch>" >&2
+    exit 1
+    ;;
+esac
